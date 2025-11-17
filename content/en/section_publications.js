@@ -2,6 +2,16 @@ portfolioData.en.sections.publications = {
     title: "Selected Publications",
     items: [
         {
+            title: "WaveDiST: A Wavelet Diffusion Transformer for Spatio-Temporal Estimation on Unobserved Locations",
+            authors: "Huiling Qin, Yuanxun Li, Weijia Jia",
+            venue: "AAAI 2026",
+            type: "会议",
+            corresponding: true,
+            links: {
+                paper: "assets/files/papers/qin2026WaveDiST.pdf",
+            }
+        },
+        {
             title: "Spatial Semantic-based Enhanced Address Parsing via Adaptive Weighted Learning",
             authors: "Huiling Qin, Ming Wang, Yuanxun Li, Junbo Zhang, Yu Zheng",
             venue: "ACM CIKM 2025",
