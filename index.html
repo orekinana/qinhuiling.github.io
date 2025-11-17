@@ -1,0 +1,277 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <!-- SEO Meta Tags -->
+    <title>Huiling Qin (秦慧玲) - Assistant Professor at Beijing Normal University</title>
+    <meta name="description" content="Dr. Qin Huiling is an Assistant Professor and Doctoral Supervisor at the Institute of Artificial Intelligence and Future Networks, Beijing Normal University, specializing in spatiotemporal data mining, urban computing, and artificial intelligence. Published 10+ papers in top-tier venues.">
+    <meta name="keywords" content="Huiling Qin, 秦慧玲, spatiotemporal data mining, urban computing, artificial intelligence, Beijing Normal University, research, academic portfolio">
+    <meta name="author" content="Huiling Qin">
+    <meta name="robots" content="index, follow">
+    <link rel="canonical" href="http://qinhuiling.me/">
+
+    <!-- Open Graph Meta Tags for Social Sharing -->
+    <meta property="og:title" content="Huiling Qin (秦慧玲) - Assistant Professor at Beijing Normal University">
+    <meta property="og:description" content="Dr. Huiling Qin is a Assistant Professor at Beijing Normal University, specializing in spatiotemporal data mining, urban computing, and artificial intelligence.">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="http://qinhuiling.me/">
+    <meta property="og:image" content="http://qinhuiling.me/assets/images/qinhuiling.jpeg">
+    <meta property="og:locale" content="en_US">
+    <meta property="og:locale:alternate" content="zh_CN">
+
+    <!-- Twitter Card Meta Tags -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Huiling Qin (秦慧玲) - Academic Portfolio">
+    <meta name="twitter:description" content="Assistant Professor at Beijing Normal University. Research in spatiotemporal data mining and urban computing.">
+    <meta name="twitter:image" content="http://qinhuiling.me/assets/images/qinhuiling.jpeg">
+
+    <!-- Language Alternate Links -->
+    <link rel="alternate" hreflang="en" href="http://qinhuiling.me/">
+    <link rel="alternate" hreflang="zh" href="http://qinhuiling.me/?lang=zh">
+    <link rel="alternate" hreflang="x-default" href="http://qinhuiling.me/">
+
+    <!-- Structured Data -->
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "Person",
+        "name": "Huiling Qin",
+        "alternateName": "秦慧玲",
+        "jobTitle": "Assistant Professor",
+        "worksFor": {
+            "@type": "EducationalOrganization",
+            "name": "Beijing Normal University"
+        },
+        "url": "http://qinhuiling.me/",
+        "image": "http://qinhuiling.me/assets/images/qinhuiling.jpeg",
+        "email": "qinhuiling@bnu.edu.cn",
+        "knowsAbout": ["Spatiotemporal Data Mining", "Urban Computing", "Artificial Intelligence"],
+        "alumniOf": {
+            "@type": "EducationalOrganization",
+            "name": "Xidian University"
+        },
+        "sameAs": [
+            "https://scholar.google.com.hk/citations?hl=en&user=DLzILA4AAAAJ"
+        ]
+    }
+    </script>
+
+    <script src="assets/js/consts.js"></script>
+    <script src="assets/js/i18n.js"></script>
+
+    <script src="content/en/navigation.js"></script>
+    <script src="content/en/profile.js"></script>
+    <script src="content/en/section_about.js"></script>
+    <script src="content/en/section_publications.js"></script>
+    <script src="content/en/section_projects.js"></script>
+    <script src="content/en/section_honors.js"></script>
+    <script src="content/en/section_education.js"></script>
+    <script src="content/en/section_experience.js"></script>
+    <script src="content/en/section_patents.js"></script>
+    <script src="content/en/section_services.js"></script>
+    <script src="content/en/section_lab.js"></script>
+
+    <script src="content/zh/navigation.js"></script>
+    <script src="content/zh/profile.js"></script>
+    <script src="content/zh/section_about.js"></script>
+    <script src="content/zh/section_publications.js"></script>
+    <script src="content/zh/section_projects.js"></script>
+    <script src="content/zh/section_honors.js"></script>
+    <script src="content/zh/section_education.js"></script>
+    <script src="content/zh/section_experience.js"></script>
+    <script src="content/zh/section_patents.js"></script>
+    <script src="content/zh/section_services.js"></script>
+    <script src="content/zh/section_lab.js"></script>
+
+    <script src="assets/npm/tailwindcss/3.4.17/all.min.js"></script>
+
+    <link rel="stylesheet" href="assets/npm/font-awesome/6.5.1/all.min.css">
+    <link rel="stylesheet" href="assets/css/style.css">
+
+</head>
+
+<body class="bg-gray-50 dark:bg-gray-900 text-gray-900 dark:text-gray-100">
+    <!-- Navigation Bar -->
+    <nav class="fixed top-0 w-full bg-white/95 dark:bg-gray-900/95 backdrop-blur-md border-b border-gray-200 dark:border-gray-800 z-50">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-center h-16">
+                <!-- Logo/Name -->
+                <div class="flex-shrink-0">
+                    <h1 class="text-xl font-bold bg-gradient-to-r from-purple-600 to-blue-600 bg-clip-text text-transparent" id="nav-name"></h1>
+                </div>
+
+                <!-- Navigation Links -->
+                <div class="hidden md:flex items-center space-x-8">
+                    <div id="nav-links" class="flex space-x-6"></div>
+
+                    <!-- Language & Theme Toggle -->
+                    <div class="flex items-center space-x-3 ml-6 border-l border-gray-300 dark:border-gray-700 pl-6">
+                        <button id="lang-toggle" class="flex items-center justify-center h-10 px-3 text-sm font-medium rounded-lg bg-gray-200 dark:bg-gray-800 hover:bg-gray-300 dark:hover:bg-gray-700 transition-colors">
+                            EN
+                        </button>
+                        <button id="theme-toggle" class="flex items-center justify-center h-10 w-10 rounded-lg bg-gray-200 dark:bg-gray-800 hover:bg-gray-300 dark:hover:bg-gray-700 transition-colors">
+                            <i class="fas fa-moon dark:hidden"></i>
+                            <i class="fas fa-sun hidden dark:inline"></i>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Mobile menu button -->
+                <div class="md:hidden flex items-center space-x-3">
+                    <button id="lang-toggle-mobile" class="flex items-center justify-center h-10 px-3 text-sm font-medium rounded-lg bg-gray-200 dark:bg-gray-800">
+                        EN
+                    </button>
+                    <button id="theme-toggle-mobile" class="flex items-center justify-center h-10 w-10 rounded-lg bg-gray-200 dark:bg-gray-800">
+                        <i class="fas fa-moon dark:hidden"></i>
+                        <i class="fas fa-sun hidden dark:inline"></i>
+                    </button>
+                    <button id="mobile-menu-toggle" class="p-2">
+                        <i class="fas fa-bars"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Mobile Navigation -->
+        <div id="mobile-menu" class="hidden md:hidden bg-white dark:bg-gray-900 border-t border-gray-200 dark:border-gray-800">
+            <div id="mobile-nav-links" class="px-4 py-2 space-y-1"></div>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <div class="pt-16 min-h-screen">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+            <div class="flex flex-col lg:flex-row gap-8">
+                <!-- Left Sidebar - Profile -->
+                <aside class="lg:w-80 lg:sticky lg:top-24 lg:h-fit">
+                    <div class="bg-white dark:bg-gray-800 rounded-2xl shadow-lg p-6 card-hover">
+                        <!-- Profile Image -->
+                        <div class="flex justify-center mb-6">
+                            <div class="w-32 h-32 rounded-full bg-gradient-to-br from-purple-400 to-blue-600 p-1">
+                                <img src="assets/images/qinhuiling.jpeg" alt="Dr. Huiling Qin" class="w-full h-full rounded-full object-cover">
+                            </div>
+                        </div>
+
+                        <!-- Profile Info -->
+                        <!-- 注意：以下个人信息包含静态内容用于SEO，JavaScript会动态更新这些信息 -->
+                        <div class="text-center mb-6">
+                            <h1 class="text-2xl font-bold mb-2" id="profile-name">Huiling Qin (秦慧玲)</h1>
+                            <p class="text-gray-600 dark:text-gray-400 mb-1" id="profile-title">Assistant Professor</p>
+                            <p class="text-gray-500 dark:text-gray-500 text-sm" id="profile-affiliation">Beijing Normal University</p>
+                            <p class="text-gray-500 dark:text-gray-500 text-sm" id="profile-department">Institute of Artificial Intelligence and Future Networks</p>
+                        </div>
+
+                        <!-- Bio -->
+                        <div class="mb-6">
+                            <p class="text-gray-600 dark:text-gray-400 text-sm leading-relaxed" id="profile-bio">Dr. Huiling Qin received her Bachelor's and Ph.D. degrees from Xidian University in 2018 and 2023. She worked as an algorithm engineer at Microsoft Research Asia, DiDi Research, and JD Technology from 2017-2023. Currently a Assistant Professor at the Institute of Artificial Intelligence and Future Networks, Beijing Normal University Zhuhai. Research focuses on spatiotemporal data mining and urban computing.</p>
+                        </div>
+
+                        <!-- Contact Info -->
+                        <div class="space-y-3 mb-6" id="profile-contact">
+                            <div class="flex items-center text-sm text-gray-600 dark:text-gray-400">
+                                <i class="fas fa-map-marker-alt w-5"></i>
+                                <span>Zhuhai, China</span>
+                            </div>
+                            <div class="flex items-center text-sm text-gray-600 dark:text-gray-400">
+                                <i class="fas fa-envelope w-5"></i>
+                                <a href="mailto:qinhuiling@bnu.edu.cn" class="link-hover">qinhuiling@bnu.edu.cn</a>
+                            </div>
+                        </div>
+
+                        <!-- Research Fields -->
+                        <div class="mb-6">
+                            <p class="text-gray-600 dark:text-gray-400 text-sm leading-relaxed" id="profile-research-fields">Spatiotemporal Data Mining, Urban Computing, Artificial Intelligence</p>
+                        </div>
+
+                        <!-- Social Links -->
+                        <div class="flex justify-center space-x-4" id="profile-social">
+                            <a href="https://scholar.google.com.hk/citations?hl=en&user=DLzILA4AAAAJ" target="_blank" class="text-gray-600 dark:text-gray-400 hover:text-purple-600 dark:hover:text-purple-400" aria-label="Google Scholar">
+                                <i class="fas fa-graduation-cap text-lg"></i>
+                            </a>
+                        </div>
+
+                    </div>
+                </aside>
+
+                <!-- Right Content Area -->
+                <main class="flex-1 space-y-8" id="main-content">
+                    <!--
+                    ========================================
+                    以下静态内容仅用于SEO优化目的
+                    ========================================
+                    注意：
+                    1. 这些内容主要为了让搜索引擎能够抓取和索引页面信息
+                    2. 内容可能不是最新的，真实数据由JavaScript动态加载
+                    3. JavaScript加载完成后，这些静态内容会被隐藏
+                    4. 用户看到的实际内容来自JavaScript渲染的动态内容
+                    ========================================
+                    -->
+                    <section id="about" class="static-content bg-white dark:bg-gray-800 rounded-2xl shadow-lg p-6">
+                        <h2 class="text-2xl font-bold mb-6">About Me</h2>
+                        <p class="text-gray-600 dark:text-gray-400 leading-relaxed mb-4">
+                            I am a Assistant Professor at the Institute of Artificial Intelligence and Future Networks, Beijing Normal University Zhuhai. My research interests include spatiotemporal data mining, urban computing, and artificial intelligence.
+                        </p>
+                        <p class="text-gray-600 dark:text-gray-400 leading-relaxed mb-4">
+                            I received my Ph.D. degree from Xidian University in 2023. From 2017 to 2023, I worked as an algorithm engineer at prestigious institutions including Microsoft Research Asia, DiDi Research, and JD Technology, gaining extensive industry experience in applying AI to real-world problems.
+                        </p>
+                        <p class="text-gray-600 dark:text-gray-400 leading-relaxed">
+                            I have published over 10 papers in top-tier conferences and journals, led 1 National Natural Science Foundation project, participated in 1 NSFC project, 2 National Key R&D Program projects, and 2 Beijing municipal research projects. I have also filed 2 patents.
+                        </p>
+                    </section>
+
+                    <section id="publications" class="static-content bg-white dark:bg-gray-800 rounded-2xl shadow-lg p-6">
+                        <h2 class="text-2xl font-bold mb-6">Selected Publications</h2>
+                        <ul class="space-y-4">
+                            <li class="border-b border-gray-200 dark:border-gray-700 pb-4 last:border-b-0">
+                                <h3 class="font-semibold text-gray-900 dark:text-gray-100">Spatial Semantic-based Enhanced Address Parsing via Adaptive Weighted Learning</h3>
+                                <p class="text-sm text-gray-600 dark:text-gray-400">Huiling Qin, Ming Wang, Yuanxun Li, Junbo Zhang, Yu Zheng</p>
+                                <p class="text-sm text-gray-500">ACM CIKM 2025</p>
+                            </li>
+                            <li class="border-b border-gray-200 dark:border-gray-700 pb-4 last:border-b-0">
+                                <h3 class="font-semibold text-gray-900 dark:text-gray-100">Network-wide Traffic States Imputation Using Self-interested Coalitional Learning</h3>
+                                <p class="text-sm text-gray-600 dark:text-gray-400">Huiling Qin, Xianyuan Zhan, Yuanxun Li, Xiaodu Yang, Yu Zheng</p>
+                                <p class="text-sm text-gray-500">ACM SIGKDD 2021</p>
+                            </li>
+                            <li class="border-b border-gray-200 dark:border-gray-700 pb-4 last:border-b-0">
+                                <h3 class="font-semibold text-gray-900 dark:text-gray-100">Robust Spatio-Temporal Purchase Prediction via Deep Meta Learning</h3>
+                                <p class="text-sm text-gray-600 dark:text-gray-400">Huiling Qin, Songyu Ke, Xiaodu Yang, Haoran Xu, Xianyuan Zhan, Yu Zheng</p>
+                                <p class="text-sm text-gray-500">AAAI 2021</p>
+                            </li>
+                        </ul>
+                    </section>
+
+                    <!--
+                    ========================================
+                    静态SEO内容结束
+                    ========================================
+                    以上内容将在JavaScript加载后被隐藏，
+                    用户将看到由JavaScript动态生成的最新内容
+                    ========================================
+                    -->
+
+                    <!-- Content sections will be dynamically inserted here and replace static content -->
+                </main>
+            </div>
+        </div>
+    </div>
+
+    <!-- Back to Top Button -->
+    <button id="back-to-top" class="fixed bottom-8 right-8 p-3 bg-purple-600 text-white rounded-full shadow-lg opacity-0 invisible transition-all hover:bg-purple-700">
+        <i class="fas fa-arrow-up"></i>
+    </button>
+
+    <script src="assets/js/section_renderer/honors.js"></script>
+    <script src="assets/js/section_renderer/markdown.js"></script>
+    <script src="assets/js/section_renderer/news.js"></script>
+    <script src="assets/js/section_renderer/patents.js"></script>
+    <script src="assets/js/section_renderer/periods.js"></script>
+    <script src="assets/js/section_renderer/projects.js"></script>
+    <script src="assets/js/section_renderer/publications.js"></script>
+    <script src="assets/js/section_renderer/talks.js"></script>
+    <script src="assets/js/main.js"></script>
+
+</body>
+</html>
