@@ -210,6 +210,12 @@ start_service() {
 
     print_info "文件复制完成"
 
+    # 确保日志目录存在且权限正确
+    print_info "检查日志目录..."
+    mkdir -p /var/log/caddy
+    chown -R caddy:caddy /var/log/caddy
+    chmod -R 755 /var/log/caddy
+
     # 检查配置文件
     if [ ! -f "$CADDY_CONFIG" ]; then
         print_error "Caddyfile 不存在！请先运行 install 命令"
