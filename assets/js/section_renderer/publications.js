@@ -61,10 +61,13 @@ const renderPublicationItem = (item) => {
         });
         linksHtml += '</div>';
     }
-    const correspondingMark = item.corresponding ? '<span class="ml-1 text-xs text-[#2c4f7c]">*</span>' : '';
+
+    // Process authors: bold site author, add envelope for corresponding authors
+    const authorsHtml = formatAuthors(item.authors, item.correspondingAuthors || []);
+
     itemDiv.innerHTML = `
-        <h3 class="font-semibold text-gray-900 dark:text-gray-100 mb-1">${item.title}${correspondingMark}</h3>
-        <p class="text-sm text-gray-600 dark:text-gray-400 mb-1">${item.authors}</p>
+        <h3 class="font-semibold text-gray-900 dark:text-gray-100 mb-1">${item.title}</h3>
+        <p class="text-sm text-gray-600 dark:text-gray-400 mb-1">${authorsHtml}</p>
         <p class="text-sm text-gray-500 dark:text-gray-500">
             <span class="font-medium">${item.venue}</span>
             ${item.award ? `<span class="ml-2 px-2 py-1 bg-yellow-100 dark:bg-yellow-900/30 text-yellow-800 dark:text-yellow-300 rounded text-xs">${item.award}</span>` : ''}
@@ -72,6 +75,38 @@ const renderPublicationItem = (item) => {
         ${linksHtml}
     `;
     return itemDiv;
+}
+
+// Helper function to format authors with corresponding marks and bold for site author
+const formatAuthors = (authorsString, correspondingAuthors) => {
+    if (!authorsString) return '';
+
+    // Get site author names from content constants
+    const siteAuthorNames = contentConsts.siteAuthorNames || [];
+
+    // Split authors by comma
+    const authors = authorsString.split(',').map(a => a.trim());
+
+    // Format each author
+    const formattedAuthors = authors.map(author => {
+        let formattedAuthor = author;
+
+        // Check if this is the site author (bold)
+        const isSiteAuthor = siteAuthorNames.some(name => author === name);
+        if (isSiteAuthor) {
+            formattedAuthor = `<strong>${formattedAuthor}</strong>`;
+        }
+
+        // Check if this is a corresponding author (add envelope icon)
+        const isCorresponding = correspondingAuthors.some(ca => author === ca);
+        if (isCorresponding) {
+            formattedAuthor += `<svg class="inline-block w-3.5 h-3.5 text-[#2c4f7c] dark:text-blue-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="margin-left: 0.15em; margin-right: 0.25em; vertical-align: -0.15em;"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="M2 7.5l10 6.5 10-6.5"/></svg>`;
+        }
+
+        return formattedAuthor;
+    });
+
+    return formattedAuthors.join(', ');
 }
 
 // Copy BibTeX to clipboard function

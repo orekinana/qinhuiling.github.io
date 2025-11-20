@@ -6,7 +6,7 @@ portfolioData.en.sections.publications = {
             authors: "Huiling Qin, Yuanxun Li, Weijia Jia",
             venue: "AAAI 2026",
             type: "会议",
-            corresponding: true,
+            correspondingAuthors: ["Huiling Qin"],
             links: {
                 paper: "assets/files/papers/qin2026WaveDiST.pdf",
             }
@@ -16,17 +16,17 @@ portfolioData.en.sections.publications = {
             authors: "Huiling Qin, Ming Wang, Yuanxun Li, Junbo Zhang, Yu Zheng",
             venue: "ACM CIKM 2025",
             type: "会议",
-            corresponding: true,
+            correspondingAuthors: ["Huiling Qin"],
             links: {
                 paper: "assets/files/papers/qin2025spatial.pdf",
             }
         },
         {
             title: "Brainstorming Brings Power to Large Language Models of Knowledge Reasoning",
-            authors: "Zining Qin, Huiling Qin*, Chenghao Wang, Jianxiong Guo, Weijia Jia",
+            authors: "Zining Qin, Huiling Qin, Chenghao Wang, Jianxiong Guo, Weijia Jia",
             venue: "IEEE ICME 2025",
             type: "会议",
-            corresponding: true,
+            correspondingAuthors: ["Huiling Qin"],
             links: {
                 paper: "https://arxiv.org/pdf/2406.06561",
                 bibtex: `@article{qin2024brainstorming,
@@ -40,10 +40,10 @@ year={2024}
         },
         {
             title: "AS-STG: Spatio-Temporal Graph Learning with Active Sampling for Dynamic IoT Sensing",
-            authors: "Yaxin Mei, Jiandian Zeng, Huiling Qin*, Guangxue Zhang, Xi Zheng, Qin Liu, Tian Wang",
+            authors: "Yaxin Mei, Jiandian Zeng, Huiling Qin, Guangxue Zhang, Xi Zheng, Qin Liu, Tian Wang",
             venue: "IEEE/ACM IWQoS 2025",
             type: "会议",
-            corresponding: true,
+            correspondingAuthors: ["Huiling Qin"],
             links: {
                 paper: "assets/files/papers/mei2025asstg.pdf",
                 bibtex: `@inproceedings{DBLP:conf/iwqos/MeiZQZZLW25,
@@ -74,7 +74,7 @@ bibsource    = {dblp computer science bibliography, https://dblp.org}
             authors: "Huiling Qin, Xianyuan Zhan, Yuanxun Li, Yu Zheng",
             venue: "ECAI 2024",
             type: "会议",
-            corresponding: true,
+            correspondingAuthors: ["Huiling Qin"],
             links: {
                 paper: "https://arxiv.org/pdf/2312.16892v1",
                 bibtex: `@inproceedings{DBLP:conf/ecai/QinZL024,
@@ -113,7 +113,7 @@ bibsource    = {dblp computer science bibliography, https://dblp.org}
             authors: "Huiling Qin, Xianyuan Zhan, Yu Zheng",
             venue: "IEEE TKDE 2022",
             type: "期刊",
-            corresponding: true,
+            correspondingAuthors: ["Huiling Qin"],
             links: {
                 paper: "https://arxiv.org/pdf/2105.14476",
                 bibtex: `@article{DBLP:journals/tkde/QinZZ23,
@@ -174,7 +174,7 @@ bibsource    = {dblp computer science bibliography, https://dblp.org}
             authors: "Huiling Qin, Xianyuan Zhan, Yuanxun Li, Xiaodu Yang, Yu Zheng",
             venue: "ACM SIGKDD 2021",
             type: "会议",
-            corresponding: true,
+            correspondingAuthors: ["Huiling Qin"],
             links: {
                 paper: "http://urban-computing.com/pdf/Network-Wide%20Traffic%20States%20Imputation%20Using%20Self-interested%20Coalitional%20Learning.pdf",
                 bibtex: `@inproceedings{DBLP:conf/kdd/QinZLY021,
@@ -206,7 +206,7 @@ bibsource    = {dblp computer science bibliography, https://dblp.org}
             authors: "Huiling Qin, Songyu Ke, Xiaodu Yang, Haoran Xu, Xianyuan Zhan, Yu Zheng",
             venue: "AAAI 2021",
             type: "会议",
-            corresponding: true,
+            correspondingAuthors: ["Huiling Qin"],
             links: {
                 paper: "https://ojs.aaai.org/index.php/AAAI/article/view/16556",
                 bibtex: `@inproceedings{DBLP:conf/aaai/QinKYXZ021,
