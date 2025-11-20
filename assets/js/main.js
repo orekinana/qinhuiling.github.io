@@ -153,7 +153,7 @@ function renderNavigation(navItems) {
         // Desktop nav
         const link = document.createElement('a');
         link.href = `#${item.id}`;
-        link.className = 'nav-link link-hover text-gray-600 dark:text-gray-400 hover:text-purple-600 dark:hover:text-purple-400 font-medium';
+        link.className = 'nav-link link-hover text-gray-600 dark:text-gray-400 hover:text-[#2c4f7c] dark:hover:text-blue-400 font-medium';
         link.textContent = item.label;
         link.dataset.section = item.id;
         navLinks.appendChild(link);
@@ -161,7 +161,7 @@ function renderNavigation(navItems) {
         // Mobile nav
         const mobileLink = document.createElement('a');
         mobileLink.href = `#${item.id}`;
-        mobileLink.className = 'block px-3 py-2 text-gray-600 dark:text-gray-400 hover:text-purple-600 dark:hover:text-purple-400';
+        mobileLink.className = 'block px-3 py-2 text-gray-600 dark:text-gray-400 hover:text-[#2c4f7c] dark:hover:text-blue-400';
         mobileLink.innerHTML = `<i class="fas ${item.icon} w-5 mr-2"></i>${item.label}`;
         mobileLink.addEventListener('click', () => {
             document.getElementById('mobile-menu').classList.add('hidden');
@@ -202,19 +202,19 @@ function renderProfile(profile) {
 
     // Contact
     if (profile.social.googleScholar) {
-        socialDiv.innerHTML += `<a href="${profile.social.googleScholar}" target="_blank" class="text-gray-600 dark:text-gray-400 hover:text-purple-600 dark:hover:text-purple-400"><i class="fas fa-graduation-cap text-lg"></i></a>`;
+        socialDiv.innerHTML += `<a href="${profile.social.googleScholar}" target="_blank" class="text-gray-600 dark:text-gray-400 hover:text-[#2c4f7c] dark:hover:text-blue-400"><i class="fas fa-graduation-cap text-lg"></i></a>`;
     }
     if (profile.social.schoolWebsite) {
-        socialDiv.innerHTML += `<a href="${profile.social.schoolWebsite}" target="_blank" class="text-gray-600 dark:text-gray-400 hover:text-purple-600 dark:hover:text-purple-400"><i class="fas fa-school text-lg"></i></a>`;
+        socialDiv.innerHTML += `<a href="${profile.social.schoolWebsite}" target="_blank" class="text-gray-600 dark:text-gray-400 hover:text-[#2c4f7c] dark:hover:text-blue-400"><i class="fas fa-school text-lg"></i></a>`;
     }
     if (profile.social.github) {
-        socialDiv.innerHTML += `<a href="${profile.social.github}" target="_blank" class="text-gray-600 dark:text-gray-400 hover:text-purple-600 dark:hover:text-purple-400"><i class="fab fa-github text-lg"></i></a>`;
+        socialDiv.innerHTML += `<a href="${profile.social.github}" target="_blank" class="text-gray-600 dark:text-gray-400 hover:text-[#2c4f7c] dark:hover:text-blue-400"><i class="fab fa-github text-lg"></i></a>`;
     }
     if (profile.social.linkedin) {
-        socialDiv.innerHTML += `<a href="${profile.social.linkedin}" target="_blank" class="text-gray-600 dark:text-gray-400 hover:text-purple-600 dark:hover:text-purple-400"><i class="fab fa-linkedin text-lg"></i></a>`;
+        socialDiv.innerHTML += `<a href="${profile.social.linkedin}" target="_blank" class="text-gray-600 dark:text-gray-400 hover:text-[#2c4f7c] dark:hover:text-blue-400"><i class="fab fa-linkedin text-lg"></i></a>`;
     }
     if (profile.social.twitter) {
-        socialDiv.innerHTML += `<a href="${profile.social.twitter}" target="_blank" class="text-gray-600 dark:text-gray-400 hover:text-purple-600 dark:hover:text-purple-400"><i class="fab fa-twitter text-lg"></i></a>`;
+        socialDiv.innerHTML += `<a href="${profile.social.twitter}" target="_blank" class="text-gray-600 dark:text-gray-400 hover:text-[#2c4f7c] dark:hover:text-blue-400"><i class="fab fa-twitter text-lg"></i></a>`;
     }
 }
 
@@ -231,7 +231,7 @@ function renderSections(sections) {
     Object.entries(sections).forEach(([key, section]) => {
         const sectionDiv = document.createElement('section');
         sectionDiv.id = key;
-        sectionDiv.className = 'fade-in bg-white dark:bg-gray-800 rounded-2xl shadow-lg p-6';
+        sectionDiv.className = 'fade-in bg-white dark:bg-gray-800 rounded-2xl shadow-sm border border-gray-100 dark:border-gray-700 p-6';
 
         // Section title
         const title = document.createElement('h2');
@@ -338,9 +338,9 @@ function setupScrollSpy() {
         });
 
         navLinks.forEach(link => {
-            link.classList.remove('text-purple-600', 'dark:text-purple-400');
+            link.classList.remove('text-[#2c4f7c]', 'dark:text-blue-400');
             if (link.dataset.section === current) {
-                link.classList.add('text-purple-600', 'dark:text-purple-400');
+                link.classList.add('text-[#2c4f7c]', 'dark:text-blue-400');
             }
         });
     });

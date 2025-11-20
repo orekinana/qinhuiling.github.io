@@ -31,7 +31,7 @@ const renderPublicationItem = (item) => {
                 const copiedText = displayKeys.bibtexCopiedText[currentLang];
                 linksHtml += `
                     <button
-                        class="publication-link-btn inline-flex items-center px-3 py-1.5 text-xs font-medium rounded-md border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700 hover:border-purple-300 dark:hover:border-purple-600 hover:text-purple-600 dark:hover:text-purple-400 transition-all duration-200 ease-in-out shadow-sm hover:shadow-md"
+                        class="publication-link-btn inline-flex items-center px-3 py-1.5 text-xs font-medium rounded-md border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700 hover:border-blue-300 dark:hover:border-blue-600 hover:text-[#2c4f7c] dark:hover:text-blue-400 transition-all duration-200 ease-in-out shadow-sm"
                         data-bibtex="${encodeURIComponent(url)}"
                         data-copy-text="${copyText}"
                         data-copied-text="${copiedText}"
@@ -52,7 +52,7 @@ const renderPublicationItem = (item) => {
                                   key === 'video' ? displayKeys.pubLinkVideo[currentLang] : key;
                 linksHtml += `
                     <a href="${url}" target="_blank"
-                       class="publication-link-btn inline-flex items-center px-3 py-1.5 text-xs font-medium rounded-md border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700 hover:border-purple-300 dark:hover:border-purple-600 hover:text-purple-600 dark:hover:text-purple-400 transition-all duration-200 ease-in-out shadow-sm hover:shadow-md">
+                       class="publication-link-btn inline-flex items-center px-3 py-1.5 text-xs font-medium rounded-md border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700 hover:border-blue-300 dark:hover:border-blue-600 hover:text-[#2c4f7c] dark:hover:text-blue-400 transition-all duration-200 ease-in-out shadow-sm">
                         <i class="fas ${icon} mr-1.5"></i>
                         ${displayKey}
                     </a>
@@ -61,7 +61,7 @@ const renderPublicationItem = (item) => {
         });
         linksHtml += '</div>';
     }
-    const correspondingMark = item.corresponding ? '<span class="ml-1 text-xs text-purple-600">*</span>' : '';
+    const correspondingMark = item.corresponding ? '<span class="ml-1 text-xs text-[#2c4f7c]">*</span>' : '';
     itemDiv.innerHTML = `
         <h3 class="font-semibold text-gray-900 dark:text-gray-100 mb-1">${item.title}${correspondingMark}</h3>
         <p class="text-sm text-gray-600 dark:text-gray-400 mb-1">${item.authors}</p>

@@ -8,7 +8,7 @@ const periodsRenderer = (section) => {
         const itemContainer = document.createElement('div');
         itemContainer.className = 'relative pl-8 pb-4 border-l-2 border-gray-300 dark:border-gray-700 last:border-l-0';
         itemContainer.innerHTML = `
-            <div class="absolute left-[-9px] top-0 w-4 h-4 bg-purple-600 rounded-full"></div>
+            <div class="absolute left-[-9px] top-0 w-4 h-4 bg-[#2c4f7c] rounded-full"></div>
             <div class="bg-gray-50 dark:bg-gray-700/50 rounded-lg p-4">
                 <div class="text-sm font-mono text-gray-500 dark:text-gray-400 mb-1">${item.period}</div>
                 <h3 class="font-semibold text-gray-900 dark:text-gray-100">${item.degree || item.position}</h3>
