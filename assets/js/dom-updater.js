@@ -165,10 +165,13 @@ window.DOMUpdater = (function() {
             }
         });
 
-        // 首次加载：滚动到顶部
+        // 首次加载：滚动到顶部（除非有锚点，由 main.js 处理）
         if (isFirstLoad) {
             setTimeout(() => {
-                window.scrollTo({ top: 0, behavior: 'instant' });
+                // 如果 URL 中有锚点，跳过滚动到顶部（由 main.js 的 handleInitialHashNavigation 处理）
+                if (!window.location.hash) {
+                    window.scrollTo({ top: 0, behavior: 'instant' });
+                }
                 isFirstLoad = false;
             }, 50);
         } else {

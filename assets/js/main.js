@@ -2,6 +2,7 @@
 // State management
 let currentLang = window.INITIAL_LANG || 'zh'; // Use language detected by loader.js
 let isDarkMode = false;
+let isFirstRender = true; // 标记是否是首次渲染
 
 tailwind.config = {
     darkMode: 'class',
@@ -12,11 +13,12 @@ tailwind.config = {
 
 // Initialize function
 function initializeApp() {
-    // Check for saved preferences
-    const savedLang = localStorage.getItem('language') || window.INITIAL_LANG || 'zh';
-    const savedTheme = localStorage.getItem('theme') || 'light';
+    // 使用 loader.js 检测到的语言（URL 路径优先级最高）
+    // 不使用 localStorage，因为 URL 路径应该覆盖本地存储
+    currentLang = window.INITIAL_LANG || 'zh';
 
-    currentLang = savedLang;
+    // 应用主题（从 localStorage 读取）
+    const savedTheme = localStorage.getItem('theme') || 'light';
     isDarkMode = savedTheme === 'dark';
 
     // Apply theme correctly
@@ -141,6 +143,42 @@ function renderContent() {
 
     // Update theme buttons after rendering
     updateThemeButtons();
+
+    // 首次渲染完成后，处理 URL 中的锚点跳转
+    if (isFirstRender) {
+        handleInitialHashNavigation();
+        isFirstRender = false;
+    }
+}
+
+// 处理首次加载时的锚点跳转
+function handleInitialHashNavigation() {
+    const hash = window.location.hash;
+
+    if (!hash) return;
+
+    // 移除 # 号，获取目标 section ID
+    const targetId = hash.slice(1);
+
+    // 等待所有内容和动画完成后再跳转
+    // section 淡入动画是 300ms，所以需要等待至少 400ms
+    setTimeout(() => {
+        const targetElement = document.getElementById(targetId);
+
+        if (targetElement) {
+            const offset = 80; // 固定导航栏高度
+            const targetPosition = targetElement.offsetTop - offset;
+
+            window.scrollTo({
+                top: targetPosition,
+                behavior: 'smooth'
+            });
+
+            console.log(`[Hash Navigation] Scrolled to section: ${targetId}`);
+        } else {
+            console.warn(`[Hash Navigation] Target section not found: ${targetId}`);
+        }
+    }, 500); // 500ms 延迟，确保所有动画完成和内容已渲染
 }
 
 // Render navigation
@@ -307,6 +345,9 @@ function setupEventListeners() {
             currentLang = newLang;
             localStorage.setItem('language', currentLang);
 
+            // 更新全局语言标记（重要：保持和 loader.js 同步）
+            window.INITIAL_LANG = currentLang;
+
             // 更新 URL 路径（保留当前锚点）
             const hash = window.location.hash;
             const newPath = `/${currentLang}${hash}`;
@@ -396,7 +437,7 @@ function setupBackToTop() {
 }
 
 // Setup browser navigation (back/forward button) handler
-window.addEventListener('popstate', (event) => {
+window.addEventListener('popstate', async (event) => {
     // 检测 URL 路径变化
     const path = window.location.pathname;
     let newLang = 'zh'; // 默认
@@ -409,8 +450,20 @@ window.addEventListener('popstate', (event) => {
 
     // 如果语言变化，重新渲染
     if (newLang !== currentLang) {
+        // 检查新语言是否已加载
+        if (!window.LOADED_LANGUAGES.has(newLang)) {
+            try {
+                await window.loadLanguageContent(newLang);
+                window.LOADED_LANGUAGES.add(newLang);
+            } catch (error) {
+                console.error(`Failed to load ${newLang} content:`, error);
+                return;
+            }
+        }
+
         currentLang = newLang;
         localStorage.setItem('language', currentLang);
+        window.INITIAL_LANG = currentLang; // 保持全局语言标记同步
         renderContent();
     }
 });
