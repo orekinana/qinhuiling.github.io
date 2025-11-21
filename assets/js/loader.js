@@ -15,22 +15,31 @@
     const VERSION = getVersion();
 
     // 检测用户语言偏好
-    // 优先级: localStorage > URL 参数 > 浏览器语言 > 默认中文
+    // 优先级: URL 路径 > localStorage > URL 参数 > 浏览器语言 > 默认中文
     const detectLanguage = () => {
-        // 1. 检查 localStorage
+        // 1. 检查 URL 路径（最高优先级）
+        const path = window.location.pathname;
+        if (path === '/zh' || path.startsWith('/zh/') || path.startsWith('/zh#')) {
+            return 'zh';
+        }
+        if (path === '/en' || path.startsWith('/en/') || path.startsWith('/en#')) {
+            return 'en';
+        }
+
+        // 2. 检查 localStorage
         const saved = localStorage.getItem('language');
         if (saved && (saved === 'zh' || saved === 'en')) {
             return saved;
         }
 
-        // 2. 检查 URL 参数
+        // 3. 检查 URL 参数（保持向后兼容）
         const urlParams = new URLSearchParams(window.location.search);
         const urlLang = urlParams.get('lang');
         if (urlLang && (urlLang === 'zh' || urlLang === 'en')) {
             return urlLang;
         }
 
-        // 3. 检查浏览器语言
+        // 4. 检查浏览器语言
         const browserLang = navigator.language || navigator.userLanguage;
         if (browserLang) {
             if (browserLang.toLowerCase().startsWith('zh')) {
@@ -41,7 +50,7 @@
             }
         }
 
-        // 4. 默认中文
+        // 5. 默认中文
         return 'zh';
     };
 

@@ -306,6 +306,12 @@ function setupEventListeners() {
             // Switch to the new language
             currentLang = newLang;
             localStorage.setItem('language', currentLang);
+
+            // 更新 URL 路径（保留当前锚点）
+            const hash = window.location.hash;
+            const newPath = `/${currentLang}${hash}`;
+            history.pushState({ lang: currentLang }, '', newPath);
+
             renderContent();
         });
     });
@@ -388,3 +394,23 @@ function setupBackToTop() {
         });
     });
 }
+
+// Setup browser navigation (back/forward button) handler
+window.addEventListener('popstate', (event) => {
+    // 检测 URL 路径变化
+    const path = window.location.pathname;
+    let newLang = 'zh'; // 默认
+
+    if (path === '/en' || path.startsWith('/en/') || path.startsWith('/en#')) {
+        newLang = 'en';
+    } else if (path === '/zh' || path.startsWith('/zh/') || path.startsWith('/zh#')) {
+        newLang = 'zh';
+    }
+
+    // 如果语言变化，重新渲染
+    if (newLang !== currentLang) {
+        currentLang = newLang;
+        localStorage.setItem('language', currentLang);
+        renderContent();
+    }
+});

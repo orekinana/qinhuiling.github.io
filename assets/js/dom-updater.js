@@ -179,10 +179,20 @@ window.DOMUpdater = (function() {
 
     // 更新 section 内容
     function updateSectionContent(section, data, renderers, key) {
-        // 更新标题
-        const title = section.querySelector('.section-heading, h2');
-        if (title) {
-            title.textContent = data.title;
+        // 更新标题和链接图标
+        const titleContainer = section.querySelector('.section-title-container');
+        if (titleContainer) {
+            const title = titleContainer.querySelector('.section-heading, h2');
+            if (title) {
+                title.textContent = data.title;
+            }
+        } else {
+            // 如果还没有容器，需要重建标题结构
+            const oldTitle = section.querySelector('.section-heading, h2');
+            if (oldTitle) {
+                const newTitleContainer = createTitleWithLink(data.title, key);
+                oldTitle.replaceWith(newTitleContainer);
+            }
         }
 
         // 渲染内容
@@ -215,6 +225,47 @@ window.DOMUpdater = (function() {
         section.style.opacity = '1';
     }
 
+    // 创建标题和链接图标
+    function createTitleWithLink(titleText, sectionKey) {
+        const titleContainer = document.createElement('div');
+        titleContainer.className = 'section-title-container flex items-center mb-6 group';
+
+        const title = document.createElement('h2');
+        title.className = 'section-heading text-2xl font-bold';
+        title.textContent = titleText;
+
+        const linkIcon = document.createElement('a');
+        linkIcon.href = `#${sectionKey}`;
+        linkIcon.className = 'section-link-icon ml-2 text-gray-400 hover:text-[#2c4f7c] dark:hover:text-blue-400 opacity-0 group-hover:opacity-100 transition-opacity duration-200';
+        linkIcon.innerHTML = '🔗';
+        linkIcon.setAttribute('aria-label', 'Copy section link');
+        linkIcon.title = 'Copy link to this section';
+
+        linkIcon.addEventListener('click', (e) => {
+            e.preventDefault();
+            const currentLang = window.INITIAL_LANG || 'zh';
+            const url = `${window.location.origin}/${currentLang}#${sectionKey}`;
+
+            navigator.clipboard.writeText(url).then(() => {
+                // 显示复制成功提示
+                const originalContent = linkIcon.innerHTML;
+                linkIcon.innerHTML = '✓';
+                linkIcon.classList.add('text-green-500', 'dark:text-green-400');
+                setTimeout(() => {
+                    linkIcon.innerHTML = originalContent;
+                    linkIcon.classList.remove('text-green-500', 'dark:text-green-400');
+                }, 2000);
+            }).catch(err => {
+                console.error('Failed to copy link:', err);
+            });
+        });
+
+        titleContainer.appendChild(title);
+        titleContainer.appendChild(linkIcon);
+
+        return titleContainer;
+    }
+
     // 创建新 section
     function createSection(key, data, renderers) {
         const section = document.createElement('section');
@@ -223,11 +274,9 @@ window.DOMUpdater = (function() {
         section.style.opacity = '0';
         section.style.transition = 'opacity 0.3s ease';
 
-        // 创建标题
-        const title = document.createElement('h2');
-        title.className = 'section-heading text-2xl font-bold mb-6';
-        title.textContent = data.title;
-        section.appendChild(title);
+        // 创建标题和链接图标
+        const titleContainer = createTitleWithLink(data.title, key);
+        section.appendChild(titleContainer);
 
         // 渲染内容
         const contentElement = renderSectionContent(data, renderers, key);

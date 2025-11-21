@@ -136,6 +136,13 @@ $domain_input {
     # 网站根目录
     root * $WEB_ROOT
 
+    # 路径重写 - 支持 /zh 和 /en 访问（必须在 file_server 之前）
+    # 将 /zh 和 /en 重写为根路径，前端JS会读取路径来决定语言
+    @lang_paths {
+        path /zh /en /zh/ /en/
+    }
+    rewrite @lang_paths /
+
     # 启用文件服务器
     file_server
 

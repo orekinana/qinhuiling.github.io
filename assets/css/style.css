@@ -99,3 +99,41 @@ html {
     margin-right: 12px;
     vertical-align: middle;
 }
+
+/* Section link icon styles */
+.section-title-container {
+    position: relative;
+}
+
+.section-link-icon {
+    display: inline-flex;
+    align-items: center;
+    text-decoration: none;
+    cursor: pointer;
+    font-size: 0.875rem; /* 14px */
+    user-select: none;
+}
+
+/* Desktop: only show on hover */
+@media (min-width: 768px) {
+    .section-link-icon {
+        opacity: 0;
+        transition: opacity 0.2s ease;
+    }
+
+    .section-title-container.group:hover .section-link-icon,
+    .section-title-container:hover .section-link-icon {
+        opacity: 1;
+    }
+}
+
+/* Mobile: always show with reduced opacity */
+@media (max-width: 767px) {
+    .section-link-icon {
+        opacity: 0.5;
+    }
+
+    .section-link-icon:active {
+        opacity: 1;
+    }
+}
