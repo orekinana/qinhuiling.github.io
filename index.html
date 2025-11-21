@@ -13,6 +13,9 @@
     <meta name="robots" content="index, follow">
     <link rel="canonical" href="http://qinhuiling.me/">
 
+    <!-- Assets Version for Cache Control (will be replaced during deployment) -->
+    <meta name="assets-version" content="BUILD_VERSION">
+
     <!-- Open Graph Meta Tags for Social Sharing -->
     <meta property="og:title" content="Huiling Qin (秦慧玲) - Assistant Professor at Beijing Normal University">
     <meta property="og:description" content="Dr. Huiling Qin is a Assistant Professor at Beijing Normal University, specializing in spatiotemporal data mining, urban computing, and artificial intelligence.">
@@ -59,39 +62,18 @@
     }
     </script>
 
-    <script src="assets/js/consts.js"></script>
-    <script src="assets/js/i18n.js"></script>
-
-    <script src="content/en/consts.js"></script>
-    <script src="content/en/navigation.js"></script>
-    <script src="content/en/profile.js"></script>
-    <script src="content/en/section_about.js"></script>
-    <script src="content/en/section_publications.js"></script>
-    <script src="content/en/section_projects.js"></script>
-    <script src="content/en/section_honors.js"></script>
-    <script src="content/en/section_education.js"></script>
-    <script src="content/en/section_experience.js"></script>
-    <script src="content/en/section_patents.js"></script>
-    <script src="content/en/section_services.js"></script>
-    <script src="content/en/section_lab.js"></script>
-
-    <script src="content/zh/consts.js"></script>
-    <script src="content/zh/navigation.js"></script>
-    <script src="content/zh/profile.js"></script>
-    <script src="content/zh/section_about.js"></script>
-    <script src="content/zh/section_publications.js"></script>
-    <script src="content/zh/section_projects.js"></script>
-    <script src="content/zh/section_honors.js"></script>
-    <script src="content/zh/section_education.js"></script>
-    <script src="content/zh/section_experience.js"></script>
-    <script src="content/zh/section_patents.js"></script>
-    <script src="content/zh/section_services.js"></script>
-    <script src="content/zh/section_lab.js"></script>
-
+    <!-- Static Dependencies (cached long-term) -->
     <script src="assets/npm/tailwindcss/3.4.17/all.min.js"></script>
-
     <link rel="stylesheet" href="assets/npm/font-awesome/6.5.1/all.min.css">
     <link rel="stylesheet" href="assets/css/style.css">
+
+    <!-- Core Utilities (loaded first) -->
+    <script src="assets/js/error-handler.js"></script>
+    <script src="assets/js/loading-indicator.js"></script>
+    <script src="assets/js/dom-updater.js"></script>
+
+    <!-- Dynamic Resource Loader (handles all JS loading with version control) -->
+    <script src="assets/js/loader.js"></script>
 
 </head>
 
@@ -119,6 +101,8 @@
                             <i class="fas fa-sun hidden dark:inline"></i>
                         </button>
                     </div>
+
+                    <!-- Loading Indicator will be injected here by JavaScript -->
                 </div>
 
                 <!-- Mobile menu button -->
@@ -202,57 +186,31 @@
                 <main class="flex-1 space-y-8" id="main-content">
                     <!--
                     ========================================
-                    以下静态内容仅用于SEO优化目的
+                    静态内容：用于 SEO + 就地更新 + JS 失败兜底
                     ========================================
-                    注意：
-                    1. 这些内容主要为了让搜索引擎能够抓取和索引页面信息
-                    2. 内容可能不是最新的，真实数据由JavaScript动态加载
-                    3. JavaScript加载完成后，这些静态内容会被隐藏
-                    4. 用户看到的实际内容来自JavaScript渲染的动态内容
+                    设计原则：
+                    1. 保持简洁，只展示基础信息
+                    2. 结构便于 DOM 更新器就地更新
+                    3. JS 加载成功后平滑过渡到动态内容
                     ========================================
                     -->
                     <section id="about" class="static-content bg-white dark:bg-gray-800 rounded-2xl shadow-sm border border-gray-100 dark:border-gray-700 p-6">
-                        <h2 class="text-2xl font-bold mb-6">About Me</h2>
-                        <p class="text-gray-600 dark:text-gray-400 leading-relaxed mb-4">
-                            I am a Assistant Professor at the Institute of Artificial Intelligence and Future Networks, Beijing Normal University Zhuhai. My research interests include spatiotemporal data mining, urban computing, and artificial intelligence.
-                        </p>
-                        <p class="text-gray-600 dark:text-gray-400 leading-relaxed mb-4">
-                            I received my Ph.D. degree from Xidian University in 2023. From 2017 to 2023, I worked as an algorithm engineer at prestigious institutions including Microsoft Research Asia, DiDi Research, and JD Technology, gaining extensive industry experience in applying AI to real-world problems.
-                        </p>
-                        <p class="text-gray-600 dark:text-gray-400 leading-relaxed">
-                            I have published over 10 papers in top-tier conferences and journals, led 1 National Natural Science Foundation project, participated in 1 NSFC project, 2 National Key R&D Program projects, and 2 Beijing municipal research projects. I have also filed 2 patents.
-                        </p>
+                        <h2 class="section-heading text-2xl font-bold mb-6">About Me</h2>
+                        <div class="section-content">
+                            <p class="text-gray-600 dark:text-gray-400 leading-relaxed mb-4">
+                                I am an Assistant Professor at the Institute of Artificial Intelligence and Future Networks, Beijing Normal University. My research focuses on spatiotemporal data mining, urban computing, and artificial intelligence.
+                            </p>
+                        </div>
                     </section>
 
                     <section id="publications" class="static-content bg-white dark:bg-gray-800 rounded-2xl shadow-sm border border-gray-100 dark:border-gray-700 p-6">
-                        <h2 class="text-2xl font-bold mb-6">Selected Publications</h2>
-                        <ul class="space-y-4">
-                            <li class="border-b border-gray-200 dark:border-gray-700 pb-4 last:border-b-0">
-                                <h3 class="font-semibold text-gray-900 dark:text-gray-100">Spatial Semantic-based Enhanced Address Parsing via Adaptive Weighted Learning</h3>
-                                <p class="text-sm text-gray-600 dark:text-gray-400">Huiling Qin, Ming Wang, Yuanxun Li, Junbo Zhang, Yu Zheng</p>
-                                <p class="text-sm text-gray-500">ACM CIKM 2025</p>
-                            </li>
-                            <li class="border-b border-gray-200 dark:border-gray-700 pb-4 last:border-b-0">
-                                <h3 class="font-semibold text-gray-900 dark:text-gray-100">Network-wide Traffic States Imputation Using Self-interested Coalitional Learning</h3>
-                                <p class="text-sm text-gray-600 dark:text-gray-400">Huiling Qin, Xianyuan Zhan, Yuanxun Li, Xiaodu Yang, Yu Zheng</p>
-                                <p class="text-sm text-gray-500">ACM SIGKDD 2021</p>
-                            </li>
-                            <li class="border-b border-gray-200 dark:border-gray-700 pb-4 last:border-b-0">
-                                <h3 class="font-semibold text-gray-900 dark:text-gray-100">Robust Spatio-Temporal Purchase Prediction via Deep Meta Learning</h3>
-                                <p class="text-sm text-gray-600 dark:text-gray-400">Huiling Qin, Songyu Ke, Xiaodu Yang, Haoran Xu, Xianyuan Zhan, Yu Zheng</p>
-                                <p class="text-sm text-gray-500">AAAI 2021</p>
-                            </li>
-                        </ul>
+                        <h2 class="section-heading text-2xl font-bold mb-6">Selected Publications</h2>
+                        <div class="section-content">
+                            <div class="text-gray-600 dark:text-gray-400 text-sm">
+                                Published 10+ papers in top-tier conferences and journals including SIGKDD, AAAI, TKDE, etc.
+                            </div>
+                        </div>
                     </section>
-
-                    <!--
-                    ========================================
-                    静态SEO内容结束
-                    ========================================
-                    以上内容将在JavaScript加载后被隐藏，
-                    用户将看到由JavaScript动态生成的最新内容
-                    ========================================
-                    -->
 
                     <!-- Content sections will be dynamically inserted here and replace static content -->
                 </main>
@@ -264,16 +222,6 @@
     <button id="back-to-top" class="fixed bottom-8 right-8 p-3 bg-[#2c4f7c] text-white rounded-full shadow-sm border border-gray-200 opacity-0 invisible transition-all hover:bg-[#1a365d]">
         <i class="fas fa-arrow-up"></i>
     </button>
-
-    <script src="assets/js/section_renderer/honors.js"></script>
-    <script src="assets/js/section_renderer/markdown.js"></script>
-    <script src="assets/js/section_renderer/news.js"></script>
-    <script src="assets/js/section_renderer/patents.js"></script>
-    <script src="assets/js/section_renderer/periods.js"></script>
-    <script src="assets/js/section_renderer/projects.js"></script>
-    <script src="assets/js/section_renderer/publications.js"></script>
-    <script src="assets/js/section_renderer/talks.js"></script>
-    <script src="assets/js/main.js"></script>
 
 </body>
 </html>

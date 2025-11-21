@@ -142,6 +142,26 @@ $domain_input {
     # 启用 gzip 压缩
     encode gzip
 
+    # 缓存控制策略 - HTML 文件必须重新验证
+    @html {
+        path *.html /
+    }
+    header @html Cache-Control "no-cache, must-revalidate"
+    header @html Pragma "no-cache"
+    header @html Expires "0"
+
+    # 缓存控制策略 - 动态内容（JS/CSS）短期缓存
+    @dynamic {
+        path /content/* /assets/js/* /assets/css/*
+    }
+    header @dynamic Cache-Control "max-age=300, must-revalidate"
+
+    # 缓存控制策略 - 静态资源（npm库、图片、文件）长期缓存
+    @static {
+        path /assets/npm/* /assets/images/* /assets/files/*
+    }
+    header @static Cache-Control "public, max-age=31536000, immutable"
+
     # 访问日志
     log {
         output file /var/log/caddy/access.log
@@ -209,6 +229,12 @@ start_service() {
     chmod -R 755 "$WEB_ROOT"
 
     print_info "文件复制完成"
+
+    # 注入版本号用于缓存控制
+    print_info "注入版本号..."
+    VERSION=$(date +%Y%m%d%H%M%S)
+    sed -i "s/BUILD_VERSION/$VERSION/g" "$WEB_ROOT/index.html"
+    print_info "版本号: $VERSION"
 
     # 确保日志目录存在且权限正确
     print_info "检查日志目录..."
@@ -302,6 +328,12 @@ update_files() {
     chmod -R 755 "$WEB_ROOT"
 
     print_info "文件更新完成"
+
+    # 注入版本号用于缓存控制
+    print_info "注入版本号..."
+    VERSION=$(date +%Y%m%d%H%M%S)
+    sed -i "s/BUILD_VERSION/$VERSION/g" "$WEB_ROOT/index.html"
+    print_info "版本号: $VERSION"
 
     # 如果服务正在运行，重新加载配置
     if systemctl is-active --quiet caddy; then

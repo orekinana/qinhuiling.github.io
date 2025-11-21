@@ -1,6 +1,6 @@
 
 // State management
-let currentLang = 'zh';
+let currentLang = window.INITIAL_LANG || 'zh'; // Use language detected by loader.js
 let isDarkMode = false;
 
 tailwind.config = {
@@ -10,10 +10,10 @@ tailwind.config = {
     }
 }
 
-// Initialize
-document.addEventListener('DOMContentLoaded', () => {
+// Initialize function
+function initializeApp() {
     // Check for saved preferences
-    const savedLang = localStorage.getItem('language') || 'zh';
+    const savedLang = localStorage.getItem('language') || window.INITIAL_LANG || 'zh';
     const savedTheme = localStorage.getItem('theme') || 'light';
 
     currentLang = savedLang;
@@ -33,7 +33,17 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Setup back to top button
     setupBackToTop();
-});
+}
+
+// Initialize
+// Check if DOM is already loaded (for dynamic script loading)
+if (document.readyState === 'loading') {
+    // DOM is still loading, wait for it
+    document.addEventListener('DOMContentLoaded', initializeApp);
+} else {
+    // DOM is already loaded, initialize immediately
+    initializeApp();
+}
 
 // Apply theme to DOM
 function applyTheme() {
@@ -117,25 +127,20 @@ function renderContent() {
     document.getElementById('lang-toggle').textContent = displayKeys.lang[currentLang];
     document.getElementById('lang-toggle-mobile').textContent = displayKeys.lang[currentLang];
 
-    // Render navigation
-    renderNavigation(data.navigation);
-
-    // Render profile
-    renderProfile(data.profile);
-
-    // Render sections
-    renderSections(data.sections);
+    // Use DOM Updater for smooth updates
+    if (window.DOMUpdater) {
+        window.DOMUpdater.updateNavigation(data.navigation, currentLang);
+        window.DOMUpdater.updateProfile(data.profile);
+        window.DOMUpdater.updateSections(data.sections, getSectionRenderers());
+    } else {
+        // Fallback to old method if DOMUpdater not available
+        renderNavigation(data.navigation);
+        renderProfile(data.profile);
+        renderSections(data.sections);
+    }
 
     // Update theme buttons after rendering
     updateThemeButtons();
-
-    // Add fade-in animation to new content
-    document.querySelectorAll('.fade-in').forEach(el => {
-        el.style.opacity = '0';
-        setTimeout(() => {
-            el.style.opacity = '1';
-        }, 100);
-    });
 }
 
 // Render navigation
@@ -218,7 +223,25 @@ function renderProfile(profile) {
     }
 }
 
-// Render sections
+// Get section renderers mapping
+function getSectionRenderers() {
+    return {
+        'about': markdownRenderer,
+        'services': markdownRenderer,
+        'lab': markdownRenderer,
+        'news': newsRenderer,
+        'publications': publicationsRenderer,
+        'projects': projectsRenderer,
+        'honors': honorsRenderer,
+        'education': periodsRenderer,
+        'experience': periodsRenderer,
+        'internships': periodsRenderer,
+        'patents': patentsRenderer,
+        'talks': talksRenderer
+    };
+}
+
+// Render sections (fallback method, kept for compatibility)
 function renderSections(sections) {
     const mainContent = document.getElementById('main-content');
 
@@ -227,6 +250,8 @@ function renderSections(sections) {
     staticContent.forEach(element => element.style.display = 'none');
 
     mainContent.innerHTML = '';
+
+    const renderers = getSectionRenderers();
 
     Object.entries(sections).forEach(([key, section]) => {
         const sectionDiv = document.createElement('section');
@@ -239,39 +264,12 @@ function renderSections(sections) {
         title.textContent = section.title;
         sectionDiv.appendChild(title);
 
-        let contentElement = null;
-        switch (key) {
-            case 'about':
-            case 'services':
-            case 'lab':
-                contentElement = markdownRenderer(section);
-                break;
-            case 'news':
-                contentElement = newsRenderer(section);
-                break;
-            case 'publications':
-                contentElement = publicationsRenderer(section);
-                break;
-            case 'projects':
-                contentElement = projectsRenderer(section);
-                break;
-            case 'honors':
-                contentElement = honorsRenderer(section);
-                break;
-            case 'education':
-            case 'experience':
-            case 'internships':
-                contentElement = periodsRenderer(section);
-                break;
-            case 'patents':
-                contentElement = patentsRenderer(section);
-                break;
-            case 'talks':
-                contentElement = talksRenderer(section);
-                break;
-        }
-        if (contentElement) {
-            sectionDiv.appendChild(contentElement);
+        const renderer = renderers[key];
+        if (renderer) {
+            const contentElement = renderer(section);
+            if (contentElement) {
+                sectionDiv.appendChild(contentElement);
+            }
         }
 
         mainContent.appendChild(sectionDiv);
@@ -280,10 +278,33 @@ function renderSections(sections) {
 
 // Setup event listeners
 function setupEventListeners() {
-    // Language toggle
+    // Language toggle with lazy loading
     ['lang-toggle', 'lang-toggle-mobile'].forEach(id => {
-        document.getElementById(id).addEventListener('click', () => {
-            currentLang = currentLang === 'zh' ? 'en' : 'zh';
+        document.getElementById(id).addEventListener('click', async () => {
+            const newLang = currentLang === 'zh' ? 'en' : 'zh';
+
+            // Check if the new language is already loaded
+            if (!window.LOADED_LANGUAGES.has(newLang)) {
+                const button = document.getElementById(id);
+                const originalText = button.textContent;
+                button.textContent = '...';
+                button.disabled = true;
+
+                try {
+                    await window.loadLanguageContent(newLang);
+                    window.LOADED_LANGUAGES.add(newLang);
+                } catch (error) {
+                    console.error(`Failed to load ${newLang} content:`, error);
+                    button.textContent = originalText;
+                    button.disabled = false;
+                    return;
+                }
+
+                button.disabled = false;
+            }
+
+            // Switch to the new language
+            currentLang = newLang;
             localStorage.setItem('language', currentLang);
             renderContent();
         });
