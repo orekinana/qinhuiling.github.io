@@ -1,0 +1,63 @@
+# Caddy 配置文件
+# 自动生成的配置，适用于学术主页项目
+# 支持中英文路径访问 (/zh, /en) 和 SEO 优化
+
+# 域名占位符（部署时会被 run.sh 替换）
+DOMAIN_PLACEHOLDER {
+    # 网站根目录
+    root * /var/www/html
+
+    # 路径重写 - 支持 /zh 和 /en 访问（必须在 file_server 之前）
+    # 将 /zh 和 /en 重写为根路径，前端JS会读取路径来决定语言
+    @lang_paths {
+        path /zh /en /zh/ /en/
+    }
+    rewrite @lang_paths /
+
+    # 启用文件服务器
+    file_server
+
+    # 启用 gzip 压缩
+    encode gzip
+
+    # 缓存控制策略 - HTML 文件必须重新验证
+    @html {
+        path *.html /
+    }
+    header @html Cache-Control "no-cache, must-revalidate"
+    header @html Pragma "no-cache"
+    header @html Expires "0"
+
+    # 缓存控制策略 - 动态内容（JS/CSS）短期缓存
+    @dynamic {
+        path /content/* /assets/js/* /assets/css/*
+    }
+    header @dynamic Cache-Control "max-age=300, must-revalidate"
+
+    # 缓存控制策略 - 静态资源（npm库、图片、文件）长期缓存
+    @static {
+        path /assets/npm/* /assets/images/* /assets/files/*
+    }
+    header @static Cache-Control "public, max-age=604800, immutable"
+
+    # 访问日志
+    log {
+        output file /var/log/caddy/access.log
+        format json
+    }
+
+    # 自定义错误页面（可选）
+    # handle_errors {
+    #     @404 {
+    #         expression {http.error.status_code} == 404
+    #     }
+    #     rewrite @404 /404.html
+    #     file_server
+    # }
+}
+
+# 如果需要禁用自动 HTTPS（仅用于测试），取消下面的注释
+# {
+#     auto_https off
+# }
+

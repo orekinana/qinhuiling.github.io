@@ -107,6 +107,13 @@ install_caddy() {
 configure_caddyfile() {
     print_info "配置 Caddyfile..."
 
+    # 检查项目模板是否存在
+    if [ ! -f "$CURRENT_DIR/Caddyfile" ]; then
+        print_error "未找到项目 Caddyfile 模板！"
+        print_error "请确保 $CURRENT_DIR/Caddyfile 存在"
+        exit 1
+    fi
+
     # 获取用户输入的域名
     echo ""
     echo "请输入您的域名（多个域名用空格分隔）："
@@ -127,69 +134,9 @@ configure_caddyfile() {
         print_info "已备份现有配置"
     fi
 
-    # 创建新的 Caddyfile
-    cat > "$CADDY_CONFIG" <<EOF
-# Caddy 配置文件
-# 自动生成于 $(date)
-
-$domain_input {
-    # 网站根目录
-    root * $WEB_ROOT
-
-    # 路径重写 - 支持 /zh 和 /en 访问（必须在 file_server 之前）
-    # 将 /zh 和 /en 重写为根路径，前端JS会读取路径来决定语言
-    @lang_paths {
-        path /zh /en /zh/ /en/
-    }
-    rewrite @lang_paths /
-
-    # 启用文件服务器
-    file_server
-
-    # 启用 gzip 压缩
-    encode gzip
-
-    # 缓存控制策略 - HTML 文件必须重新验证
-    @html {
-        path *.html /
-    }
-    header @html Cache-Control "no-cache, must-revalidate"
-    header @html Pragma "no-cache"
-    header @html Expires "0"
-
-    # 缓存控制策略 - 动态内容（JS/CSS）短期缓存
-    @dynamic {
-        path /content/* /assets/js/* /assets/css/*
-    }
-    header @dynamic Cache-Control "max-age=300, must-revalidate"
-
-    # 缓存控制策略 - 静态资源（npm库、图片、文件）长期缓存
-    @static {
-        path /assets/npm/* /assets/images/* /assets/files/*
-    }
-    header @static Cache-Control "public, max-age=31536000, immutable"
-
-    # 访问日志
-    log {
-        output file /var/log/caddy/access.log
-        format json
-    }
-
-    # 自定义错误页面（可选）
-    # handle_errors {
-    #     @404 {
-    #         expression {http.error.status_code} == 404
-    #     }
-    #     rewrite @404 /404.html
-    #     file_server
-    # }
-}
-
-# 如果需要禁用自动 HTTPS（仅用于测试），取消下面的注释
-# {
-#     auto_https off
-# }
-EOF
+    # 使用项目模板，替换域名占位符
+    cp "$CURRENT_DIR/Caddyfile" "$CADDY_CONFIG"
+    sed -i "s/DOMAIN_PLACEHOLDER/$domain_input/g" "$CADDY_CONFIG"
 
     # 创建日志目录
     mkdir -p /var/log/caddy
@@ -223,12 +170,13 @@ start_service() {
     # 复制文件
     print_info "复制网站文件到 $WEB_ROOT ..."
 
-    # 排除脚本自身和隐藏文件
+    # 排除脚本自身、隐藏文件和 Caddyfile（Caddyfile 在 /etc/caddy/ 中管理）
     rsync -av --progress \
         --exclude="$(basename "$0")" \
         --exclude=".git" \
         --exclude=".gitignore" \
         --exclude="*.sh" \
+        --exclude="Caddyfile" \
         "$CURRENT_DIR/" "$WEB_ROOT/"
 
     # 设置权限
@@ -328,6 +276,7 @@ update_files() {
         --exclude=".git" \
         --exclude=".gitignore" \
         --exclude="*.sh" \
+        --exclude="Caddyfile" \
         "$CURRENT_DIR/" "$WEB_ROOT/"
 
     # 设置权限
@@ -342,11 +291,61 @@ update_files() {
     sed -i "s/BUILD_VERSION/$VERSION/g" "$WEB_ROOT/index.html"
     print_info "版本号: $VERSION"
 
+    # 更新 Caddyfile
+    print_info "更新 Caddyfile 配置..."
+
+    if [ ! -f "$CURRENT_DIR/Caddyfile" ]; then
+        print_warning "未找到项目 Caddyfile 模板，跳过配置更新"
+    elif [ ! -f "$CADDY_CONFIG" ]; then
+        print_warning "系统 Caddyfile 不存在，请先运行 install 命令"
+    else
+        # 提取当前配置的域名（从现有 Caddyfile 第一行域名配置）
+        current_domain=$(grep -E "^[a-zA-Z0-9].*\{" "$CADDY_CONFIG" | head -n 1 | sed 's/ {//')
+
+        if [ -z "$current_domain" ]; then
+            print_warning "无法从现有配置中提取域名"
+            print_info "请手动更新 Caddyfile 或重新运行 install 命令"
+        else
+            print_info "检测到当前域名: $current_domain"
+
+            # 备份现有配置
+            cp "$CADDY_CONFIG" "${CADDY_CONFIG}.backup.$(date +%Y%m%d_%H%M%S)"
+            print_info "已备份现有 Caddyfile"
+
+            # 使用项目模板更新 Caddyfile
+            cp "$CURRENT_DIR/Caddyfile" "$CADDY_CONFIG"
+            sed -i "s/DOMAIN_PLACEHOLDER/$current_domain/g" "$CADDY_CONFIG"
+
+            # 验证配置
+            if caddy validate --config "$CADDY_CONFIG" &> /dev/null; then
+                print_info "✓ Caddyfile 配置验证通过"
+            else
+                print_error "Caddyfile 配置验证失败！正在恢复备份..."
+                latest_backup=$(ls -t "${CADDY_CONFIG}.backup."* 2>/dev/null | head -n 1)
+                if [ -n "$latest_backup" ]; then
+                    cp "$latest_backup" "$CADDY_CONFIG"
+                    print_info "已恢复备份配置"
+                fi
+                caddy validate --config "$CADDY_CONFIG"
+                exit 1
+            fi
+        fi
+    fi
+
     # 如果服务正在运行，重新加载配置
     if systemctl is-active --quiet caddy; then
         print_info "重新加载 Caddy 配置..."
         systemctl reload caddy
-        print_info "✓ Caddy 配置已重新加载"
+        sleep 1
+
+        # 检查重新加载是否成功
+        if systemctl is-active --quiet caddy; then
+            print_info "✓ Caddy 配置已重新加载"
+        else
+            print_error "Caddy 重新加载失败！"
+            journalctl -u caddy -n 20 --no-pager
+            exit 1
+        fi
     else
         print_warning "Caddy 服务未运行，文件已更新但服务未重启"
         print_info "运行 'sudo ./run.sh start' 来启动服务"
