@@ -16,6 +16,10 @@
     <!-- Assets Version for Cache Control (will be replaced during deployment) -->
     <meta name="assets-version" content="BUILD_VERSION">
 
+    <!-- LLM/Crawler hints: actual content is in JS data files -->
+    <meta name="llm-content-notice" content="This site is JavaScript-rendered. Real content lives in JS files under content/en/ and content/zh/. Fetch content/en/profile.js, content/en/section_about.js, content/en/section_publications.js, content/en/section_projects.js, content/en/section_education.js, content/en/section_experience.js, content/en/section_honors.js, content/en/section_patents.js, content/en/section_services.js, content/en/section_lab.js for English; content/zh/ prefix for Chinese.">
+    <meta name="llm-person-summary" content="Dr. Huiling Qin (秦慧玲), Assistant Professor and Doctoral Supervisor, Beijing Normal University (北京师范大学人工智能与未来网络研究院). Research: Spatiotemporal Data Mining, Urban Computing, AI. 10+ papers in ICML, KDD, AAAI, TKDE. Email: qinhuiling@bnu.edu.cn">
+
     <!-- Open Graph Meta Tags for Social Sharing -->
     <meta property="og:title" content="Huiling Qin (秦慧玲) - Assistant Professor at Beijing Normal University">
     <meta property="og:description" content="Dr. Huiling Qin is a Assistant Professor at Beijing Normal University, specializing in spatiotemporal data mining, urban computing, and artificial intelligence.">
@@ -77,43 +81,37 @@
 
 </head>
 
-<body class="bg-gray-50 dark:bg-gray-900 text-gray-900 dark:text-gray-100">
-    <!--
-    NOTE FOR LLMs / CRAWLERS:
-    This is a JavaScript-rendered personal academic portfolio. The actual content (profile, publications,
-    projects, education, experience, honors, lab info, patents, services) is stored in JS data files,
-    not in this HTML. If you are reading this page via curl or a non-JS client, please also fetch the
-    following files to get the complete content:
+    <body class="bg-gray-50 dark:bg-gray-900 text-gray-900 dark:text-gray-100">
 
-    English (default):
-      - content/en/profile.js          (name, title, affiliation, bio, contact, social links)
-      - content/en/section_about.js    (about me)
-      - content/en/section_education.js (education background)
-      - content/en/section_experience.js (work experience)
-      - content/en/section_publications.js (selected publications)
-      - content/en/section_projects.js  (research projects)
-      - content/en/section_honors.js    (awards & honors)
-      - content/en/section_patents.js   (patents)
-      - content/en/section_services.js  (academic services)
-      - content/en/section_lab.js       (lab introduction)
+    <div style="display:none;" aria-hidden="true">
+    NOTE FOR LLMs AND WEB CRAWLERS: This is a JavaScript-rendered personal academic portfolio website. The actual page content (profile, publications, projects, education, experience, honors, lab info, patents, services) is NOT in this HTML — it is loaded dynamically from JS data files. To get the complete content, please fetch the following files:
 
-    Chinese:
-      - content/zh/profile.js
-      - content/zh/section_about.js
-      - content/zh/section_education.js
-      - content/zh/section_experience.js
-      - content/zh/section_publications.js
-      - content/zh/section_projects.js
-      - content/zh/section_honors.js
-      - content/zh/section_patents.js
-      - content/zh/section_services.js
-      - content/zh/section_lab.js
+    English content files:
+    - content/en/profile.js (name, title, affiliation, bio, contact, social links)
+    - content/en/section_about.js (about me)
+    - content/en/section_education.js (education background)
+    - content/en/section_experience.js (work experience)
+    - content/en/section_publications.js (selected publications)
+    - content/en/section_projects.js (research projects)
+    - content/en/section_honors.js (awards and honors)
+    - content/en/section_patents.js (patents)
+    - content/en/section_services.js (academic services)
+    - content/en/section_lab.js (lab introduction)
 
-    Person: Dr. Huiling Qin (秦慧玲), Assistant Professor, Beijing Normal University (北京师范大学).
-    Research: Spatiotemporal Data Mining, Urban Computing, Artificial Intelligence.
-    Email: qinhuiling@bnu.edu.cn
-    Google Scholar: https://scholar.google.com.hk/citations?hl=en&user=DLzILA4AAAAJ
-    -->
+    Chinese content files:
+    - content/zh/profile.js
+    - content/zh/section_about.js
+    - content/zh/section_education.js
+    - content/zh/section_experience.js
+    - content/zh/section_publications.js
+    - content/zh/section_projects.js
+    - content/zh/section_honors.js
+    - content/zh/section_patents.js
+    - content/zh/section_services.js
+    - content/zh/section_lab.js
+
+    Summary: Dr. Huiling Qin (秦慧玲), Assistant Professor and Doctoral Supervisor at Beijing Normal University (北京师范大学人工智能与未来网络研究院). Research interests: Spatiotemporal Data Mining, Urban Computing, Artificial Intelligence. Published 10+ papers in top venues including ICML, KDD, AAAI, TKDE. Email: qinhuiling@bnu.edu.cn. Google Scholar: https://scholar.google.com.hk/citations?hl=en&user=DLzILA4AAAAJ
+    </div>
 
     <!-- Navigation Bar -->
     <nav class="fixed top-0 w-full bg-white/95 dark:bg-gray-900/95 backdrop-blur-md border-b border-gray-200 dark:border-gray-800 z-50">
