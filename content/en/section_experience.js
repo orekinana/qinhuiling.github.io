@@ -3,7 +3,7 @@ portfolioData.en.sections.experience = {
     items: [
         {
             period: "2023.11 - Present",
-            position: "Lecturer",
+            position: "Assistant Professor",
             organization: "Beijing Normal University, Zhuhai",
             description: "Institute of Artificial Intelligence and Future Networks"
         },
