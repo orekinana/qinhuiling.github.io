@@ -291,21 +291,6 @@ update_files() {
     sed -i "s/BUILD_VERSION/$VERSION/g" "$WEB_ROOT/index.html"
     print_info "版本号: $VERSION"
 
-    # 预渲染：把 JS 内容文件渲染成语义化 HTML 嵌入 index.html
-    print_info "预渲染内容到 HTML..."
-    if command -v node &> /dev/null; then
-        if [ -f "$WEB_ROOT/prerender.js" ]; then
-            cd "$WEB_ROOT"
-            node prerender.js
-            print_info "✓ 预渲染完成"
-            cd "$CURRENT_DIR"
-        else
-            print_warning "未找到 prerender.js，跳过预渲染"
-        fi
-    else
-        print_warning "Node.js 未安装，跳过预渲染"
-    fi
-
     # 更新 Caddyfile
     print_info "更新 Caddyfile 配置..."
 
