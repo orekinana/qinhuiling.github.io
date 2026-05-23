@@ -518,15 +518,23 @@
 
 
     /* ── 13.  Populate recent-papers as a slice of #publications ─ */
-    var RECENT_COUNT = 10;
+    var RECENT_YEARS = 2;
 
     function populateRecentPapers() {
         var recent = document.getElementById('papers');
         var full   = document.getElementById('publications');
         if (!recent || !full) return;
-        var pubs = Array.prototype.slice.call(full.querySelectorAll(':scope > .pub'), 0, RECENT_COUNT);
+        var now    = new Date().getFullYear();
+        var cutoff = now - RECENT_YEARS + 1;
+        var pubs   = Array.prototype.slice.call(full.querySelectorAll(':scope > .pub'));
+        var filtered = pubs.filter(function (pub) {
+            var m = pub.querySelector('.meta em');
+            if (!m) return false;
+            var y = parseInt(m.textContent.match(/\d{4}/));
+            return y >= cutoff;
+        });
         var more = recent.querySelector('.more');
-        pubs.forEach(function (pub) {
+        filtered.forEach(function (pub) {
             var clone = pub.cloneNode(true);
             recent.insertBefore(clone, more);
         });
