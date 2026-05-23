@@ -1,92 +1,64 @@
 /**
- * app.js — Semantic HTML decorator for qinhuiling.github.io
- *
- * Content lives in index.html (both zh/en inline).
- * This script handles: language switching, dark mode, navigation UX, BibTeX copy.
+ * app.js — semantic-HTML decorator for qinhuiling.me
+ * Content lives in index.html. This script handles interactions only.
  */
 (function () {
   'use strict';
 
-  var cls = document.documentElement.classList;
-  var m = cls.value.match(/lang-(\w+)/);
+  var html = document.documentElement;
+  var m = html.className.match(/lang-(\w+)/);
   var currentLang = m ? m[1] : 'zh';
-  var isDarkMode = cls.contains('dark');
+  var isDarkMode  = html.classList.contains('dark');
 
-  /* ───────── Language ───────── */
-
+  /* ── language ───────────────────────────────────── */
   function applyLanguage(lang) {
     currentLang = lang;
-    cls.remove('lang-zh', 'lang-en');
-    cls.add('lang-' + lang);
-    document.documentElement.setAttribute('lang', lang === 'en' ? 'en' : 'zh-CN');
-    ['lang-toggle', 'lang-toggle-mobile'].forEach(function (id) {
-      var btn = document.getElementById(id);
-      if (btn) btn.textContent = lang === 'zh' ? 'EN' : '中文';
+    html.classList.remove('lang-zh', 'lang-en');
+    html.classList.add('lang-' + lang);
+    html.setAttribute('lang', lang === 'en' ? 'en' : 'zh-CN');
+    document.querySelectorAll('.lang-toggle').forEach(function (btn) {
+      btn.textContent = lang === 'zh' ? 'EN' : '中文';
     });
-    updatePageMeta(lang);
+    updateMeta(lang);
   }
 
-  function updatePageMeta(lang) {
+  function updateMeta(lang) {
     document.title = lang === 'en'
-      ? 'Huiling Qin (秦慧玲) - Assistant Professor, Beijing Normal University'
-      : '秦慧玲 - 北京师范大学助理教授';
+      ? 'Huiling Qin (秦慧玲) — Assistant Professor, Beijing Normal University'
+      : '秦慧玲 — 北京师范大学助理教授';
     var desc = document.querySelector('meta[name="description"]');
     if (desc) {
       desc.content = lang === 'en'
-        ? 'Dr. Huiling Qin is an Assistant Professor and Doctoral Supervisor at the Institute of Artificial Intelligence and Future Networks, Beijing Normal University, specializing in spatiotemporal data mining, urban computing, and artificial intelligence.'
-        : '秦慧玲，北京师范大学人工智能与未来网络研究院助理教授、博士生导师，研究方向：时空数据挖掘、城市计算、人工智能。';
+        ? 'Dr. Huiling Qin is an Assistant Professor at Beijing Normal University, specializing in spatiotemporal data mining, urban computing, and AI.'
+        : '秦慧玲，北京师范大学人工智能与未来网络研究院助理教授，研究方向：时空数据挖掘、城市计算、人工智能。';
     }
-    var ogTitle = document.querySelector('meta[property="og:title"]');
-    var ogDesc = document.querySelector('meta[property="og:description"]');
-    var ogLocale = document.querySelector('meta[property="og:locale"]');
-    if (ogTitle) ogTitle.content = document.title;
-    if (ogDesc) ogDesc.content = desc ? desc.content : '';
-    if (ogLocale) ogLocale.content = lang === 'en' ? 'en_US' : 'zh_CN';
   }
 
   function setupLangToggle() {
-    ['lang-toggle', 'lang-toggle-mobile'].forEach(function (id) {
-      var btn = document.getElementById(id);
-      if (!btn) return;
+    document.querySelectorAll('.lang-toggle').forEach(function (btn) {
       btn.addEventListener('click', function () {
-        var newLang = currentLang === 'zh' ? 'en' : 'zh';
-        localStorage.setItem('language', newLang);
-        history.pushState({ lang: newLang }, '', '/' + newLang + window.location.hash);
-        applyLanguage(newLang);
+        var next = currentLang === 'zh' ? 'en' : 'zh';
+        localStorage.setItem('language', next);
+        history.pushState({ lang: next }, '', '/' + next + location.hash);
+        applyLanguage(next);
       });
     });
   }
 
-  /* ───────── Theme ───────── */
-
+  /* ── theme ──────────────────────────────────────── */
   function applyTheme(dark) {
     isDarkMode = dark;
-    cls.toggle('dark', dark);
+    html.classList.toggle('dark', dark);
     localStorage.setItem('theme', dark ? 'dark' : 'light');
   }
 
   function setupThemeToggle() {
-    ['theme-toggle', 'theme-toggle-mobile'].forEach(function (id) {
-      var btn = document.getElementById(id);
-      if (!btn) return;
+    document.querySelectorAll('.theme-toggle').forEach(function (btn) {
       btn.addEventListener('click', function () { applyTheme(!isDarkMode); });
     });
   }
 
-  /* ───────── Mobile menu ───────── */
-
-  function setupMobileMenu() {
-    var toggle = document.getElementById('mobile-menu-toggle');
-    var menu = document.getElementById('mobile-menu');
-    if (!toggle || !menu) return;
-    toggle.addEventListener('click', function () { menu.classList.toggle('hidden'); });
-    menu.querySelectorAll('a').forEach(function (a) {
-      a.addEventListener('click', function () { menu.classList.add('hidden'); });
-    });
-  }
-
-  /* ───────── Smooth scroll ───────── */
-
+  /* ── smooth scroll for in-page anchors ──────────── */
   function setupSmoothScroll() {
     document.addEventListener('click', function (e) {
       var link = e.target.closest('a[href^="#"]');
@@ -96,133 +68,109 @@
       var target = document.getElementById(id);
       if (!target) return;
       e.preventDefault();
-      window.scrollTo({ top: target.offsetTop - 80, behavior: 'smooth' });
+      var top = target.getBoundingClientRect().top + window.scrollY - 60;
+      window.scrollTo({ top: top, behavior: 'smooth' });
+      history.replaceState(null, '', '#' + id);
     });
   }
 
-  /* ───────── Scroll spy ───────── */
-
+  /* ── scroll spy ─────────────────────────────────── */
   function setupScrollSpy() {
-    var sections = document.querySelectorAll('section[id]');
-    var links = document.querySelectorAll('.nav-link');
-    window.addEventListener('scroll', function () {
-      var current = '';
-      sections.forEach(function (s) {
-        if (window.scrollY >= s.offsetTop - 100) current = s.id;
-      });
+    var sections = Array.prototype.slice.call(document.querySelectorAll('section[id]'));
+    var links    = document.querySelectorAll('nav .nav-link');
+    function update() {
+      var y = window.scrollY + 120, current = '';
+      for (var i = 0; i < sections.length; i++) {
+        if (y >= sections[i].offsetTop) current = sections[i].id;
+      }
       links.forEach(function (a) {
-        var active = a.dataset.section === current;
-        a.classList.toggle('text-[#2c4f7c]', active);
-        a.classList.toggle('dark:text-blue-400', active);
-        a.classList.toggle('font-semibold', active);
+        a.classList.toggle('active', a.dataset.section === current);
       });
-    }, { passive: true });
+    }
+    window.addEventListener('scroll', update, { passive: true });
+    update();
   }
 
-  /* ───────── Back to top ───────── */
-
-  function setupBackToTop() {
-    var btn = document.getElementById('back-to-top');
-    if (!btn) return;
-    window.addEventListener('scroll', function () {
-      var show = window.scrollY > 300;
-      btn.classList.toggle('opacity-0', !show);
-      btn.classList.toggle('invisible', !show);
-      btn.classList.toggle('opacity-100', show);
-    }, { passive: true });
-    btn.addEventListener('click', function () {
-      window.scrollTo({ top: 0, behavior: 'smooth' });
-    });
-  }
-
-  /* ───────── Section link copy ───────── */
-
+  /* ── section link copy ──────────────────────────── */
   function setupSectionLinks() {
-    document.querySelectorAll('.section-link-icon').forEach(function (icon) {
-      icon.addEventListener('click', function (e) {
+    document.querySelectorAll('.section-link').forEach(function (link) {
+      link.addEventListener('click', function (e) {
         e.preventDefault();
-        var section = icon.closest('section[id]');
+        var section = link.closest('section[id]');
         if (!section) return;
-        var url = window.location.origin + '/' + currentLang + '#' + section.id;
+        var url = location.origin + '/' + currentLang + '#' + section.id;
         navigator.clipboard.writeText(url).then(function () {
-          var orig = icon.innerHTML;
-          icon.innerHTML = '✓';
-          icon.classList.add('text-green-500', 'dark:text-green-400');
-          setTimeout(function () {
-            icon.innerHTML = orig;
-            icon.classList.remove('text-green-500', 'dark:text-green-400');
-          }, 2000);
+          link.classList.add('copied');
+          setTimeout(function () { link.classList.remove('copied'); }, 1800);
         }).catch(function () {});
       });
     });
   }
 
-  /* ───────── BibTeX copy ───────── */
-
+  /* ── bibtex copy ────────────────────────────────── */
   function setupBibtex() {
-    document.querySelectorAll('[data-copy-bibtex]').forEach(function (btn) {
+    document.querySelectorAll('.bibtex-copy').forEach(function (btn) {
       btn.addEventListener('click', function () {
-        var details = btn.closest('details');
-        if (!details) return;
-        var pre = details.querySelector('pre');
+        var pre = btn.closest('details').querySelector('pre');
         if (!pre) return;
-        var zhSpan = btn.querySelector('[lang="zh"]');
-        var enSpan = btn.querySelector('[lang="en"]');
-
-        function label(zh, en) {
-          if (zhSpan) zhSpan.textContent = zh;
-          if (enSpan) enSpan.textContent = en;
-        }
-
         navigator.clipboard.writeText(pre.textContent.trim()).then(function () {
-          label('已复制!', 'Copied!');
-          btn.classList.add('text-green-600', 'border-green-400', 'dark:text-green-400', 'dark:border-green-600');
-          setTimeout(function () {
-            label('复制', 'Copy');
-            btn.classList.remove('text-green-600', 'border-green-400', 'dark:text-green-400', 'dark:border-green-600');
-          }, 3000);
-        }).catch(function () {
-          label('失败', 'Failed');
-          setTimeout(function () { label('复制', 'Copy'); }, 2000);
-        });
+          btn.classList.add('copied');
+          setTimeout(function () { btn.classList.remove('copied'); }, 2000);
+        }).catch(function () {});
       });
     });
   }
 
-  /* ───────── Initial hash scroll ───────── */
-
-  function handleInitialHash() {
-    var hash = window.location.hash;
-    if (!hash) return;
-    var id = hash.slice(1);
-    setTimeout(function () {
-      var el = document.getElementById(id);
-      if (el) window.scrollTo({ top: el.offsetTop - 80, behavior: 'smooth' });
-    }, 200);
+  /* ── reveal on scroll ───────────────────────────── */
+  function setupReveal() {
+    var els = document.querySelectorAll('.reveal');
+    if (!('IntersectionObserver' in window)) {
+      els.forEach(function (el) { el.classList.add('in'); });
+      return;
+    }
+    var io = new IntersectionObserver(function (entries) {
+      entries.forEach(function (e) {
+        if (e.isIntersecting) {
+          e.target.classList.add('in');
+          io.unobserve(e.target);
+        }
+      });
+    }, { threshold: 0.05, rootMargin: '0px 0px -8% 0px' });
+    els.forEach(function (el) { io.observe(el); });
   }
 
-  /* ───────── Popstate ───────── */
+  /* ── hash scroll on load ────────────────────────── */
+  function handleHash() {
+    if (!location.hash) return;
+    var id = location.hash.slice(1);
+    setTimeout(function () {
+      var el = document.getElementById(id);
+      if (el) {
+        var top = el.getBoundingClientRect().top + window.scrollY - 60;
+        window.scrollTo({ top: top, behavior: 'smooth' });
+      }
+    }, 80);
+  }
 
+  /* ── popstate ───────────────────────────────────── */
   window.addEventListener('popstate', function () {
-    var path = window.location.pathname;
-    var lang = /^\/en/.test(path) ? 'en' : /^\/zh/.test(path) ? 'zh' : currentLang;
+    var lang = /^\/en/.test(location.pathname) ? 'en'
+             : /^\/zh/.test(location.pathname) ? 'zh' : currentLang;
     if (lang !== currentLang) applyLanguage(lang);
   });
 
-  /* ───────── Init ───────── */
-
+  /* ── init ───────────────────────────────────────── */
   function init() {
     applyLanguage(currentLang);
     applyTheme(isDarkMode);
     setupLangToggle();
     setupThemeToggle();
-    setupMobileMenu();
     setupSmoothScroll();
     setupScrollSpy();
-    setupBackToTop();
     setupSectionLinks();
     setupBibtex();
-    handleInitialHash();
+    setupReveal();
+    handleHash();
   }
 
   if (document.readyState === 'loading') {
