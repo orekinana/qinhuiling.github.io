@@ -55,10 +55,10 @@
             '</svg>',
         faculty:
             '<svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">' +
-                '<path d="M3 21h18"/>' +
-                '<path d="M5 21V9l7-4 7 4v12"/>' +
-                '<path d="M9 21v-5h6v5"/>' +
-                '<path d="M9 12h.01M15 12h.01"/>' +
+                '<path d="M3 20h18"/>' +
+                '<path d="M5 20V8l7-4 7 4v12"/>' +
+                '<path d="M9 20v-5h6v5"/>' +
+                '<path d="M9 11h.01M15 11h.01"/>' +
             '</svg>',
         email:
             '<svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">' +
@@ -119,12 +119,37 @@
     }
 
     function bindLanguageToggle() {
+        var switching = false;
+        var main = document.querySelector('main');
         document.querySelectorAll('.lang-toggle').forEach(function (btn) {
             btn.addEventListener('click', function () {
+                if (switching) return;
                 var next = currentLang === 'zh' ? 'en' : 'zh';
                 try { localStorage.setItem('language', next); } catch (e) {}
                 history.replaceState({ lang: next }, '', '/' + next + location.hash);
-                applyLanguage(next);
+
+                switching = true;
+                var oldH = main.offsetHeight;
+                html.classList.add('lang-fade');
+
+                setTimeout(function () {
+                    main.style.height = oldH + 'px';
+                    main.classList.add('lang-resize');
+                    main.offsetHeight; // force reflow
+                    applyLanguage(next);
+                    var newH = main.scrollHeight;
+                    main.style.height = newH + 'px';
+                    html.classList.remove('lang-fade');
+
+                    function done() {
+                        main.classList.remove('lang-resize');
+                        main.style.height = '';
+                        switching = false;
+                        main.removeEventListener('transitionend', done);
+                    }
+                    main.addEventListener('transitionend', done);
+                    setTimeout(done, 350);
+                }, 150);
             });
         });
     }
@@ -318,6 +343,37 @@
     }
 
 
+    /* ── 6b. Email copy-to-clipboard ─────────────────────────── */
+    function bindEmailCopy() {
+        var link = document.querySelector('.elsewhere a[data-icon="email"]');
+        if (!link) return;
+        var emailSvg = ICONS.email;
+        var copying = false;
+
+        link.addEventListener('mouseenter', function () {
+            if (!copying) link.innerHTML = ICONS.copy;
+        });
+        link.addEventListener('mouseleave', function () {
+            if (!copying) link.innerHTML = emailSvg;
+        });
+        link.addEventListener('click', function (e) {
+            e.preventDefault();
+            var href = link.getAttribute('href') || '';
+            var addr = href.replace(/^mailto:/, '').replace(/#/g, '@');
+            copyText(addr, function () {
+                copying = true;
+                link.innerHTML = ICONS.check;
+                link.classList.add('copied');
+                setTimeout(function () {
+                    copying = false;
+                    link.innerHTML = emailSvg;
+                    link.classList.remove('copied');
+                }, 1800);
+            });
+        });
+    }
+
+
     /* ── 7.  BibTeX expand / collapse with smooth height tween ── */
     function bindBibtex() {
         document.querySelectorAll('button[data-bibtex]').forEach(function (btn) {
@@ -461,8 +517,25 @@
     }
 
 
-    /* ── 13.  Init ────────────────────────────────────────────── */
+    /* ── 13.  Populate recent-papers as a slice of #publications ─ */
+    var RECENT_COUNT = 10;
+
+    function populateRecentPapers() {
+        var recent = document.getElementById('papers');
+        var full   = document.getElementById('publications');
+        if (!recent || !full) return;
+        var pubs = Array.prototype.slice.call(full.querySelectorAll(':scope > .pub'), 0, RECENT_COUNT);
+        var more = recent.querySelector('.more');
+        pubs.forEach(function (pub) {
+            var clone = pub.cloneNode(true);
+            recent.insertBefore(clone, more);
+        });
+    }
+
+
+    /* ── 14.  Init ────────────────────────────────────────────── */
     function init() {
+        populateRecentPapers();
         injectIcons();
         applyLanguage(currentLang);
         applyTheme(isDark);
@@ -471,6 +544,7 @@
         bindViewLinks();
         bindSmoothScroll();
         bindSectionAnchors();
+        bindEmailCopy();
         bindBibtex();
         probeAnimations();
         setupReveal();

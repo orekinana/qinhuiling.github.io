@@ -8,12 +8,19 @@
    external CSS turns each piece back on with the right display. */
 html.js nav.js-only           { display: flex   !important; }
 html.js .toolbar.js-only      { display: flex   !important; }
+html.js section.js-only       { display: block  !important; }
 html.js .anchor               { display: inline !important; }
 html.js [data-bibtex]         { display: inline !important; }
 html.js .bibtex               { display: grid   !important; }
 html.js [data-icon] svg.icon  { display: inline-block !important; }
 html.js .copy                 { display: inline-flex !important; }
 
+
+/* ── 0b. Language crossfade ──────────────────────────────────────── */
+[lang="zh"], [lang="en"] { transition: opacity .14s ease; }
+html.lang-fade [lang="zh"],
+html.lang-fade [lang="en"] { opacity: 0; }
+main.lang-resize { transition: height .28s cubic-bezier(.4,0,.2,1); overflow: hidden; }
 
 /* ── 1.  Reset ──────────────────────────────────────────────────── */
 *, *::before, *::after { box-sizing: border-box; }
@@ -213,6 +220,7 @@ main     { grid-area: main; min-width: 0; }
 }
 .elsewhere a:hover { color: var(--accent); background: var(--paper-deep); transform: translateY(-1px); }
 .elsewhere a svg { width: 14px; height: 14px; }
+.elsewhere a.copied { color: var(--accent); }
 
 
 /* ── 7.  Sidebar navigation — active marker is a CSS pseudo-element,
@@ -303,6 +311,15 @@ main     { grid-area: main; min-width: 0; }
 }
 .theme-toggle:hover { color: var(--accent); transform: rotate(-12deg); }
 .theme-toggle svg { width: 15px; height: 15px; }
+.sidebar p.toolbar {
+    margin: 1.05rem auto 0;
+    padding: 0.85rem 1rem;
+    border-top: 1px solid var(--rule);
+    border-bottom: 1px solid var(--rule);
+    display: flex;
+    text-align: left;
+    width: var(--nav-width);
+}
 
 
 /* ── 9.  Main · sections ────────────────────────────────────────── */
@@ -317,7 +334,7 @@ h2 {
     display: flex;
     align-items: center;          /* vertical-center the trailing rule */
     gap: 0.9rem;
-    margin: 0 0 1.1rem;
+    margin: 0 0 1.2rem;
     font-family: var(--serif);
     font-size: 1.5rem;
     font-style: italic;
@@ -330,10 +347,6 @@ h2::after {
     flex: 1 1 auto;
     height: 1px;
     background: var(--rule);
-    /* nudge from line-box centre down to the optical centre of
-       the italic serif text (which sits noticeably above the
-       baseline-to-cap-height geometric centre). */
-    transform: translateY(0.36em);
 }
 h2 [lang="zh"] { font-style: normal; letter-spacing: 0.06em; }
 h2 [lang="en"] { font-style: italic; }
@@ -423,7 +436,7 @@ h3 {
 
 /* ── 12.  Publications view ─────────────────────────────────────── */
 .view { display: none; }
-body.view-publications main > section:not(.view) { display: none; }
+body.view-publications main > section:not(.view) { display: none !important; }
 body.view-publications main > section.view       { display: block; animation: view-in .35s ease both; }
 @keyframes view-in {
     from { opacity: 0; transform: translateY(6px); }

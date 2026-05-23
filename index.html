@@ -96,7 +96,7 @@
         }
         img { max-width: 100%; height: auto; display: block; }
         .photo { width: 120px; height: auto; margin: 0 auto 1.2rem; }
-        .sidebar { text-align: center; margin-bottom: 2.5rem; padding-bottom: 1.8rem; border-bottom: 1px solid #d5d5d2; }
+        .sidebar { text-align: center; margin-bottom: 2.5rem; padding-bottom: 1.8rem; }
         .sidebar h1 { font-size: 1.65rem; font-weight: 500; margin: 0 0 0.3rem; }
         .sidebar p { margin: 0.2rem 0; color: #565660; font-size: 0.94rem; }
         h2 { font-size: 1.3rem; font-weight: 500; font-style: italic; margin: 2.4rem 0 1rem; color: #15161a; }
@@ -131,14 +131,10 @@
             <span lang="zh">人工智能与未来网络研究院</span><span lang="en">Inst. of AI &amp; Future Networks</span>
         </p>
 
-        <p class="contact">
-            <a href="/cdn-cgi/l/email-protection#e3928a8d8b968a8f8a8d84a3818d96cd868796cd808d"><span class="__cf_email__" data-cfemail="94e5fdfafce1fdf8fdfaf3d4f6fae1baf1f0e1baf7fa">[email&#160;protected]</span></a>
-        </p>
-
         <p class="elsewhere">
             <a href="https://scholar.google.com.hk/citations?hl=en&user=DLzILA4AAAAJ" target="_blank" rel="noopener" data-icon="scholar" aria-label="Google Scholar"></a>
             <a href="http://www.bnuaifn.cn/ScientificResearchTeam/QinHuiling.html" target="_blank" rel="noopener" data-icon="faculty" aria-label="Faculty Page"></a>
-            <a href="/cdn-cgi/l/email-protection#26574f484e534f4a4f48416644485308434253084548" data-icon="email" aria-label="Email"></a>
+            <a href="mailto:qinhuiling#bnu.edu.cn" data-icon="email" aria-label="Email"></a>
         </p>
 
         <nav class="js-only" aria-label="Sections">
@@ -183,13 +179,37 @@
 
 
         <!-- ─── Recent papers ─────────────────────────────────────
-             Mirrors the publication-view markup but trimmed to a
-             handful of the most recent items.  To add a new entry,
-             copy one <article class="pub"> block from the full
-             publications list below.
+             Populated by JS: clones the first N articles from the
+             full #publications section so content is never duplicated.
         ──────────────────────────────────────────────────────── -->
-        <section id="papers">
-            <h2><span lang="zh">论文</span><span lang="en">Papers</span><a class="anchor" href="#papers" aria-label="Copy link">§</a></h2>
+        <section id="papers" class="js-only">
+            <h2><span lang="zh">最近发表论文</span><span lang="en">Recent Papers</span><a class="anchor" href="#papers" aria-label="Copy link">§</a></h2>
+
+            <p class="more">
+                <a href="#publications" data-view="publications"><span lang="zh">查看全部论文 →</span><span lang="en">View all publications →</span></a>
+            </p>
+        </section>
+
+        <!-- ═══════════════════════════════════════════════════════════
+             Publications view — hidden by default, surfaced when the
+             sidebar's "Publications" link is clicked (or url is /publications).
+
+             Template for a new entry:
+                <article class="pub">
+                    <h3>Title goes here</h3>
+                    <p class="authors">A, <strong data-me>Huiling Qin</strong><sup data-cor>✉</sup>, C</p>
+                    <p class="meta">
+                        <em>Venue Year</em>
+                        <a data-icon="pdf" href="…">PDF</a>
+                        <button data-bibtex type="button">BibTeX</button>
+                    </p>
+                    <div class="bibtex"><pre>@…{…}</pre></div>
+                </article>
+             Omit the button + .bibtex block if you don't have a citation yet.
+        ═══════════════════════════════════════════════════════════ -->
+        <section id="publications" class="view">
+            <p class="back"><a href="#about" data-view="default"><span lang="zh">← 返回</span><span lang="en">← Back</span></a></p>
+            <h2><span lang="zh">全部论文</span><span lang="en">Publications</span></h2>
 
             <article class="pub">
                 <h3>WaveDiST: A Wavelet Diffusion Transformer for Spatio-Temporal Estimation on Unobserved Locations</h3>
@@ -215,7 +235,15 @@
                 <p class="meta">
                     <em>IEEE ICME 2025</em>
                     <a data-icon="pdf" href="https://arxiv.org/pdf/2406.06561" target="_blank" rel="noopener">PDF</a>
+                    <button data-bibtex type="button">BibTeX</button>
                 </p>
+                <div class="bibtex"><pre>@article{qin2024brainstorming,
+  title   = {Brainstorming Brings Power to Large Language Models of Knowledge Reasoning},
+  author  = {Qin, Zining and Wang, Chenhao and Qin, Huiling and Jia, Weijia},
+  journal = {arXiv e-prints},
+  pages   = {arXiv--2406},
+  year    = {2024}
+}</pre></div>
             </article>
 
             <article class="pub">
@@ -224,7 +252,18 @@
                 <p class="meta">
                     <em>IEEE/ACM IWQoS 2025</em>
                     <a data-icon="pdf" href="assets/files/papers/mei2025asstg.pdf" target="_blank" rel="noopener">PDF</a>
+                    <button data-bibtex type="button">BibTeX</button>
                 </p>
+                <div class="bibtex"><pre>@inproceedings{DBLP:conf/iwqos/MeiZQZZLW25,
+  author    = {Yaxin Mei and Jiandian Zeng and Huiling Qin and
+               Guangxue Zhang and Xi Zheng and Qin Liu and Tian Wang},
+  title     = {AS-STG: Spatio-Temporal Graph Learning with Active Sampling for Dynamic IoT Sensing},
+  booktitle = {33rd IEEE/ACM Intl. Symposium on Quality of Service (IWQoS 2025)},
+  pages     = {1--10},
+  publisher = {IEEE},
+  year      = {2025},
+  doi       = {10.1109/IWQOS65803.2025.11143341}
+}</pre></div>
             </article>
 
             <article class="pub">
@@ -233,7 +272,19 @@
                 <p class="meta">
                     <em>ECAI 2024</em>
                     <a data-icon="pdf" href="https://arxiv.org/pdf/2312.16892v1" target="_blank" rel="noopener">PDF</a>
+                    <button data-bibtex type="button">BibTeX</button>
                 </p>
+                <div class="bibtex"><pre>@inproceedings{DBLP:conf/ecai/QinZL024,
+  author    = {Huiling Qin and Xianyuan Zhan and Yuanxun Li and Yu Zheng},
+  title     = {FlexSSL: A Generic and Efficient Framework for Semi-Supervised Learning},
+  booktitle = {ECAI 2024 — 27th European Conf. on AI},
+  series    = {Frontiers in AI and Applications},
+  volume    = {392},
+  pages     = {1455--1462},
+  publisher = {IOS Press},
+  year      = {2024},
+  doi       = {10.3233/FAIA240648}
+}</pre></div>
             </article>
 
             <article class="pub">
@@ -242,7 +293,18 @@
                 <p class="meta">
                     <em>IEEE TKDE 2022</em>
                     <a data-icon="pdf" href="https://arxiv.org/pdf/2105.14476" target="_blank" rel="noopener">PDF</a>
+                    <button data-bibtex type="button">BibTeX</button>
                 </p>
+                <div class="bibtex"><pre>@article{DBLP:journals/tkde/QinZZ23,
+  author  = {Huiling Qin and Xianyuan Zhan and Yu Zheng},
+  title   = {CSCAD: Correlation Structure-Based Collective Anomaly Detection in Complex System},
+  journal = {IEEE Trans. Knowl. Data Eng.},
+  volume  = {35},
+  number  = {5},
+  pages   = {4634--4645},
+  year    = {2023},
+  doi     = {10.1109/TKDE.2022.3154166}
+}</pre></div>
             </article>
 
             <article class="pub">
@@ -251,7 +313,17 @@
                 <p class="meta">
                     <em>ICML 2022</em>
                     <a data-icon="pdf" href="https://proceedings.mlr.press/v162/xu22l/xu22l.pdf" target="_blank" rel="noopener">PDF</a>
+                    <button data-bibtex type="button">BibTeX</button>
                 </p>
+                <div class="bibtex"><pre>@inproceedings{DBLP:conf/icml/XuZYQ22,
+  author    = {Haoran Xu and Xianyuan Zhan and Honglei Yin and Huiling Qin},
+  title     = {Discriminator-Weighted Offline Imitation Learning from Suboptimal Demonstrations},
+  booktitle = {Intl. Conf. on Machine Learning (ICML 2022)},
+  series    = {PMLR},
+  volume    = {162},
+  pages     = {24725--24742},
+  year      = {2022}
+}</pre></div>
             </article>
 
             <article class="pub">
@@ -260,7 +332,17 @@
                 <p class="meta">
                     <em>ACM SIGKDD 2021</em>
                     <a data-icon="pdf" href="http://urban-computing.com/pdf/Network-Wide%20Traffic%20States%20Imputation%20Using%20Self-interested%20Coalitional%20Learning.pdf" target="_blank" rel="noopener">PDF</a>
+                    <button data-bibtex type="button">BibTeX</button>
                 </p>
+                <div class="bibtex"><pre>@inproceedings{DBLP:conf/kdd/QinZLY021,
+  author    = {Huiling Qin and Xianyuan Zhan and Yuanxun Li and Xiaodu Yang and Yu Zheng},
+  title     = {Network-Wide Traffic States Imputation Using Self-interested Coalitional Learning},
+  booktitle = {KDD '21 — 27th ACM SIGKDD Conf. on Knowledge Discovery and Data Mining},
+  pages     = {1370--1378},
+  publisher = {ACM},
+  year      = {2021},
+  doi       = {10.1145/3447548.3467424}
+}</pre></div>
             </article>
 
             <article class="pub">
@@ -269,12 +351,18 @@
                 <p class="meta">
                     <em>AAAI 2021</em>
                     <a data-icon="pdf" href="https://ojs.aaai.org/index.php/AAAI/article/view/16556" target="_blank" rel="noopener">PDF</a>
+                    <button data-bibtex type="button">BibTeX</button>
                 </p>
+                <div class="bibtex"><pre>@inproceedings{DBLP:conf/aaai/QinKYXZ021,
+  author    = {Huiling Qin and Songyu Ke and Xiaodu Yang and Haoran Xu and Xianyuan Zhan and Yu Zheng},
+  title     = {Robust Spatio-Temporal Purchase Prediction via Deep Meta Learning},
+  booktitle = {35th AAAI Conf. on Artificial Intelligence},
+  pages     = {4312--4319},
+  publisher = {AAAI Press},
+  year      = {2021},
+  doi       = {10.1609/AAAI.V35I5.16556}
+}</pre></div>
             </article>
-
-            <p class="more">
-                <a href="#publications" data-view="publications"><span lang="zh">查看全部论文 →</span><span lang="en">View all publications →</span></a>
-            </p>
         </section>
 
 
@@ -460,182 +548,6 @@
                 <p><strong>Output ——</strong> 42 papers, 17 funded projects, 8 patents/software copyrights and 1 monograph over the past two years.</p>
                 <p><strong>Industry ——</strong> partnerships with JD.com, Huawei, Gree and Inspur.</p>
             </div>
-        </section>
-
-
-        <!-- ═══════════════════════════════════════════════════════════
-             Publications view — hidden by default, surfaced when the
-             sidebar's "Publications" link is clicked (or url is /publications).
-
-             Template for a new entry:
-                <article class="pub">
-                    <h3>Title goes here</h3>
-                    <p class="authors">A, <strong data-me>Huiling Qin</strong><sup data-cor>✉</sup>, C</p>
-                    <p class="meta">
-                        <em>Venue Year</em>
-                        <a data-icon="pdf" href="…">PDF</a>
-                        <button data-bibtex type="button">BibTeX</button>
-                    </p>
-                    <div class="bibtex"><pre>@…{…}</pre></div>
-                </article>
-             Omit the button + .bibtex block if you don't have a citation yet.
-        ═══════════════════════════════════════════════════════════ -->
-        <section id="publications" class="view">
-            <p class="back"><a href="#about" data-view="default"><span lang="zh">← 返回</span><span lang="en">← Back</span></a></p>
-            <h2><span lang="zh">全部论文</span><span lang="en">Publications</span></h2>
-
-            <article class="pub">
-                <h3>WaveDiST: A Wavelet Diffusion Transformer for Spatio-Temporal Estimation on Unobserved Locations</h3>
-                <p class="authors"><strong data-me>Huiling Qin</strong><sup data-cor>✉</sup>, Yuanxun Li, Weijia Jia</p>
-                <p class="meta">
-                    <em>AAAI 2026</em>
-                    <a data-icon="pdf" href="assets/files/papers/qin2026WaveDiST.pdf" target="_blank" rel="noopener">PDF</a>
-                </p>
-            </article>
-
-            <article class="pub">
-                <h3>Spatial Semantic-based Enhanced Address Parsing via Adaptive Weighted Learning</h3>
-                <p class="authors"><strong data-me>Huiling Qin</strong><sup data-cor>✉</sup>, Ming Wang, Yuanxun Li, Junbo Zhang, Yu Zheng</p>
-                <p class="meta">
-                    <em>ACM CIKM 2025</em>
-                    <a data-icon="pdf" href="assets/files/papers/qin2025spatial.pdf" target="_blank" rel="noopener">PDF</a>
-                </p>
-            </article>
-
-            <article class="pub">
-                <h3>Brainstorming Brings Power to Large Language Models of Knowledge Reasoning</h3>
-                <p class="authors">Zining Qin, <strong data-me>Huiling Qin</strong><sup data-cor>✉</sup>, Chenghao Wang, Jianxiong Guo, Weijia Jia</p>
-                <p class="meta">
-                    <em>IEEE ICME 2025</em>
-                    <a data-icon="pdf" href="https://arxiv.org/pdf/2406.06561" target="_blank" rel="noopener">PDF</a>
-                    <button data-bibtex type="button">BibTeX</button>
-                </p>
-                <div class="bibtex"><pre>@article{qin2024brainstorming,
-  title   = {Brainstorming Brings Power to Large Language Models of Knowledge Reasoning},
-  author  = {Qin, Zining and Wang, Chenhao and Qin, Huiling and Jia, Weijia},
-  journal = {arXiv e-prints},
-  pages   = {arXiv--2406},
-  year    = {2024}
-}</pre></div>
-            </article>
-
-            <article class="pub">
-                <h3>AS-STG: Spatio-Temporal Graph Learning with Active Sampling for Dynamic IoT Sensing</h3>
-                <p class="authors">Yaxin Mei, Jiandian Zeng, <strong data-me>Huiling Qin</strong><sup data-cor>✉</sup>, Guangxue Zhang, Xi Zheng, Qin Liu, Tian Wang</p>
-                <p class="meta">
-                    <em>IEEE/ACM IWQoS 2025</em>
-                    <a data-icon="pdf" href="assets/files/papers/mei2025asstg.pdf" target="_blank" rel="noopener">PDF</a>
-                    <button data-bibtex type="button">BibTeX</button>
-                </p>
-                <div class="bibtex"><pre>@inproceedings{DBLP:conf/iwqos/MeiZQZZLW25,
-  author    = {Yaxin Mei and Jiandian Zeng and Huiling Qin and
-               Guangxue Zhang and Xi Zheng and Qin Liu and Tian Wang},
-  title     = {AS-STG: Spatio-Temporal Graph Learning with Active Sampling for Dynamic IoT Sensing},
-  booktitle = {33rd IEEE/ACM Intl. Symposium on Quality of Service (IWQoS 2025)},
-  pages     = {1--10},
-  publisher = {IEEE},
-  year      = {2025},
-  doi       = {10.1109/IWQOS65803.2025.11143341}
-}</pre></div>
-            </article>
-
-            <article class="pub">
-                <h3>FlexSSL: A Generic and Efficient Framework for Semi-Supervised Learning</h3>
-                <p class="authors"><strong data-me>Huiling Qin</strong><sup data-cor>✉</sup>, Xianyuan Zhan, Yuanxun Li, Yu Zheng</p>
-                <p class="meta">
-                    <em>ECAI 2024</em>
-                    <a data-icon="pdf" href="https://arxiv.org/pdf/2312.16892v1" target="_blank" rel="noopener">PDF</a>
-                    <button data-bibtex type="button">BibTeX</button>
-                </p>
-                <div class="bibtex"><pre>@inproceedings{DBLP:conf/ecai/QinZL024,
-  author    = {Huiling Qin and Xianyuan Zhan and Yuanxun Li and Yu Zheng},
-  title     = {FlexSSL: A Generic and Efficient Framework for Semi-Supervised Learning},
-  booktitle = {ECAI 2024 — 27th European Conf. on AI},
-  series    = {Frontiers in AI and Applications},
-  volume    = {392},
-  pages     = {1455--1462},
-  publisher = {IOS Press},
-  year      = {2024},
-  doi       = {10.3233/FAIA240648}
-}</pre></div>
-            </article>
-
-            <article class="pub">
-                <h3>CSCAD: Correlation Structure-based Collective Anomaly Detection in Complex System</h3>
-                <p class="authors"><strong data-me>Huiling Qin</strong><sup data-cor>✉</sup>, Xianyuan Zhan, Yu Zheng</p>
-                <p class="meta">
-                    <em>IEEE TKDE 2022</em>
-                    <a data-icon="pdf" href="https://arxiv.org/pdf/2105.14476" target="_blank" rel="noopener">PDF</a>
-                    <button data-bibtex type="button">BibTeX</button>
-                </p>
-                <div class="bibtex"><pre>@article{DBLP:journals/tkde/QinZZ23,
-  author  = {Huiling Qin and Xianyuan Zhan and Yu Zheng},
-  title   = {CSCAD: Correlation Structure-Based Collective Anomaly Detection in Complex System},
-  journal = {IEEE Trans. Knowl. Data Eng.},
-  volume  = {35},
-  number  = {5},
-  pages   = {4634--4645},
-  year    = {2023},
-  doi     = {10.1109/TKDE.2022.3154166}
-}</pre></div>
-            </article>
-
-            <article class="pub">
-                <h3>Discriminator-weighted Offline Imitation Learning from Suboptimal Demonstrations</h3>
-                <p class="authors">Haoran Xu, Xianyuan Zhan, Honglei Yin, <strong data-me>Huiling Qin</strong></p>
-                <p class="meta">
-                    <em>ICML 2022</em>
-                    <a data-icon="pdf" href="https://proceedings.mlr.press/v162/xu22l/xu22l.pdf" target="_blank" rel="noopener">PDF</a>
-                    <button data-bibtex type="button">BibTeX</button>
-                </p>
-                <div class="bibtex"><pre>@inproceedings{DBLP:conf/icml/XuZYQ22,
-  author    = {Haoran Xu and Xianyuan Zhan and Honglei Yin and Huiling Qin},
-  title     = {Discriminator-Weighted Offline Imitation Learning from Suboptimal Demonstrations},
-  booktitle = {Intl. Conf. on Machine Learning (ICML 2022)},
-  series    = {PMLR},
-  volume    = {162},
-  pages     = {24725--24742},
-  year      = {2022}
-}</pre></div>
-            </article>
-
-            <article class="pub">
-                <h3>Network-wide Traffic States Imputation Using Self-interested Coalitional Learning</h3>
-                <p class="authors"><strong data-me>Huiling Qin</strong><sup data-cor>✉</sup>, Xianyuan Zhan, Yuanxun Li, Xiaodu Yang, Yu Zheng</p>
-                <p class="meta">
-                    <em>ACM SIGKDD 2021</em>
-                    <a data-icon="pdf" href="http://urban-computing.com/pdf/Network-Wide%20Traffic%20States%20Imputation%20Using%20Self-interested%20Coalitional%20Learning.pdf" target="_blank" rel="noopener">PDF</a>
-                    <button data-bibtex type="button">BibTeX</button>
-                </p>
-                <div class="bibtex"><pre>@inproceedings{DBLP:conf/kdd/QinZLY021,
-  author    = {Huiling Qin and Xianyuan Zhan and Yuanxun Li and Xiaodu Yang and Yu Zheng},
-  title     = {Network-Wide Traffic States Imputation Using Self-interested Coalitional Learning},
-  booktitle = {KDD '21 — 27th ACM SIGKDD Conf. on Knowledge Discovery and Data Mining},
-  pages     = {1370--1378},
-  publisher = {ACM},
-  year      = {2021},
-  doi       = {10.1145/3447548.3467424}
-}</pre></div>
-            </article>
-
-            <article class="pub">
-                <h3>Robust Spatio-Temporal Purchase Prediction via Deep Meta Learning</h3>
-                <p class="authors"><strong data-me>Huiling Qin</strong><sup data-cor>✉</sup>, Songyu Ke, Xiaodu Yang, Haoran Xu, Xianyuan Zhan, Yu Zheng</p>
-                <p class="meta">
-                    <em>AAAI 2021</em>
-                    <a data-icon="pdf" href="https://ojs.aaai.org/index.php/AAAI/article/view/16556" target="_blank" rel="noopener">PDF</a>
-                    <button data-bibtex type="button">BibTeX</button>
-                </p>
-                <div class="bibtex"><pre>@inproceedings{DBLP:conf/aaai/QinKYXZ021,
-  author    = {Huiling Qin and Songyu Ke and Xiaodu Yang and Haoran Xu and Xianyuan Zhan and Yu Zheng},
-  title     = {Robust Spatio-Temporal Purchase Prediction via Deep Meta Learning},
-  booktitle = {35th AAAI Conf. on Artificial Intelligence},
-  pages     = {4312--4319},
-  publisher = {AAAI Press},
-  year      = {2021},
-  doi       = {10.1609/AAAI.V35I5.16556}
-}</pre></div>
-            </article>
         </section>
 
 
