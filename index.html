@@ -9,7 +9,7 @@
     <meta name="keywords" content="Huiling Qin, 秦慧玲, spatiotemporal data mining, urban computing, artificial intelligence, Beijing Normal University">
     <meta name="author" content="Huiling Qin">
     <meta name="robots" content="index, follow">
-    <link rel="canonical" href="http://qinhuiling.me/">
+    <link rel="canonical" href="https://qinhuiling.me/">
 
     <meta name="assets-version" content="BUILD_VERSION">
 
@@ -26,9 +26,9 @@
     <meta name="twitter:description" content="Assistant Professor at Beijing Normal University. Research in spatiotemporal data mining and urban computing.">
     <meta name="twitter:image" content="http://qinhuiling.me/assets/images/qinhuiling.jpeg">
 
-    <link rel="alternate" hreflang="en" href="http://qinhuiling.me/en">
-    <link rel="alternate" hreflang="zh" href="http://qinhuiling.me/zh">
-    <link rel="alternate" hreflang="x-default" href="http://qinhuiling.me/">
+    <link rel="alternate" hreflang="en" href="https://qinhuiling.me/en">
+    <link rel="alternate" hreflang="zh" href="https://qinhuiling.me/zh">
+    <link rel="alternate" hreflang="x-default" href="https://qinhuiling.me/">
 
     <script type="application/ld+json">
     {
@@ -50,7 +50,7 @@
     }
     </script>
 
-    <!-- pre-render hooks: set js + lang + dark class synchronously to prevent flash -->
+    <!-- Pre-render hooks: stamp lang + theme + js classes before paint to avoid flash. -->
     <script>
     (function () {
         var d = document.documentElement;
@@ -70,12 +70,40 @@
     })();
     </script>
 
-    <!-- inline minimum: chrome hiding + language hiding. Applied even if style.css fails. -->
+    <!-- ─────────────────────────────────────────────────────────────────
+         Inline minimum.  If assets/css/style.css fails to arrive, body
+         still reads as a clean academic article: chrome is hidden
+         (nav, toggles, copy, anchor); only the prose remains.
+    ───────────────────────────────────────────────────────────────── -->
     <style>
-        .js-only { display: none !important; }
-        html.js .js-only { display: revert !important; }
         html.lang-zh [lang="en"] { display: none; }
         html.lang-en [lang="zh"] { display: none; }
+        .js-only, nav, .toolbar, .anchor, [data-bibtex], .bibtex,
+        [data-icon] svg, .copy { display: none !important; }
+
+        html, body { margin: 0; padding: 0; }
+        body {
+            max-width: 36rem;
+            margin: 3rem auto;
+            padding: 0 1.5rem 5rem;
+            font-family: 'Iowan Old Style', Charter, Baskerville, 'Source Han Serif SC', 'Songti SC', Georgia, serif;
+            font-size: 17px;
+            line-height: 1.65;
+            color: #15161a;
+            background: #fafaf8;
+            -webkit-font-smoothing: antialiased;
+            text-rendering: optimizeLegibility;
+        }
+        img { max-width: 100%; height: auto; display: block; }
+        .photo { width: 120px; height: auto; margin: 0 auto 1.2rem; }
+        .sidebar { text-align: center; margin-bottom: 2.5rem; padding-bottom: 1.8rem; border-bottom: 1px solid #d5d5d2; }
+        .sidebar h1 { font-size: 1.65rem; font-weight: 500; margin: 0 0 0.3rem; }
+        .sidebar p { margin: 0.2rem 0; color: #565660; font-size: 0.94rem; }
+        h2 { font-size: 1.3rem; font-weight: 500; font-style: italic; margin: 2.4rem 0 1rem; color: #15161a; }
+        h3 { font-size: 1rem; font-weight: 600; margin: 0 0 0.25rem; }
+        a { color: #6e1b14; }
+        article { margin: 1rem 0; }
+        article p { margin: 0.12rem 0; color: #565660; font-size: 0.94rem; }
     </style>
 
     <link rel="stylesheet" href="assets/css/style.css">
@@ -83,518 +111,523 @@
 
 <body>
 
-    <!-- ═══════════════════════════════════════════════
-         Top navigation (chrome — hidden without JS)
-    ═══════════════════════════════════════════════ -->
-    <header class="site-header js-only">
-        <nav class="site-nav" aria-label="Section navigation">
-            <a class="nav-link" href="#about"        data-section="about"><span lang="zh">个人简介</span><span lang="en">About</span></a>
-            <a class="nav-link" href="#publications" data-section="publications"><span lang="zh">代表论文</span><span lang="en">Publications</span></a>
-            <a class="nav-link" href="#projects"     data-section="projects"><span lang="zh">科研项目</span><span lang="en">Projects</span></a>
-            <a class="nav-link" href="#honors"       data-section="honors"><span lang="zh">荣誉奖励</span><span lang="en">Honors</span></a>
-            <a class="nav-link" href="#education"    data-section="education"><span lang="zh">教育背景</span><span lang="en">Education</span></a>
-            <a class="nav-link" href="#experience"   data-section="experience"><span lang="zh">工作经历</span><span lang="en">Experience</span></a>
-            <a class="nav-link" href="#patents"      data-section="patents"><span lang="zh">专利</span><span lang="en">Patents</span></a>
-            <a class="nav-link" href="#services"     data-section="services"><span lang="zh">服务</span><span lang="en">Services</span></a>
-            <a class="nav-link" href="#lab"          data-section="lab"><span lang="zh">实验室</span><span lang="en">Lab</span></a>
-            <span class="nav-spacer"></span>
-            <button class="lang-toggle" type="button" aria-label="Switch language">EN</button>
-            <button class="theme-toggle" type="button" aria-label="Toggle dark mode">
-                <svg class="icon-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
-                <svg class="icon-sun"  viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M6.34 17.66l-1.41 1.41M19.07 4.93l-1.41 1.41"/></svg>
-            </button>
+    <!-- ═══════════════════════════════════════════════════════════════
+         Sidebar — portrait, name, role, contact, navigation, toggles.
+         Without external CSS, it falls back to a centred article header.
+    ═══════════════════════════════════════════════════════════════ -->
+    <aside class="sidebar">
+        <img class="photo" src="assets/images/qinhuiling.jpeg" alt="Huiling Qin / 秦慧玲">
+
+        <h1>
+            <span lang="zh">秦慧玲</span>
+            <span lang="en">Huiling Qin</span>
+        </h1>
+        <p class="role">
+            <span lang="zh">助理教授 · 博士生导师</span>
+            <span lang="en">Assistant Professor</span>
+        </p>
+        <p class="org">
+            <span lang="zh">北京师范大学</span><span lang="en">Beijing Normal University</span><br>
+            <span lang="zh">人工智能与未来网络研究院</span><span lang="en">Inst. of AI &amp; Future Networks</span>
+        </p>
+
+        <p class="contact">
+            <a href="/cdn-cgi/l/email-protection#e3928a8d8b968a8f8a8d84a3818d96cd868796cd808d"><span class="__cf_email__" data-cfemail="94e5fdfafce1fdf8fdfaf3d4f6fae1baf1f0e1baf7fa">[email&#160;protected]</span></a>
+        </p>
+
+        <p class="elsewhere">
+            <a href="https://scholar.google.com.hk/citations?hl=en&user=DLzILA4AAAAJ" target="_blank" rel="noopener" data-icon="scholar" aria-label="Google Scholar"></a>
+            <a href="http://www.bnuaifn.cn/ScientificResearchTeam/QinHuiling.html" target="_blank" rel="noopener" data-icon="faculty" aria-label="Faculty Page"></a>
+            <a href="/cdn-cgi/l/email-protection#26574f484e534f4a4f48416644485308434253084548" data-icon="email" aria-label="Email"></a>
+        </p>
+
+        <nav class="js-only" aria-label="Sections">
+            <a href="#about"      data-section="about"><span lang="zh">简介</span><span lang="en">About</span></a>
+            <a href="#publications" data-view="publications"><span lang="zh">论文</span><span lang="en">Papers</span></a>
+            <a href="#projects"   data-section="projects"><span lang="zh">项目</span><span lang="en">Projects</span></a>
+            <a href="#honors"     data-section="honors"><span lang="zh">荣誉</span><span lang="en">Honors</span></a>
+            <a href="#education"  data-section="education"><span lang="zh">教育</span><span lang="en">Education</span></a>
+            <a href="#experience" data-section="experience"><span lang="zh">经历</span><span lang="en">Experience</span></a>
+            <a href="#patents"    data-section="patents"><span lang="zh">专利</span><span lang="en">Patents</span></a>
+            <a href="#services"   data-section="services"><span lang="zh">服务</span><span lang="en">Services</span></a>
+            <a href="#lab"        data-section="lab"><span lang="zh">实验室</span><span lang="en">Lab</span></a>
         </nav>
-    </header>
 
-    <main class="content">
-
-        <!-- ═══════════════════════════════════════════════
-             Profile masthead
-        ═══════════════════════════════════════════════ -->
-        <header class="profile">
-            <img class="profile-photo" src="assets/images/qinhuiling.jpeg" alt="Huiling Qin / 秦慧玲">
-            <h1>
-                <span lang="zh">秦慧玲</span>
-                <span lang="en">Huiling Qin</span>
-            </h1>
-            <p class="profile-title">
-                <span lang="zh">助理教授&nbsp;·&nbsp;博士生导师</span>
-                <span lang="en">Assistant Professor</span>
-            </p>
-            <p class="profile-affiliation">
-                <span lang="zh">北京师范大学&nbsp;·&nbsp;人工智能与未来网络研究院</span>
-                <span lang="en">Institute of Artificial Intelligence and Future Networks, Beijing Normal University</span>
-            </p>
-            <p class="profile-contact">
-                <a href="mailto:qinhuiling@bnu.edu.cn">qinhuiling@bnu.edu.cn</a>
-                <span class="dot-sep"></span>
-                <span lang="zh">中国 珠海</span><span lang="en">Zhuhai, China</span>
-            </p>
-            <p class="profile-fields">
-                <span lang="zh"><em>研究方向：</em>时空数据挖掘、城市计算、人工智能</span>
-                <span lang="en"><em>Research:</em> Spatiotemporal Data Mining, Urban Computing, Artificial Intelligence</span>
-            </p>
-            <p class="profile-links">
-                <a href="https://scholar.google.com.hk/citations?hl=en&user=DLzILA4AAAAJ" target="_blank">Google Scholar</a>
-                <span class="dot-sep"></span>
-                <a href="http://www.bnuaifn.cn/ScientificResearchTeam/QinHuiling.html" target="_blank"><span lang="zh">学校主页</span><span lang="en">University Page</span></a>
-            </p>
-        </header>
+        <p class="toolbar js-only">
+            <button class="lang-toggle" type="button" aria-label="Switch language">EN</button>
+            <button class="theme-toggle" type="button" aria-label="Toggle dark mode" data-icon="theme"></button>
+        </p>
+    </aside>
 
 
-        <!-- ═══════════════════════════════════════════════
-             About
-        ═══════════════════════════════════════════════ -->
-        <section id="about" class="reveal">
-            <h2>
-                <span lang="zh">个人简介</span><span lang="en">About</span>
-                <a class="section-link js-only" href="#about" aria-label="Copy link">§</a>
-            </h2>
-            <div class="prose">
-                <div lang="zh">
-                    <p>秦慧玲，博士，北京师范大学人工智能与未来网络研究院助理教授、博士生导师。自 2017 年起师从城市计算领域奠基人、IEEE Fellow 郑宇教授，长期专注于时空数据挖掘与城市计算领域的研究工作，围绕时空表征学习这一核心方向在 ICML、KDD、AAAI、TKDE 等国际顶级学术会议和期刊发表多篇论文，拥有 2 项国家发明专利。主持国家自然科学基金青年项目 1 项，参与国家重点研发计划等多项国家级项目。先后在微软亚洲研究院、滴滴大数据研究院和京东科技等企业担任算法研究员，利用智能算法在信号灯优化、危化品违规行为识别和地址解析等业务场景中解决了关键问题。获得陕西高校优秀毕业生、西安电子科技大学优秀博士论文等荣誉。</p>
-                    <p>每年招收硕士 2 名，博士 1 名，有意向者请发送简历到联系邮箱。</p>
-                </div>
-                <div lang="en">
-                    <p>Dr. Qin Huiling is an Assistant Professor and Doctoral Supervisor at the Institute of Artificial Intelligence and Future Networks, Beijing Normal University. Since 2017, she has been studying under Professor Yu Zheng, a pioneer in urban computing and IEEE Fellow, dedicating herself to research in spatiotemporal data mining and urban computing. Focusing on spatiotemporal representation learning as her core direction, she has published numerous papers in top-tier venues including ICML, KDD, AAAI, and TKDE, and holds two national invention patents. She serves as the Principal Investigator for one National Natural Science Foundation Youth Project and has participated in multiple national-level projects. She previously held positions as Algorithm Researcher at Microsoft Research Asia, DiDi Big Data Research, and JD Technology, applying intelligent algorithms to challenges in traffic signal optimization, hazardous-chemical violation identification, and address parsing. She has received honors including Outstanding Graduate of Shaanxi Universities and Outstanding Doctoral Dissertation Award from Xidian University.</p>
-                </div>
+    <!-- ═══════════════════════════════════════════════════════════════
+         Main article.
+         Each item type uses one or two class names.  To add a new
+         entry, copy one <article> block and edit its fields — no
+         class wrangling required.
+    ═══════════════════════════════════════════════════════════════ -->
+    <main>
+
+        <!-- ─── About ─────────────────────────────────────────────── -->
+        <section id="about">
+            <h2><span lang="zh">简介</span><span lang="en">About</span><a class="anchor" href="#about" aria-label="Copy link">§</a></h2>
+            <div lang="zh" class="prose">
+                <p>北京师范大学人工智能与未来网络研究院助理教授、博士生导师。自 2017 年起师从城市计算领域奠基人、IEEE Fellow 郑宇教授，长期专注于时空数据挖掘与城市计算领域的研究工作，围绕时空表征学习这一核心方向在 ICML、KDD、AAAI、TKDE 等国际顶级学术会议和期刊发表多篇论文，拥有 2 项国家发明专利。主持国家自然科学基金青年项目 1 项，参与国家重点研发计划等多项国家级项目。先后在微软亚洲研究院、滴滴大数据研究院和京东科技等企业担任算法研究员，利用智能算法在信号灯优化、危化品违规行为识别和地址解析等业务场景中解决了关键问题。</p>
+                <p>每年招收硕士 2 名，博士 1 名，有意向者请发送简历至联系邮箱。</p>
+            </div>
+            <div lang="en" class="prose">
+                <p>Dr. Qin Huiling is an Assistant Professor and Doctoral Supervisor at the Institute of Artificial Intelligence and Future Networks, Beijing Normal University. Since 2017 she has been studying under Professor Yu Zheng — a pioneer in urban computing and IEEE Fellow — focusing on spatiotemporal data mining and urban computing. Around the theme of spatiotemporal representation learning she has published in ICML, KDD, AAAI, TKDE and other top venues, and holds two national invention patents. She is the principal investigator of one NSFC Youth Project and a co-investigator on several national programmes. She has held research positions at Microsoft Research Asia, DiDi Big Data Research and JD Technology, working on traffic-signal optimisation, hazardous-chemical violation detection and address parsing.</p>
+                <p>Each year she takes 2 Master and 1 Doctoral students. Prospective applicants are welcome to email a CV to the address above.</p>
             </div>
         </section>
 
 
-        <!-- ═══════════════════════════════════════════════
-             Publications
-             Adding a new entry: copy one <article class="publication">.
-             Mark site author with <strong data-self>, mark corresponding
-             author by appending <sup data-corresponding>✉</sup>.
-        ═══════════════════════════════════════════════ -->
-        <section id="publications" class="reveal">
-            <h2>
-                <span lang="zh">代表性论文</span><span lang="en">Selected Publications</span>
-                <a class="section-link js-only" href="#publications" aria-label="Copy link">§</a>
-            </h2>
+        <!-- ─── Recent papers ─────────────────────────────────────
+             Mirrors the publication-view markup but trimmed to a
+             handful of the most recent items.  To add a new entry,
+             copy one <article class="pub"> block from the full
+             publications list below.
+        ──────────────────────────────────────────────────────── -->
+        <section id="papers">
+            <h2><span lang="zh">论文</span><span lang="en">Papers</span><a class="anchor" href="#papers" aria-label="Copy link">§</a></h2>
 
-            <article class="publication">
+            <article class="pub">
                 <h3>WaveDiST: A Wavelet Diffusion Transformer for Spatio-Temporal Estimation on Unobserved Locations</h3>
-                <p class="authors"><strong data-self>Huiling Qin</strong><sup data-corresponding>✉</sup>, Yuanxun Li, Weijia Jia</p>
-                <p class="venue">AAAI 2026</p>
-                <p class="pub-links">
-                    <a href="assets/files/papers/qin2026WaveDiST.pdf" target="_blank">PDF</a>
+                <p class="authors"><strong data-me>Huiling Qin</strong><sup data-cor>✉</sup>, Yuanxun Li, Weijia Jia</p>
+                <p class="meta">
+                    <em>AAAI 2026</em>
+                    <a data-icon="pdf" href="assets/files/papers/qin2026WaveDiST.pdf" target="_blank" rel="noopener">PDF</a>
                 </p>
             </article>
 
-            <article class="publication">
+            <article class="pub">
                 <h3>Spatial Semantic-based Enhanced Address Parsing via Adaptive Weighted Learning</h3>
-                <p class="authors"><strong data-self>Huiling Qin</strong><sup data-corresponding>✉</sup>, Ming Wang, Yuanxun Li, Junbo Zhang, Yu Zheng</p>
-                <p class="venue">ACM CIKM 2025</p>
-                <p class="pub-links">
-                    <a href="assets/files/papers/qin2025spatial.pdf" target="_blank">PDF</a>
+                <p class="authors"><strong data-me>Huiling Qin</strong><sup data-cor>✉</sup>, Ming Wang, Yuanxun Li, Junbo Zhang, Yu Zheng</p>
+                <p class="meta">
+                    <em>ACM CIKM 2025</em>
+                    <a data-icon="pdf" href="assets/files/papers/qin2025spatial.pdf" target="_blank" rel="noopener">PDF</a>
                 </p>
             </article>
 
-            <article class="publication">
+            <article class="pub">
                 <h3>Brainstorming Brings Power to Large Language Models of Knowledge Reasoning</h3>
-                <p class="authors">Zining Qin, <strong data-self>Huiling Qin</strong><sup data-corresponding>✉</sup>, Chenghao Wang, Jianxiong Guo, Weijia Jia</p>
-                <p class="venue">IEEE ICME 2025</p>
-                <p class="pub-links">
-                    <a href="https://arxiv.org/pdf/2406.06561" target="_blank">PDF</a>
-                    <details class="bibtex"><summary>BibTeX</summary><pre>@article{qin2024brainstorming,
-title={Brainstorming Brings Power to Large Language Models of Knowledge Reasoning},
-author={Qin, Zining and Wang, Chenhao and Qin, Huiling and Jia, Weijia},
-journal={arXiv e-prints},
-pages={arXiv--2406},
-year={2024}
-}</pre><button class="bibtex-copy js-only" type="button"><span lang="zh">复制</span><span lang="en">Copy</span></button></details>
+                <p class="authors">Zining Qin, <strong data-me>Huiling Qin</strong><sup data-cor>✉</sup>, Chenghao Wang, Jianxiong Guo, Weijia Jia</p>
+                <p class="meta">
+                    <em>IEEE ICME 2025</em>
+                    <a data-icon="pdf" href="https://arxiv.org/pdf/2406.06561" target="_blank" rel="noopener">PDF</a>
                 </p>
             </article>
 
-            <article class="publication">
+            <article class="pub">
                 <h3>AS-STG: Spatio-Temporal Graph Learning with Active Sampling for Dynamic IoT Sensing</h3>
-                <p class="authors">Yaxin Mei, Jiandian Zeng, <strong data-self>Huiling Qin</strong><sup data-corresponding>✉</sup>, Guangxue Zhang, Xi Zheng, Qin Liu, Tian Wang</p>
-                <p class="venue">IEEE/ACM IWQoS 2025</p>
-                <p class="pub-links">
-                    <a href="assets/files/papers/mei2025asstg.pdf" target="_blank">PDF</a>
-                    <details class="bibtex"><summary>BibTeX</summary><pre>@inproceedings{DBLP:conf/iwqos/MeiZQZZLW25,
-author       = {Yaxin Mei and Jiandian Zeng and Huiling Qin and
-                Guangxue Zhang and Xi Zheng and Qin Liu and Tian Wang},
-title        = {As-Stg: Spatio-Temporal Graph Learning with Active Sampling
-                for Dynamic IoT Sensing},
-booktitle    = {33rd {IEEE/ACM} International Symposium on Quality of Service,
-                IWQoS 2025, Gold Coast, Australia, July 2-4, 2025},
-pages        = {1--10},
-publisher    = {{IEEE}},
-year         = {2025},
-doi          = {10.1109/IWQOS65803.2025.11143341}
-}</pre><button class="bibtex-copy js-only" type="button"><span lang="zh">复制</span><span lang="en">Copy</span></button></details>
+                <p class="authors">Yaxin Mei, Jiandian Zeng, <strong data-me>Huiling Qin</strong><sup data-cor>✉</sup>, Guangxue Zhang, Xi Zheng, Qin Liu, Tian Wang</p>
+                <p class="meta">
+                    <em>IEEE/ACM IWQoS 2025</em>
+                    <a data-icon="pdf" href="assets/files/papers/mei2025asstg.pdf" target="_blank" rel="noopener">PDF</a>
                 </p>
             </article>
 
-            <article class="publication">
+            <article class="pub">
                 <h3>FlexSSL: A Generic and Efficient Framework for Semi-Supervised Learning</h3>
-                <p class="authors"><strong data-self>Huiling Qin</strong><sup data-corresponding>✉</sup>, Xianyuan Zhan, Yuanxun Li, Yu Zheng</p>
-                <p class="venue">ECAI 2024</p>
-                <p class="pub-links">
-                    <a href="https://arxiv.org/pdf/2312.16892v1" target="_blank">PDF</a>
-                    <details class="bibtex"><summary>BibTeX</summary><pre>@inproceedings{DBLP:conf/ecai/QinZL024,
-author       = {Huiling Qin and Xianyuan Zhan and Yuanxun Li and Yu Zheng},
-title        = {FlexSSL : {A} Generic and Efficient Framework for Semi-Supervised
-                Learning},
-booktitle    = {{ECAI} 2024 - 27th European Conference on Artificial Intelligence,
-                19-24 October 2024, Santiago de Compostela, Spain},
-series       = {Frontiers in Artificial Intelligence and Applications},
-volume       = {392},
-pages        = {1455--1462},
-publisher    = {{IOS} Press},
-year         = {2024},
-doi          = {10.3233/FAIA240648}
-}</pre><button class="bibtex-copy js-only" type="button"><span lang="zh">复制</span><span lang="en">Copy</span></button></details>
+                <p class="authors"><strong data-me>Huiling Qin</strong><sup data-cor>✉</sup>, Xianyuan Zhan, Yuanxun Li, Yu Zheng</p>
+                <p class="meta">
+                    <em>ECAI 2024</em>
+                    <a data-icon="pdf" href="https://arxiv.org/pdf/2312.16892v1" target="_blank" rel="noopener">PDF</a>
                 </p>
             </article>
 
-            <article class="publication">
+            <article class="pub">
                 <h3>CSCAD: Correlation Structure-based Collective Anomaly Detection in Complex System</h3>
-                <p class="authors"><strong data-self>Huiling Qin</strong><sup data-corresponding>✉</sup>, Xianyuan Zhan, Yu Zheng</p>
-                <p class="venue">IEEE TKDE 2022</p>
-                <p class="pub-links">
-                    <a href="https://arxiv.org/pdf/2105.14476" target="_blank">PDF</a>
-                    <details class="bibtex"><summary>BibTeX</summary><pre>@article{DBLP:journals/tkde/QinZZ23,
-author       = {Huiling Qin and Xianyuan Zhan and Yu Zheng},
-title        = {{CSCAD:} Correlation Structure-Based Collective Anomaly Detection
-                in Complex System},
-journal      = {{IEEE} Trans. Knowl. Data Eng.},
-volume       = {35},
-number       = {5},
-pages        = {4634--4645},
-year         = {2023},
-doi          = {10.1109/TKDE.2022.3154166}
-}</pre><button class="bibtex-copy js-only" type="button"><span lang="zh">复制</span><span lang="en">Copy</span></button></details>
+                <p class="authors"><strong data-me>Huiling Qin</strong><sup data-cor>✉</sup>, Xianyuan Zhan, Yu Zheng</p>
+                <p class="meta">
+                    <em>IEEE TKDE 2022</em>
+                    <a data-icon="pdf" href="https://arxiv.org/pdf/2105.14476" target="_blank" rel="noopener">PDF</a>
                 </p>
             </article>
 
-            <article class="publication">
-                <h3>Discriminator-weighted Offline Imitation Learning from Suboptimal Demonstrations</h3>
-                <p class="authors">Haoran Xu, Xianyuan Zhan, Honglei Yin, <strong data-self>Huiling Qin</strong></p>
-                <p class="venue">ICML 2022</p>
-                <p class="pub-links">
-                    <a href="https://proceedings.mlr.press/v162/xu22l/xu22l.pdf" target="_blank">PDF</a>
-                    <details class="bibtex"><summary>BibTeX</summary><pre>@inproceedings{DBLP:conf/icml/XuZYQ22,
-author       = {Haoran Xu and Xianyuan Zhan and Honglei Yin and Huiling Qin},
-title        = {Discriminator-Weighted Offline Imitation Learning from Suboptimal
-                Demonstrations},
-booktitle    = {International Conference on Machine Learning, {ICML} 2022,
-                17-23 July 2022, Baltimore, Maryland, {USA}},
-series       = {Proceedings of Machine Learning Research},
-volume       = {162},
-pages        = {24725--24742},
-publisher    = {{PMLR}},
-year         = {2022}
-}</pre><button class="bibtex-copy js-only" type="button"><span lang="zh">复制</span><span lang="en">Copy</span></button></details>
-                </p>
+            <p class="more">
+                <a href="#publications" data-view="publications"><span lang="zh">查看全部论文 →</span><span lang="en">View all publications →</span></a>
+            </p>
+        </section>
+
+
+        <!-- ─── Projects ──────────────────────────────────────────── -->
+        <section id="projects">
+            <h2><span lang="zh">科研项目</span><span lang="en">Projects</span><a class="anchor" href="#projects" aria-label="Copy link">§</a></h2>
+
+            <article class="entry">
+                <p class="when">2025 – 2027</p>
+                <div class="what">
+                    <h3><span lang="zh">基于多时空关系的特殊事件下交通状态监测预警研究</span><span lang="en">Multi-Spatiotemporal Traffic-State Monitoring under Special Events</span></h3>
+                    <p class="sub"><span lang="zh">国家自然科学基金青年项目 · 主持</span><span lang="en">NSFC Youth Project · PI</span></p>
+                    <p class="tag">62406029</p>
+                </div>
             </article>
 
-            <article class="publication">
-                <h3>Network-wide Traffic States Imputation Using Self-interested Coalitional Learning</h3>
-                <p class="authors"><strong data-self>Huiling Qin</strong><sup data-corresponding>✉</sup>, Xianyuan Zhan, Yuanxun Li, Xiaodu Yang, Yu Zheng</p>
-                <p class="venue">ACM SIGKDD 2021</p>
-                <p class="pub-links">
-                    <a href="http://urban-computing.com/pdf/Network-Wide%20Traffic%20States%20Imputation%20Using%20Self-interested%20Coalitional%20Learning.pdf" target="_blank">PDF</a>
-                    <details class="bibtex"><summary>BibTeX</summary><pre>@inproceedings{DBLP:conf/kdd/QinZLY021,
-author       = {Huiling Qin and Xianyuan Zhan and Yuanxun Li and
-                Xiaodu Yang and Yu Zheng},
-title        = {Network-Wide Traffic States Imputation Using Self-interested
-                Coalitional Learning},
-booktitle    = {{KDD} '21: The 27th {ACM} {SIGKDD} Conference on Knowledge
-                Discovery and Data Mining, Singapore, August 14-18, 2021},
-pages        = {1370--1378},
-publisher    = {{ACM}},
-year         = {2021},
-doi          = {10.1145/3447548.3467424}
-}</pre><button class="bibtex-copy js-only" type="button"><span lang="zh">复制</span><span lang="en">Copy</span></button></details>
-                </p>
+            <article class="entry">
+                <p class="when">—</p>
+                <div class="what">
+                    <h3><span lang="zh">基于时空大数据的人群关联性智能分析</span><span lang="en">Intelligent Analysis of Crowd Correlation from Spatiotemporal Big Data</span></h3>
+                    <p class="sub"><span lang="zh">国家自然科学基金面上项目 · 参研</span><span lang="en">NSFC General Project · Co-I</span></p>
+                    <p class="tag">62076191</p>
+                </div>
             </article>
 
-            <article class="publication">
-                <h3>Robust Spatio-Temporal Purchase Prediction via Deep Meta Learning</h3>
-                <p class="authors"><strong data-self>Huiling Qin</strong><sup data-corresponding>✉</sup>, Songyu Ke, Xiaodu Yang, Haoran Xu, Xianyuan Zhan, Yu Zheng</p>
-                <p class="venue">AAAI 2021</p>
-                <p class="pub-links">
-                    <a href="https://ojs.aaai.org/index.php/AAAI/article/view/16556" target="_blank">PDF</a>
-                    <details class="bibtex"><summary>BibTeX</summary><pre>@inproceedings{DBLP:conf/aaai/QinKYXZ021,
-author       = {Huiling Qin and Songyu Ke and Xiaodu Yang and Haoran Xu and
-                Xianyuan Zhan and Yu Zheng},
-title        = {Robust Spatio-Temporal Purchase Prediction via Deep Meta Learning},
-booktitle    = {Thirty-Fifth {AAAI} Conference on Artificial Intelligence,
-                Virtual Event, February 2-9, 2021},
-pages        = {4312--4319},
-publisher    = {{AAAI} Press},
-year         = {2021},
-doi          = {10.1609/AAAI.V35I5.16556}
-}</pre><button class="bibtex-copy js-only" type="button"><span lang="zh">复制</span><span lang="en">Copy</span></button></details>
-                </p>
+            <article class="entry">
+                <p class="when">—</p>
+                <div class="what">
+                    <h3><span lang="zh">城市知识模型体系与推理评估</span><span lang="en">Urban Knowledge Model System and Reasoning Evaluation</span></h3>
+                    <p class="sub"><span lang="zh">国家重点研发计划 · 参研</span><span lang="en">National Key R&amp;D Programme · Co-I</span></p>
+                    <p class="tag">2019YFB2101801</p>
+                </div>
+            </article>
+
+            <article class="entry">
+                <p class="when">—</p>
+                <div class="what">
+                    <h3><span lang="zh">城市数据管控与知识萃取平台及应用示范</span><span lang="en">Urban Data Governance &amp; Knowledge Extraction Platform</span></h3>
+                    <p class="sub"><span lang="zh">国家重点研发计划 · 参研</span><span lang="en">National Key R&amp;D Programme · Co-I</span></p>
+                    <p class="tag">2019YFB2101805</p>
+                </div>
+            </article>
+
+            <article class="entry">
+                <p class="when">—</p>
+                <div class="what">
+                    <h3><span lang="zh">基于城市多源数据的人群智能分析技术与应用</span><span lang="en">Intelligent Crowd Analysis from Multi-source Urban Data</span></h3>
+                    <p class="sub"><span lang="zh">北京市科技新星计划 · 参研</span><span lang="en">Beijing Nova Programme · Co-I</span></p>
+                    <p class="tag">Z201100006820053</p>
+                </div>
+            </article>
+
+            <article class="entry">
+                <p class="when">—</p>
+                <div class="what">
+                    <h3><span lang="zh">北京人工智能应用发展产业技术基础公共服务平台</span><span lang="en">Beijing AI Industry Public Service Platform</span></h3>
+                    <p class="sub"><span lang="zh">工信部产业技术基础公共服务平台 · 参研</span><span lang="en">MIIT Industrial Infrastructure Platform · Co-I</span></p>
+                    <p class="tag">2021-0166-1-1</p>
+                </div>
             </article>
         </section>
 
 
-        <!-- ═══════════════════════════════════════════════
-             Projects
-             Each project: title (bilingual), funding source, code & period.
-        ═══════════════════════════════════════════════ -->
-        <section id="projects" class="reveal">
-            <h2>
-                <span lang="zh">科研项目</span><span lang="en">Research Projects</span>
-                <a class="section-link js-only" href="#projects" aria-label="Copy link">§</a>
-            </h2>
+        <!-- ─── Honors ────────────────────────────────────────────── -->
+        <section id="honors">
+            <h2><span lang="zh">荣誉</span><span lang="en">Honors</span><a class="anchor" href="#honors" aria-label="Copy link">§</a></h2>
 
-            <article class="project">
-                <h3>
-                    <span lang="zh">基于多时空关系的特殊事件下交通状态监测预警研究（主持）</span>
-                    <span lang="en">Multi-Spatiotemporal Relationship-based Traffic State Monitoring and Warning under Special Events (PI)</span>
-                </h3>
-                <p class="meta">
-                    <span lang="zh">国家自然科学基金青年项目</span>
-                    <span lang="en">National Natural Science Foundation Youth Project</span>
-                </p>
-                <p class="details">
-                    <span>62406029</span>
-                    <span>2025.01 – 2027.12</span>
-                </p>
-            </article>
-
-            <article class="project">
-                <h3>
-                    <span lang="zh">基于时空大数据的人群关联性智能分析（参研）</span>
-                    <span lang="en">Intelligent Analysis of Crowd Correlation Based on Spatiotemporal Big Data (Co-I)</span>
-                </h3>
-                <p class="meta">
-                    <span lang="zh">国家自然科学基金面上项目</span>
-                    <span lang="en">National Natural Science Foundation General Project</span>
-                </p>
-                <p class="details"><span>62076191</span></p>
-            </article>
-
-            <article class="project">
-                <h3>
-                    <span lang="zh">城市知识模型体系与推理评估（参研）</span>
-                    <span lang="en">Urban Knowledge Model System and Reasoning Evaluation (Co-I)</span>
-                </h3>
-                <p class="meta">
-                    <span lang="zh">国家重点研发计划</span>
-                    <span lang="en">National Key R&amp;D Program</span>
-                </p>
-                <p class="details"><span>2019YFB2101801</span></p>
-            </article>
-
-            <article class="project">
-                <h3>
-                    <span lang="zh">城市数据管控与知识萃取平台及应用示范（参研）</span>
-                    <span lang="en">Urban Data Management and Knowledge Extraction Platform and Application Demonstration (Co-I)</span>
-                </h3>
-                <p class="meta">
-                    <span lang="zh">国家重点研发计划</span>
-                    <span lang="en">National Key R&amp;D Program</span>
-                </p>
-                <p class="details"><span>2019YFB2101805</span></p>
-            </article>
-
-            <article class="project">
-                <h3>
-                    <span lang="zh">基于城市多源数据的人群智能分析技术与应用（参研）</span>
-                    <span lang="en">Intelligent Crowd Analysis Based on Urban Multi-source Data (Co-I)</span>
-                </h3>
-                <p class="meta">
-                    <span lang="zh">北京市科技新星计划</span>
-                    <span lang="en">Beijing Science and Technology Rising Star Program</span>
-                </p>
-                <p class="details"><span>Z201100006820053</span></p>
-            </article>
-
-            <article class="project">
-                <h3>
-                    <span lang="zh">北京人工智能应用发展产业技术基础公共服务平台建设（参研）</span>
-                    <span lang="en">Beijing AI Application Development Industry Technology Infrastructure Public Service Platform (Co-I)</span>
-                </h3>
-                <p class="meta">
-                    <span lang="zh">工信部产业技术基础公共服务平台</span>
-                    <span lang="en">Ministry of Industry and Information Technology</span>
-                </p>
-                <p class="details"><span>2021-0166-1-1</span></p>
-            </article>
-        </section>
-
-
-        <!-- ═══════════════════════════════════════════════
-             Honors
-        ═══════════════════════════════════════════════ -->
-        <section id="honors" class="reveal">
-            <h2>
-                <span lang="zh">奖励与荣誉</span><span lang="en">Honors &amp; Awards</span>
-                <a class="section-link js-only" href="#honors" aria-label="Copy link">§</a>
-            </h2>
-
-            <div class="honor">
-                <div class="honor-year">2025</div>
-                <div class="honor-body">
+            <article class="entry">
+                <p class="when">2025</p>
+                <div class="what">
                     <h3><span lang="zh">优秀博士论文</span><span lang="en">Outstanding Doctoral Dissertation</span></h3>
-                    <p><span lang="zh">西安电子科技大学</span><span lang="en">Xidian University</span></p>
+                    <p class="sub"><span lang="zh">西安电子科技大学</span><span lang="en">Xidian University</span></p>
                 </div>
-            </div>
-
-            <div class="honor">
-                <div class="honor-year">2023</div>
-                <div class="honor-body">
+            </article>
+            <article class="entry">
+                <p class="when">2023</p>
+                <div class="what">
                     <h3><span lang="zh">陕西高校优秀毕业生</span><span lang="en">Outstanding Graduate of Shaanxi Province</span></h3>
-                    <p><span lang="zh">陕西省人民政府</span><span lang="en">Shaanxi Provincial Government</span></p>
+                    <p class="sub"><span lang="zh">陕西省人民政府</span><span lang="en">Shaanxi Provincial Government</span></p>
                 </div>
-            </div>
-
-            <div class="honor">
-                <div class="honor-year">2021</div>
-                <div class="honor-body">
+            </article>
+            <article class="entry">
+                <p class="when">2021</p>
+                <div class="what">
                     <h3><span lang="zh">国家奖学金</span><span lang="en">National Scholarship</span></h3>
-                    <p><span lang="zh">教育部</span><span lang="en">Ministry of Education, China</span></p>
+                    <p class="sub"><span lang="zh">教育部</span><span lang="en">Ministry of Education, China</span></p>
                 </div>
-            </div>
-
-            <div class="honor">
-                <div class="honor-year">2018</div>
-                <div class="honor-body">
+            </article>
+            <article class="entry">
+                <p class="when">2018</p>
+                <div class="what">
                     <h3><span lang="zh">国家奖学金</span><span lang="en">National Scholarship</span></h3>
-                    <p><span lang="zh">教育部</span><span lang="en">Ministry of Education, China</span></p>
+                    <p class="sub"><span lang="zh">教育部</span><span lang="en">Ministry of Education, China</span></p>
                 </div>
-            </div>
+            </article>
         </section>
 
 
-        <!-- ═══════════════════════════════════════════════
-             Education
-        ═══════════════════════════════════════════════ -->
-        <section id="education" class="reveal">
-            <h2>
-                <span lang="zh">教育背景</span><span lang="en">Education</span>
-                <a class="section-link js-only" href="#education" aria-label="Copy link">§</a>
-            </h2>
+        <!-- ─── Education ─────────────────────────────────────────── -->
+        <section id="education">
+            <h2><span lang="zh">教育</span><span lang="en">Education</span><a class="anchor" href="#education" aria-label="Copy link">§</a></h2>
 
-            <div class="period">
-                <div class="period-date">2018.09 – 2023.06</div>
-                <div class="period-body">
-                    <h3><span lang="zh">计算机科学与技术博士</span><span lang="en">Ph.D. in Computer Science and Technology</span></h3>
-                    <p><span lang="zh">西安电子科技大学</span><span lang="en">Xidian University</span></p>
-                    <p class="period-desc"><span lang="zh">研究方向：时空数据挖掘与城市计算</span><span lang="en">Research on Spatiotemporal Data Mining and Urban Computing</span></p>
+            <article class="entry">
+                <p class="when">2018 – 2023</p>
+                <div class="what">
+                    <h3><span lang="zh">计算机科学与技术 · 博士</span><span lang="en">Ph.D., Computer Science &amp; Technology</span></h3>
+                    <p class="sub"><span lang="zh">西安电子科技大学</span><span lang="en">Xidian University</span></p>
+                    <p class="note"><span lang="zh">方向：时空数据挖掘与城市计算</span><span lang="en">Focus: Spatiotemporal Data Mining &amp; Urban Computing</span></p>
                 </div>
-            </div>
-
-            <div class="period">
-                <div class="period-date">2014.09 – 2018.06</div>
-                <div class="period-body">
-                    <h3><span lang="zh">计算机科学与技术学士</span><span lang="en">B.S. in Computer Science and Technology</span></h3>
-                    <p><span lang="zh">西安电子科技大学</span><span lang="en">Xidian University</span></p>
+            </article>
+            <article class="entry">
+                <p class="when">2014 – 2018</p>
+                <div class="what">
+                    <h3><span lang="zh">计算机科学与技术 · 学士</span><span lang="en">B.S., Computer Science &amp; Technology</span></h3>
+                    <p class="sub"><span lang="zh">西安电子科技大学</span><span lang="en">Xidian University</span></p>
                 </div>
-            </div>
+            </article>
         </section>
 
 
-        <!-- ═══════════════════════════════════════════════
-             Experience
-        ═══════════════════════════════════════════════ -->
-        <section id="experience" class="reveal">
-            <h2>
-                <span lang="zh">工作经历</span><span lang="en">Professional Experience</span>
-                <a class="section-link js-only" href="#experience" aria-label="Copy link">§</a>
-            </h2>
+        <!-- ─── Experience ────────────────────────────────────────── -->
+        <section id="experience">
+            <h2><span lang="zh">工作经历</span><span lang="en">Experience</span><a class="anchor" href="#experience" aria-label="Copy link">§</a></h2>
 
-            <div class="period">
-                <div class="period-date"><span lang="zh">2023.11 – 至今</span><span lang="en">2023.11 – Present</span></div>
-                <div class="period-body">
+            <article class="entry">
+                <p class="when"><span lang="zh">2023 — 至今</span><span lang="en">2023 — Now</span></p>
+                <div class="what">
                     <h3><span lang="zh">助理教授</span><span lang="en">Assistant Professor</span></h3>
-                    <p><span lang="zh">北京师范大学珠海校区</span><span lang="en">Beijing Normal University, Zhuhai</span></p>
-                    <p class="period-desc"><span lang="zh">人工智能与未来网络研究院</span><span lang="en">Institute of Artificial Intelligence and Future Networks</span></p>
+                    <p class="sub"><span lang="zh">北京师范大学 · 珠海校区</span><span lang="en">Beijing Normal University, Zhuhai</span></p>
+                    <p class="note"><span lang="zh">人工智能与未来网络研究院</span><span lang="en">Institute of AI &amp; Future Networks</span></p>
                 </div>
-            </div>
-        </section>
-
-
-        <!-- ═══════════════════════════════════════════════
-             Patents
-        ═══════════════════════════════════════════════ -->
-        <section id="patents" class="reveal">
-            <h2>
-                <span lang="zh">专利授权</span><span lang="en">Patents</span>
-                <a class="section-link js-only" href="#patents" aria-label="Copy link">§</a>
-            </h2>
-
-            <article class="patent">
-                <h3>
-                    <span lang="zh">用于销量数据预测的方法、装置、设备及存储介质</span>
-                    <span lang="en">Method, Device, Equipment and Storage Medium for Sales Data Prediction</span>
-                </h3>
-                <p class="inventors"><span lang="zh">秦慧玲、詹仙园、郑宇</span><span lang="en">Huiling Qin, Xianyuan Zhan, Yu Zheng</span></p>
-                <p class="meta">
-                    <span>2020.05.29</span>
-                    <span>CN202010477825.8</span>
-                    <span><span lang="zh">中国</span><span lang="en">China</span></span>
-                </p>
-            </article>
-
-            <article class="patent">
-                <h3>
-                    <span lang="zh">数据处理方法和装置</span>
-                    <span lang="en">Data Processing Method and Device</span>
-                </h3>
-                <p class="inventors"><span lang="zh">詹仙园、秦慧玲、郑宇</span><span lang="en">Xianyuan Zhan, Huiling Qin, Yu Zheng</span></p>
-                <p class="meta">
-                    <span>2020.09.29</span>
-                    <span>ZL201910760669.3</span>
-                    <span><span lang="zh">中国</span><span lang="en">China</span></span>
-                </p>
             </article>
         </section>
 
 
-        <!-- ═══════════════════════════════════════════════
-             Services
-        ═══════════════════════════════════════════════ -->
-        <section id="services" class="reveal">
-            <h2>
-                <span lang="zh">社会服务</span><span lang="en">Academic Services</span>
-                <a class="section-link js-only" href="#services" aria-label="Copy link">§</a>
-            </h2>
-            <div class="prose">
-                <div lang="zh">
-                    <p><strong>会议 / 期刊审稿：</strong>IEEE Transactions on Knowledge and Data Engineering (TKDE)、ACM SIGKDD、AAAI、NeurIPS、ICML 等人工智能和数据挖掘领域顶级会议和期刊审稿人。</p>
+        <!-- ─── Patents ───────────────────────────────────────────── -->
+        <section id="patents">
+            <h2><span lang="zh">专利</span><span lang="en">Patents</span><a class="anchor" href="#patents" aria-label="Copy link">§</a></h2>
+
+            <article class="entry">
+                <p class="when">2020</p>
+                <div class="what">
+                    <h3><span lang="zh">用于销量数据预测的方法、装置、设备及存储介质</span><span lang="en">Method, Device &amp; System for Sales-Data Prediction</span></h3>
+                    <p class="sub"><span lang="zh">秦慧玲、詹仙园、郑宇</span><span lang="en">Huiling Qin, Xianyuan Zhan, Yu Zheng</span></p>
+                    <p class="tag">CN202010477825.8</p>
                 </div>
-                <div lang="en">
-                    <p><strong>Conference &amp; Journal Reviewer:</strong> IEEE Transactions on Knowledge and Data Engineering (TKDE), ACM SIGKDD, AAAI, NeurIPS, ICML, and other top-tier venues in artificial intelligence and data mining.</p>
+            </article>
+            <article class="entry">
+                <p class="when">2020</p>
+                <div class="what">
+                    <h3><span lang="zh">数据处理方法和装置</span><span lang="en">Data Processing Method &amp; Apparatus</span></h3>
+                    <p class="sub"><span lang="zh">詹仙园、秦慧玲、郑宇</span><span lang="en">Xianyuan Zhan, Huiling Qin, Yu Zheng</span></p>
+                    <p class="tag">ZL201910760669.3</p>
                 </div>
+            </article>
+        </section>
+
+
+        <!-- ─── Services ──────────────────────────────────────────── -->
+        <section id="services">
+            <h2><span lang="zh">学术服务</span><span lang="en">Services</span><a class="anchor" href="#services" aria-label="Copy link">§</a></h2>
+            <div lang="zh" class="prose">
+                <p><strong>会议与期刊审稿：</strong>IEEE TKDE、ACM SIGKDD、AAAI、NeurIPS、ICML 等人工智能与数据挖掘领域顶级会议和期刊审稿人。</p>
+            </div>
+            <div lang="en" class="prose">
+                <p><strong>Reviewer:</strong> IEEE TKDE, ACM SIGKDD, AAAI, NeurIPS, ICML, and other top venues in AI and data mining.</p>
             </div>
         </section>
 
 
-        <!-- ═══════════════════════════════════════════════
-             Lab
-        ═══════════════════════════════════════════════ -->
-        <section id="lab" class="reveal">
-            <h2>
-                <span lang="zh">实验室介绍</span><span lang="en">Laboratory</span>
-                <a class="section-link js-only" href="#lab" aria-label="Copy link">§</a>
-            </h2>
-            <div class="prose">
-                <div lang="zh">
-                    <p>实验室依托北京师范大学珠海校区人工智能与未来网络研究院。</p>
-                    <p><strong>研究基础设施：</strong>实验室依托教育部工程研究中心、广东省重点实验室、北师大珠海交叉智能超算中心（管理运营数百张 A100/A800 GPU）。</p>
-                    <p><strong>研究成果：</strong>团队依托交叉智能超算中心建设，支持各中心科研人员在最近两年内发表高水平论文 42 篇，横纵向项目 17 项，专利/软著 8 项，著作 1 部。</p>
-                    <p><strong>产业合作：</strong>团队兼具学术引领力与产业影响力。近年来已与京东、华为、格力、浪潮等知名企业建立合作关系。</p>
-                </div>
-                <div lang="en">
-                    <p>Our laboratory is affiliated with the Institute of Artificial Intelligence and Future Networks at Beijing Normal University, Zhuhai Campus.</p>
-                    <p><strong>Research Infrastructure:</strong> Supported by the Ministry of Education Engineering Research Center, Guangdong Provincial Key Laboratory, and the BNU Zhuhai Cross-Intelligence Supercomputing Center (managing hundreds of A100/A800 GPUs).</p>
-                    <p><strong>Research Achievements:</strong> The team has published 42 high-level papers in the past two years, completed 17 research projects, filed 8 patents and software copyrights, and published 1 monograph.</p>
-                    <p><strong>Industry Collaboration:</strong> We have established partnerships with leading companies including JD.com, Huawei, Gree, and Inspur.</p>
-                </div>
+        <!-- ─── Lab ───────────────────────────────────────────────── -->
+        <section id="lab">
+            <h2><span lang="zh">实验室</span><span lang="en">Laboratory</span><a class="anchor" href="#lab" aria-label="Copy link">§</a></h2>
+            <div lang="zh" class="prose">
+                <p>依托北京师范大学珠海校区人工智能与未来网络研究院。</p>
+                <p><strong>研究基础设施 ——</strong> 教育部工程研究中心、广东省重点实验室、北师大珠海交叉智能超算中心（数百张 A100/A800 GPU）。</p>
+                <p><strong>研究成果 ——</strong> 近两年发表高水平论文 42 篇，横纵向项目 17 项，专利/软著 8 项，著作 1 部。</p>
+                <p><strong>产业合作 ——</strong> 京东、华为、格力、浪潮等合作。</p>
+            </div>
+            <div lang="en" class="prose">
+                <p>Hosted by the Institute of AI &amp; Future Networks at BNU Zhuhai.</p>
+                <p><strong>Infrastructure ——</strong> a Ministry-of-Education engineering centre, a Guangdong key lab, and the BNU Zhuhai Cross-Intelligence Supercomputing Centre (hundreds of A100/A800 GPUs).</p>
+                <p><strong>Output ——</strong> 42 papers, 17 funded projects, 8 patents/software copyrights and 1 monograph over the past two years.</p>
+                <p><strong>Industry ——</strong> partnerships with JD.com, Huawei, Gree and Inspur.</p>
             </div>
         </section>
+
+
+        <!-- ═══════════════════════════════════════════════════════════
+             Publications view — hidden by default, surfaced when the
+             sidebar's "Publications" link is clicked (or url is /publications).
+
+             Template for a new entry:
+                <article class="pub">
+                    <h3>Title goes here</h3>
+                    <p class="authors">A, <strong data-me>Huiling Qin</strong><sup data-cor>✉</sup>, C</p>
+                    <p class="meta">
+                        <em>Venue Year</em>
+                        <a data-icon="pdf" href="…">PDF</a>
+                        <button data-bibtex type="button">BibTeX</button>
+                    </p>
+                    <div class="bibtex"><pre>@…{…}</pre></div>
+                </article>
+             Omit the button + .bibtex block if you don't have a citation yet.
+        ═══════════════════════════════════════════════════════════ -->
+        <section id="publications" class="view">
+            <p class="back"><a href="#about" data-view="default"><span lang="zh">← 返回</span><span lang="en">← Back</span></a></p>
+            <h2><span lang="zh">全部论文</span><span lang="en">Publications</span></h2>
+
+            <article class="pub">
+                <h3>WaveDiST: A Wavelet Diffusion Transformer for Spatio-Temporal Estimation on Unobserved Locations</h3>
+                <p class="authors"><strong data-me>Huiling Qin</strong><sup data-cor>✉</sup>, Yuanxun Li, Weijia Jia</p>
+                <p class="meta">
+                    <em>AAAI 2026</em>
+                    <a data-icon="pdf" href="assets/files/papers/qin2026WaveDiST.pdf" target="_blank" rel="noopener">PDF</a>
+                </p>
+            </article>
+
+            <article class="pub">
+                <h3>Spatial Semantic-based Enhanced Address Parsing via Adaptive Weighted Learning</h3>
+                <p class="authors"><strong data-me>Huiling Qin</strong><sup data-cor>✉</sup>, Ming Wang, Yuanxun Li, Junbo Zhang, Yu Zheng</p>
+                <p class="meta">
+                    <em>ACM CIKM 2025</em>
+                    <a data-icon="pdf" href="assets/files/papers/qin2025spatial.pdf" target="_blank" rel="noopener">PDF</a>
+                </p>
+            </article>
+
+            <article class="pub">
+                <h3>Brainstorming Brings Power to Large Language Models of Knowledge Reasoning</h3>
+                <p class="authors">Zining Qin, <strong data-me>Huiling Qin</strong><sup data-cor>✉</sup>, Chenghao Wang, Jianxiong Guo, Weijia Jia</p>
+                <p class="meta">
+                    <em>IEEE ICME 2025</em>
+                    <a data-icon="pdf" href="https://arxiv.org/pdf/2406.06561" target="_blank" rel="noopener">PDF</a>
+                    <button data-bibtex type="button">BibTeX</button>
+                </p>
+                <div class="bibtex"><pre>@article{qin2024brainstorming,
+  title   = {Brainstorming Brings Power to Large Language Models of Knowledge Reasoning},
+  author  = {Qin, Zining and Wang, Chenhao and Qin, Huiling and Jia, Weijia},
+  journal = {arXiv e-prints},
+  pages   = {arXiv--2406},
+  year    = {2024}
+}</pre></div>
+            </article>
+
+            <article class="pub">
+                <h3>AS-STG: Spatio-Temporal Graph Learning with Active Sampling for Dynamic IoT Sensing</h3>
+                <p class="authors">Yaxin Mei, Jiandian Zeng, <strong data-me>Huiling Qin</strong><sup data-cor>✉</sup>, Guangxue Zhang, Xi Zheng, Qin Liu, Tian Wang</p>
+                <p class="meta">
+                    <em>IEEE/ACM IWQoS 2025</em>
+                    <a data-icon="pdf" href="assets/files/papers/mei2025asstg.pdf" target="_blank" rel="noopener">PDF</a>
+                    <button data-bibtex type="button">BibTeX</button>
+                </p>
+                <div class="bibtex"><pre>@inproceedings{DBLP:conf/iwqos/MeiZQZZLW25,
+  author    = {Yaxin Mei and Jiandian Zeng and Huiling Qin and
+               Guangxue Zhang and Xi Zheng and Qin Liu and Tian Wang},
+  title     = {AS-STG: Spatio-Temporal Graph Learning with Active Sampling for Dynamic IoT Sensing},
+  booktitle = {33rd IEEE/ACM Intl. Symposium on Quality of Service (IWQoS 2025)},
+  pages     = {1--10},
+  publisher = {IEEE},
+  year      = {2025},
+  doi       = {10.1109/IWQOS65803.2025.11143341}
+}</pre></div>
+            </article>
+
+            <article class="pub">
+                <h3>FlexSSL: A Generic and Efficient Framework for Semi-Supervised Learning</h3>
+                <p class="authors"><strong data-me>Huiling Qin</strong><sup data-cor>✉</sup>, Xianyuan Zhan, Yuanxun Li, Yu Zheng</p>
+                <p class="meta">
+                    <em>ECAI 2024</em>
+                    <a data-icon="pdf" href="https://arxiv.org/pdf/2312.16892v1" target="_blank" rel="noopener">PDF</a>
+                    <button data-bibtex type="button">BibTeX</button>
+                </p>
+                <div class="bibtex"><pre>@inproceedings{DBLP:conf/ecai/QinZL024,
+  author    = {Huiling Qin and Xianyuan Zhan and Yuanxun Li and Yu Zheng},
+  title     = {FlexSSL: A Generic and Efficient Framework for Semi-Supervised Learning},
+  booktitle = {ECAI 2024 — 27th European Conf. on AI},
+  series    = {Frontiers in AI and Applications},
+  volume    = {392},
+  pages     = {1455--1462},
+  publisher = {IOS Press},
+  year      = {2024},
+  doi       = {10.3233/FAIA240648}
+}</pre></div>
+            </article>
+
+            <article class="pub">
+                <h3>CSCAD: Correlation Structure-based Collective Anomaly Detection in Complex System</h3>
+                <p class="authors"><strong data-me>Huiling Qin</strong><sup data-cor>✉</sup>, Xianyuan Zhan, Yu Zheng</p>
+                <p class="meta">
+                    <em>IEEE TKDE 2022</em>
+                    <a data-icon="pdf" href="https://arxiv.org/pdf/2105.14476" target="_blank" rel="noopener">PDF</a>
+                    <button data-bibtex type="button">BibTeX</button>
+                </p>
+                <div class="bibtex"><pre>@article{DBLP:journals/tkde/QinZZ23,
+  author  = {Huiling Qin and Xianyuan Zhan and Yu Zheng},
+  title   = {CSCAD: Correlation Structure-Based Collective Anomaly Detection in Complex System},
+  journal = {IEEE Trans. Knowl. Data Eng.},
+  volume  = {35},
+  number  = {5},
+  pages   = {4634--4645},
+  year    = {2023},
+  doi     = {10.1109/TKDE.2022.3154166}
+}</pre></div>
+            </article>
+
+            <article class="pub">
+                <h3>Discriminator-weighted Offline Imitation Learning from Suboptimal Demonstrations</h3>
+                <p class="authors">Haoran Xu, Xianyuan Zhan, Honglei Yin, <strong data-me>Huiling Qin</strong></p>
+                <p class="meta">
+                    <em>ICML 2022</em>
+                    <a data-icon="pdf" href="https://proceedings.mlr.press/v162/xu22l/xu22l.pdf" target="_blank" rel="noopener">PDF</a>
+                    <button data-bibtex type="button">BibTeX</button>
+                </p>
+                <div class="bibtex"><pre>@inproceedings{DBLP:conf/icml/XuZYQ22,
+  author    = {Haoran Xu and Xianyuan Zhan and Honglei Yin and Huiling Qin},
+  title     = {Discriminator-Weighted Offline Imitation Learning from Suboptimal Demonstrations},
+  booktitle = {Intl. Conf. on Machine Learning (ICML 2022)},
+  series    = {PMLR},
+  volume    = {162},
+  pages     = {24725--24742},
+  year      = {2022}
+}</pre></div>
+            </article>
+
+            <article class="pub">
+                <h3>Network-wide Traffic States Imputation Using Self-interested Coalitional Learning</h3>
+                <p class="authors"><strong data-me>Huiling Qin</strong><sup data-cor>✉</sup>, Xianyuan Zhan, Yuanxun Li, Xiaodu Yang, Yu Zheng</p>
+                <p class="meta">
+                    <em>ACM SIGKDD 2021</em>
+                    <a data-icon="pdf" href="http://urban-computing.com/pdf/Network-Wide%20Traffic%20States%20Imputation%20Using%20Self-interested%20Coalitional%20Learning.pdf" target="_blank" rel="noopener">PDF</a>
+                    <button data-bibtex type="button">BibTeX</button>
+                </p>
+                <div class="bibtex"><pre>@inproceedings{DBLP:conf/kdd/QinZLY021,
+  author    = {Huiling Qin and Xianyuan Zhan and Yuanxun Li and Xiaodu Yang and Yu Zheng},
+  title     = {Network-Wide Traffic States Imputation Using Self-interested Coalitional Learning},
+  booktitle = {KDD '21 — 27th ACM SIGKDD Conf. on Knowledge Discovery and Data Mining},
+  pages     = {1370--1378},
+  publisher = {ACM},
+  year      = {2021},
+  doi       = {10.1145/3447548.3467424}
+}</pre></div>
+            </article>
+
+            <article class="pub">
+                <h3>Robust Spatio-Temporal Purchase Prediction via Deep Meta Learning</h3>
+                <p class="authors"><strong data-me>Huiling Qin</strong><sup data-cor>✉</sup>, Songyu Ke, Xiaodu Yang, Haoran Xu, Xianyuan Zhan, Yu Zheng</p>
+                <p class="meta">
+                    <em>AAAI 2021</em>
+                    <a data-icon="pdf" href="https://ojs.aaai.org/index.php/AAAI/article/view/16556" target="_blank" rel="noopener">PDF</a>
+                    <button data-bibtex type="button">BibTeX</button>
+                </p>
+                <div class="bibtex"><pre>@inproceedings{DBLP:conf/aaai/QinKYXZ021,
+  author    = {Huiling Qin and Songyu Ke and Xiaodu Yang and Haoran Xu and Xianyuan Zhan and Yu Zheng},
+  title     = {Robust Spatio-Temporal Purchase Prediction via Deep Meta Learning},
+  booktitle = {35th AAAI Conf. on Artificial Intelligence},
+  pages     = {4312--4319},
+  publisher = {AAAI Press},
+  year      = {2021},
+  doi       = {10.1609/AAAI.V35I5.16556}
+}</pre></div>
+            </article>
+        </section>
+
+
+        <!-- ═══════════════════════════════════════════════════════════
+             Colophon — appears at the foot of both views.
+        ═══════════════════════════════════════════════════════════ -->
+        <footer class="colophon">
+            <p>
+                <span class="mark">❦</span>
+                <span><span lang="zh">秦慧玲</span><span lang="en">Huiling Qin</span></span>
+                <span class="dot">·</span>
+                <span>© 2025</span>
+                <span class="dot">·</span>
+                <span class="upd"><span lang="zh">最后更新</span><span lang="en">Last revised</span> 2025.12</span>
+            </p>
+        </footer>
 
     </main>
 
-    <script src="assets/js/app.js" defer></script>
+    <script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script src="assets/js/app.js" defer></script>
 </body>
 </html>
