@@ -39,9 +39,13 @@
                 '<path d="M9 18l6-6-6-6"/>' +
             '</svg>',
         copy:
-            '<svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">' +
+            '<svg class="icon ic-copy" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">' +
                 '<rect x="8" y="8" width="12" height="12" rx="2"/>' +
                 '<path d="M16 8V6a2 2 0 0 0-2-2H6a2 2 0 0 0-2 2v8a2 2 0 0 0 2 2h2"/>' +
+            '</svg>',
+        check:
+            '<svg class="icon ic-check" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">' +
+                '<path d="M4 12.5l5 5L20 6.5"/>' +
             '</svg>',
         scholar:
             '<svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">' +
@@ -152,7 +156,7 @@
         if (opts && opts.scroll) window.scrollTo({ top: 0, behavior: 'auto' });
         // Force-update scrollspy after view change
         spy.lastId = '';
-        updateSpy();
+        if (typeof pickSpy === 'function') pickSpy();
     }
 
     function bindViewLinks() {
@@ -212,8 +216,16 @@
     }
 
 
-    /* ── 5.  Scroll-spy (active nav link) ─────────────────────── */
-    var spy = { sections: [], links: [], lastId: '' };
+    /* ── 5.  Scroll-spy (active nav link) ──────────────────────
+       Uses IntersectionObserver with a tall horizontal "spotlight"
+       band near the top of the viewport.  The first section
+       intersecting the band (in document order) is the active one.
+       A bottom-of-page detector pins the last section as active
+       once the reader has scrolled to the absolute end — so short
+       trailing sections like Lab can still light up.
+       Each marker simply fades opacity/scaleX from CSS, so multiple
+       transitions don't fight; no race, no flicker. */
+    var spy = { sections: [], links: [], visible: null, lastId: '', io: null };
 
     function setupScrollSpy() {
         spy.sections = Array.prototype.slice.call(
@@ -221,33 +233,72 @@
         );
         spy.links = Array.prototype.slice.call(document.querySelectorAll('nav a'));
         if (!spy.sections.length || !spy.links.length) return;
-        updateSpy();
-        window.addEventListener('scroll', requestSpy, { passive: true });
-        window.addEventListener('resize', requestSpy);
-    }
 
-    var spyRaf = 0;
-    function requestSpy() {
-        if (spyRaf) return;
-        spyRaf = requestAnimationFrame(function () { spyRaf = 0; updateSpy(); });
-    }
-
-    function updateSpy() {
-        if (document.body.classList.contains('view-publications')) {
-            spy.links.forEach(function (a) {
-                a.classList.toggle('active', a.dataset.section === 'publications');
+        spy.visible = new Set();
+        if ('IntersectionObserver' in window) {
+            spy.io = new IntersectionObserver(function (entries) {
+                entries.forEach(function (e) {
+                    if (e.isIntersecting) spy.visible.add(e.target.id);
+                    else spy.visible.delete(e.target.id);
+                });
+                pickSpy();
+            }, {
+                // Spotlight stripe: from 18% to 60% of viewport height.
+                rootMargin: '-18% 0% -40% 0%',
+                threshold: 0
             });
+            spy.sections.forEach(function (s) { spy.io.observe(s); });
+        }
+
+        // Bottom-of-page sentinel — runs on every scroll, cheaply.
+        window.addEventListener('scroll', requestBottomCheck, { passive: true });
+        window.addEventListener('resize', requestBottomCheck);
+        pickSpy();
+    }
+
+    var bottomRaf = 0;
+    function requestBottomCheck() {
+        if (bottomRaf) return;
+        bottomRaf = requestAnimationFrame(function () { bottomRaf = 0; pickSpy(); });
+    }
+
+    function pickSpy() {
+        if (document.body.classList.contains('view-publications')) {
+            setActive('publications');
             return;
         }
-        var y = window.scrollY + Math.min(140, window.innerHeight * 0.24);
-        var currentId = spy.sections[0] ? spy.sections[0].id : '';
-        for (var i = 0; i < spy.sections.length; i++) {
-            if (y >= spy.sections[i].offsetTop) currentId = spy.sections[i].id;
+        // 1. At the very bottom of the page, lock to the last section.
+        var docH = document.documentElement.scrollHeight;
+        var winB = window.scrollY + window.innerHeight;
+        if (winB >= docH - 6) {
+            setActive(spy.sections[spy.sections.length - 1].id);
+            return;
         }
-        if (currentId === spy.lastId) return;
-        spy.lastId = currentId;
+        // 2. Otherwise: first section in document order whose top is
+        //    inside the spotlight band.
+        var firstVisible = '';
+        for (var i = 0; i < spy.sections.length; i++) {
+            if (spy.visible.has(spy.sections[i].id)) {
+                firstVisible = spy.sections[i].id;
+                break;
+            }
+        }
+        // 3. Fallbacks: above all sections → first; below all → last.
+        if (!firstVisible) {
+            var y = window.scrollY;
+            if (y < spy.sections[0].offsetTop) firstVisible = spy.sections[0].id;
+            else firstVisible = spy.lastId || spy.sections[0].id;
+        }
+        setActive(firstVisible);
+    }
+
+    function setActive(id) {
+        if (id === spy.lastId) return;
+        spy.lastId = id;
         spy.links.forEach(function (a) {
-            a.classList.toggle('active', a.dataset.section === currentId);
+            var isView = a.dataset.view === 'publications';
+            var match = isView ? (id === 'publications') : (a.dataset.section === id);
+            a.classList.toggle('active', match);
         });
     }
 
@@ -278,18 +329,26 @@
             if (!box) return;
             box.setAttribute('data-open', 'false');
 
-            // Inject a floating Copy button into the bibtex pre.
+            // Wrap the <pre> in a .bibtex-inner so the grid-rows
+            // collapse clips the pre + its padding cleanly (no
+            // background slit when closed).
             var pre = box.querySelector('pre');
-            if (pre && !box.querySelector('.copy')) {
+            if (pre && !box.querySelector('.bibtex-inner')) {
+                var inner = document.createElement('div');
+                inner.className = 'bibtex-inner';
+                box.insertBefore(inner, pre);
+                inner.appendChild(pre);
+
+                // Inject a floating Copy button into the inner wrapper.
                 var copy = document.createElement('button');
                 copy.type = 'button';
                 copy.className = 'copy';
                 copy.setAttribute('aria-label', 'Copy BibTeX');
-                copy.innerHTML = ICONS.copy;
+                copy.innerHTML = ICONS.copy + ICONS.check;
                 copy.addEventListener('click', function () {
                     copyText(pre.textContent.trim(), function () { flash(copy, 'copied', 1800); });
                 });
-                box.appendChild(copy);
+                inner.appendChild(copy);
             }
 
             btn.addEventListener('click', function () {

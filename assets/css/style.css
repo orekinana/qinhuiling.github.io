@@ -135,21 +135,22 @@ main     { grid-area: main; min-width: 0; }
     color: var(--ink-soft);
 }
 
-/* Portrait — frameless; gentle duotone treatment to feel like a
-   printed plate rather than a passport photo.  No box-shadow ring. */
+/* Portrait — soft circular mask, full colour. Avoids the rectangular
+   "passport plate" feel by cropping to a circle and easing the edge
+   into the paper with a hair-line vignette in the inner shadow. */
 .photo {
-    width: 108px;
-    height: 132px;
+    width: 116px;
+    height: 116px;
     object-fit: cover;
-    object-position: center 22%;
-    margin: 0 auto 1rem;
-    filter: grayscale(14%) saturate(0.9) contrast(1.04);
-    transition: filter .4s ease, transform .55s cubic-bezier(.2,.7,.2,1);
+    object-position: center 18%;
+    margin: 0 auto 1.05rem;
+    border-radius: 50%;
+    transition: transform .55s cubic-bezier(.2,.7,.2,1), filter .4s ease;
     will-change: transform;
 }
 .photo:hover {
-    filter: none;
-    transform: translateY(-1px) rotate(-0.4deg);
+    transform: translateY(-1px);
+    filter: saturate(1.05);
 }
 
 .sidebar h1 {
@@ -214,71 +215,70 @@ main     { grid-area: main; min-width: 0; }
 .elsewhere a svg { width: 14px; height: 14px; }
 
 
-/* ── 7.  Sidebar navigation — sliding cursor on the left ────────── */
+/* ── 7.  Sidebar navigation — active marker is a CSS pseudo-element,
+   vertically centred to the text by translateY(-50%).  No JS, no
+   sliding cursor; each link fades its own marker in/out independently
+   so there is no flicker, no race. */
 .sidebar nav {
-    position: relative;
     margin: 1.05rem auto 0;
     padding: 0.85rem 0 0;
     border-top: 1px solid var(--rule);
     display: flex;
     flex-direction: column;
-    gap: 0;
-    align-items: stretch;
     text-align: left;
     width: var(--nav-width);
 }
 
-/* Sliding cursor — a small vertical mark.  Injected by JS as
-   <span class="nav-cursor"></span>; absolutely positioned. */
-.nav-cursor {
-    position: absolute;
-    left: 0;
-    top: 0;
-    width: 2px;
-    height: 0.95em;
-    background: var(--accent);
-    border-radius: 2px;
-    opacity: 0;
-    transform: translateY(0);
-    transition:
-        transform .42s cubic-bezier(.4, 0, .2, 1),
-        height    .25s ease,
-        opacity   .2s ease;
-    pointer-events: none;
-}
-.nav-cursor.on { opacity: 1; }
-
 .sidebar nav a {
+    position: relative;
     display: flex;
     align-items: center;
     min-height: var(--nav-row);
-    padding: 0 var(--nav-pad-x) 0 calc(var(--nav-pad-x) + 0.45rem);
+    padding: 0 var(--nav-pad-x) 0 calc(var(--nav-pad-x) + 0.85rem);
     color: var(--ink-soft);
     font-size: 0.82rem;
     line-height: 1.45;
     letter-spacing: 0.005em;
-    border-radius: 2px;
     background-image: none;
-    transition: color .2s ease;
+    transition: color .25s ease;
 }
 .sidebar nav a [lang="zh"] { letter-spacing: 0.08em; font-size: 0.86rem; }
 .sidebar nav a:hover { color: var(--ink); }
 .sidebar nav a.active { color: var(--accent); }
 
+/* Active marker — a thin centred mark drawn from the middle outwards.
+   Pure CSS, vertically centred via top:50% + translateY(-50%). */
+.sidebar nav a::before {
+    content: '';
+    position: absolute;
+    left: var(--nav-pad-x);
+    top: 50%;
+    width: 7px;
+    height: 1px;
+    background: var(--accent);
+    transform: translateY(-50%) scaleX(0);
+    transform-origin: left center;
+    opacity: 0;
+    transition: transform .4s cubic-bezier(.2,.7,.2,1), opacity .25s ease;
+    pointer-events: none;
+}
+.sidebar nav a.active::before {
+    opacity: 1;
+    transform: translateY(-50%) scaleX(1);
+}
+
 
 /* ── 8.  Sidebar toolbar (lang + theme) ─────────────────────────── */
+/* Same width, same border, same inner padding-left as the nav links
+   so the EN label sits flush under the first character of each link. */
 .toolbar {
     margin: 0.85rem auto 0;
-    padding: 0.7rem 0 0;
+    padding: 0.7rem var(--nav-pad-x) 0 calc(var(--nav-pad-x) + 0.85rem);
     border-top: 1px solid var(--rule);
     width: var(--nav-width);
     display: flex;
     justify-content: space-between;
     align-items: center;
-    /* match the nav items' inner horizontal padding so the EN
-       label and theme glyph sit flush with the link text columns */
-    padding-left:  calc(var(--nav-pad-x) + 0.45rem);
-    padding-right: var(--nav-pad-x);
 }
 .lang-toggle {
     color: var(--ink-soft);
@@ -330,8 +330,10 @@ h2::after {
     flex: 1 1 auto;
     height: 1px;
     background: var(--rule);
-    /* nudge to optical centre of italic text x-height */
-    transform: translateY(0.18em);
+    /* nudge from line-box centre down to the optical centre of
+       the italic serif text (which sits noticeably above the
+       baseline-to-cap-height geometric centre). */
+    transform: translateY(0.36em);
 }
 h2 [lang="zh"] { font-style: normal; letter-spacing: 0.06em; }
 h2 [lang="en"] { font-style: italic; }
@@ -517,73 +519,105 @@ body.view-publications main > section.view       { display: block; animation: vi
 .pub .meta svg.icon { width: 13px; height: 13px; flex: 0 0 auto; vertical-align: -2px; }
 
 
-/* ── 14.  BibTeX — animated expand/collapse, no scrollbars ────── */
+/* ── 14.  BibTeX — animated expand/collapse, completely clipped
+   when closed (no slit of background, no scrollbar slice).  The
+   outer container owns overflow: hidden so the inner pre's padding
+   is hidden too when grid-template-rows is 0fr. */
 .bibtex {
     margin: 0;
     display: grid;
     grid-template-rows: 0fr;
+    overflow: hidden;
     transition: grid-template-rows .4s cubic-bezier(.4, 0, .2, 1), margin .4s ease;
     position: relative;
 }
-/* Inner wrapper element added by JS so we can clip the padded pre
-   cleanly when collapsed (the pre's own padding cannot be hidden
-   if it owns the grid row directly). */
 .bibtex > .bibtex-inner {
     overflow: hidden;
     min-height: 0;
+    position: relative;
 }
 .bibtex[data-open="true"] {
     grid-template-rows: 1fr;
-    margin: 0.65rem 0 0;
+    margin: 0.55rem 0 0;
 }
 .bibtex pre {
     margin: 0;
     background: var(--paper-soft);
     border-left: 2px solid var(--rule-strong);
-    padding: 0.95rem 2.6rem 0.95rem 1.05rem;
+    padding: 0.85rem 3rem 0.85rem 1rem;
     font-family: var(--mono);
     font-size: 0.74rem;
     line-height: 1.55;
     color: var(--ink);
+    /* Long lines just get clipped — bibtex is for copying, not reading. */
     overflow: hidden;
     white-space: pre;
     border-radius: 0;
     position: relative;
+    scrollbar-width: none;
 }
+.bibtex pre::-webkit-scrollbar { width: 0; height: 0; display: none; }
 
-/* Floating copy button at top-right of the expanded bibtex block. */
+/* Floating copy button at top-right of the expanded bibtex block.
+   On success the clipboard icon crossfades into a checkmark, the
+   stroke colour shifts to the accent, and a small "copied" label
+   slides in to the left.  No heavy fill, no white-on-red. */
 .copy {
     position: absolute;
-    top: 0.55rem;
+    top: 0.5rem;
     right: 0.5rem;
-    width: 28px;
-    height: 28px;
+    width: 26px;
+    height: 26px;
     align-items: center;
     justify-content: center;
     color: var(--ink-mute);
     background: var(--paper);
     border: 1px solid var(--rule);
-    border-radius: 4px;
+    border-radius: 3px;
     transition:
-        color .18s ease, border-color .18s ease,
-        background .18s ease, transform .25s cubic-bezier(.2,.7,.2,1);
+        color .25s ease, border-color .25s ease,
+        background .25s ease, transform .25s cubic-bezier(.2,.7,.2,1);
     z-index: 2;
 }
-.copy:hover { color: var(--accent); border-color: var(--accent); }
-.copy:active { transform: scale(0.93); }
+.copy:hover { color: var(--accent); border-color: var(--accent-mute); }
+.copy:active { transform: scale(0.94); }
+.copy svg {
+    width: 14px;
+    height: 14px;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%) scale(1);
+    transition: opacity .2s ease, transform .25s ease;
+}
+.copy .ic-check { opacity: 0; transform: translate(-50%, -50%) scale(0.7); }
 .copy.copied {
-    color: #ffffff;
-    background: var(--accent);
-    border-color: var(--accent);
-    /* gentle pulse on success */
-    animation: copy-pulse .55s ease;
+    color: var(--accent);
+    border-color: var(--accent-mute);
+    background: var(--paper);
 }
-@keyframes copy-pulse {
-    0%   { transform: scale(0.86); }
-    55%  { transform: scale(1.06); }
-    100% { transform: scale(1); }
+.copy.copied .ic-copy  { opacity: 0; transform: translate(-50%, -50%) scale(0.7); }
+.copy.copied .ic-check { opacity: 1; transform: translate(-50%, -50%) scale(1); }
+.copy.copied::after {
+    content: 'copied';
+    position: absolute;
+    right: calc(100% + 0.5rem);
+    top: 50%;
+    transform: translateY(-50%);
+    color: var(--accent);
+    font-family: var(--serif);
+    font-style: italic;
+    font-size: 0.72rem;
+    letter-spacing: 0.04em;
+    white-space: nowrap;
+    pointer-events: none;
+    animation: copied-slide .35s cubic-bezier(.2,.7,.2,1);
 }
-.copy svg { width: 14px; height: 14px; transition: opacity .15s ease; }
+html.lang-zh .copy.copied::after { content: '已复制'; font-style: normal; letter-spacing: 0.06em; }
+@keyframes copied-slide {
+    from { opacity: 0; transform: translateY(-50%) translateX(4px); }
+    to   { opacity: 1; transform: translateY(-50%) translateX(0); }
+}
 
 
 /* ── 15.  More link (in the recent-papers section) ──────────────── */
@@ -604,33 +638,46 @@ body.view-publications main > section.view       { display: block; animation: vi
 .more a:hover { color: var(--accent); background-size: 100% 1px; }
 
 
-/* ── 16.  Colophon ──────────────────────────────────────────────── */
+/* ── 16.  Colophon — sits quietly at the end of the article, made
+   of a small ornament between two thin rules; only visible once
+   the reader has reached the bottom of the content. */
 .colophon {
-    margin: 4rem 0 0;
-    padding-top: 1.6rem;
-    border-top: 1px solid var(--rule);
+    margin: 5rem 0 0;
     text-align: center;
     color: var(--ink-mute);
-    font-size: 0.72rem;
-    letter-spacing: 0.08em;
+    font-size: 0.7rem;
+    letter-spacing: 0.06em;
+}
+.colophon .ornament {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 1rem;
+    margin: 0 0 0.9rem;
+}
+.colophon .ornament::before,
+.colophon .ornament::after {
+    content: '';
+    flex: 1 1 auto;
+    max-width: 4.5rem;
+    height: 1px;
+    background: var(--rule);
+}
+.colophon .mark {
+    color: var(--accent-mute);
+    font-size: 1.05rem;
+    line-height: 1;
 }
 .colophon p {
     margin: 0;
     display: inline-flex;
-    align-items: center;
+    align-items: baseline;
     gap: 0.55em;
     font-style: italic;
 }
-.colophon .mark {
-    font-size: 0.85rem;
-    color: var(--accent-mute);
-    font-style: normal;
-    opacity: 0.85;
-    margin-right: 0.15em;
-}
 .colophon .dot { color: var(--rule-strong); font-style: normal; }
-.colophon .upd { font-family: var(--mono); font-style: normal; font-size: 0.68rem; letter-spacing: 0.04em; }
-.colophon .upd [lang="zh"] { font-family: var(--serif); font-size: 0.72rem; }
+.colophon .upd { font-family: var(--mono); font-style: normal; font-size: 0.66rem; letter-spacing: 0.04em; }
+.colophon .upd [lang="zh"] { font-family: var(--serif); font-style: italic; font-size: 0.7rem; letter-spacing: 0.04em; }
 
 
 /* ── 17.  Reveal on scroll ──────────────────────────────────────── */
