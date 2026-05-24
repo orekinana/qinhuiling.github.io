@@ -141,6 +141,9 @@ main     { grid-area: main; min-width: 0; }
     text-align: center;
     font-size: 0.86rem;
     color: var(--ink-soft);
+    display: flex;
+    flex-direction: column;
+    min-height: calc(100vh - 2 * var(--page-pad-y));
 }
 
 /* Portrait — soft circular mask, full colour. Avoids the rectangular
@@ -281,9 +284,13 @@ main     { grid-area: main; min-width: 0; }
 /* Same width, same border, same inner padding-left as the nav links
    so the EN label sits flush under the first character of each link. */
 .toolbar {
-    margin: 0.85rem auto 0;
+    margin-top: auto;
+    margin-left: auto;
+    margin-right: auto;
+    margin-bottom: 0;
     padding: 0.7rem var(--nav-pad-x) 0 calc(var(--nav-pad-x) + 0.85rem);
     border-top: 1px solid var(--rule);
+    border-bottom: 1px solid var(--rule);
     width: var(--nav-width);
     display: flex;
     justify-content: space-between;
@@ -313,7 +320,10 @@ main     { grid-area: main; min-width: 0; }
 .theme-toggle:hover { color: var(--accent); transform: rotate(-12deg); }
 .theme-toggle svg { width: 15px; height: 15px; }
 .sidebar p.toolbar {
-    margin: 1.05rem auto 0;
+    margin-top: auto;
+    margin-left: auto;
+    margin-right: auto;
+    margin-bottom: 0;
     padding: 0.85rem 1rem;
     border-top: 1px solid var(--rule);
     border-bottom: 1px solid var(--rule);

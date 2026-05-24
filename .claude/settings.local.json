@@ -1,0 +1,26 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(git checkout *)",
+      "Bash(git rm *)",
+      "Bash(python3 -m http.server 8742)",
+      "Bash(echo \"PID=$!\")",
+      "Bash(curl -s http://localhost:8742/)",
+      "Bash(node -e \"const pw = require\\('playwright'\\); pw.chromium.launch\\({headless:true}\\).then\\(async b => { const p = await b.newPage\\(\\); await p.goto\\('http://localhost:8742/'\\); await p.screenshot\\({path:'/tmp/qhl-zh.png', fullPage:false}\\); await b.close\\(\\); console.log\\('ok'\\); }\\)\")",
+      "Bash(node -e \"require\\('@playwright/test'\\)\")",
+      "Bash(python3 -c \"import playwright\")",
+      "Read(//Users/homelab/.local/**)",
+      "Bash(pip install *)",
+      "Bash(python3 -m playwright install chromium)",
+      "Bash(pip3 install *)",
+      "mcp__zai-mcp-server__analyze_image",
+      "Bash(git add *)",
+      "Bash(git commit -m ' *)",
+      "Bash(gh api *)",
+      "WebFetch(domain:github.com)",
+      "Bash(lsof -ti:8742)",
+      "Bash(xargs kill)",
+      "Bash(curl -s -o /dev/null -w \"HTTP %{http_code}\\\\n\" http://localhost:8742/)"
+    ]
+  }
+}
