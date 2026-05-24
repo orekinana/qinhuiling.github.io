@@ -89,9 +89,9 @@
     }
 
     function updateThemeIcon() {
-        var btn = document.querySelector('.theme-toggle');
-        if (!btn) return;
-        btn.innerHTML = isDark ? ICONS.sun : ICONS.moon;
+        document.querySelectorAll('.theme-toggle').forEach(function (btn) {
+            btn.innerHTML = isDark ? ICONS.sun : ICONS.moon;
+        });
     }
 
 
@@ -541,9 +541,95 @@
     }
 
 
-    /* ── 14.  Init ────────────────────────────────────────────── */
+    /* ── 14.  Floating mobile controls ────────────────────────
+       Three pebble buttons fixed at top-right (menu · lang · theme).
+       Only visible at narrow viewports — CSS handles the breakpoint.
+       The menu button toggles a popover that clones the sidebar nav,
+       so adding/removing items in the markup propagates here for free.
+       Lang and theme buttons share the existing handlers via class
+       selectors (.lang-toggle / .theme-toggle).                    */
+    function buildFloatingControls() {
+        if (document.querySelector('.float-ctrl')) return;
+        var navSrc = document.querySelector('.sidebar nav');
+        if (!navSrc) return;
+
+        var wrap = document.createElement('div');
+        wrap.className = 'float-ctrl';
+        wrap.setAttribute('data-open', 'false');
+
+        // — Menu button (hamburger ⇄ close X) —
+        var menuBtn = document.createElement('button');
+        menuBtn.type = 'button';
+        menuBtn.className = 'fc-btn fc-menu';
+        menuBtn.setAttribute('aria-label', 'Sections menu');
+        menuBtn.setAttribute('aria-expanded', 'false');
+        menuBtn.setAttribute('aria-controls', 'fc-popover');
+        menuBtn.innerHTML =
+            '<svg class="icon ic-menu" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" aria-hidden="true">' +
+                '<path d="M4 8h16M4 13h16M4 18h11"/>' +
+            '</svg>' +
+            '<svg class="icon ic-x" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" aria-hidden="true">' +
+                '<path d="M6 6l12 12M6 18L18 6"/>' +
+            '</svg>';
+
+        // — Lang button (mirrors .lang-toggle) —
+        var langBtn = document.createElement('button');
+        langBtn.type = 'button';
+        langBtn.className = 'fc-btn fc-lang lang-toggle';
+        langBtn.setAttribute('aria-label', 'Switch language');
+        langBtn.textContent = currentLang === 'zh' ? 'EN' : '中文';
+
+        // — Theme button (mirrors .theme-toggle) —
+        var themeBtn = document.createElement('button');
+        themeBtn.type = 'button';
+        themeBtn.className = 'fc-btn fc-theme theme-toggle';
+        themeBtn.setAttribute('aria-label', 'Toggle dark mode');
+        themeBtn.setAttribute('data-icon', 'theme');
+
+        // — Popover (cloned nav links) —
+        var pop = document.createElement('nav');
+        pop.className = 'fc-popover';
+        pop.id = 'fc-popover';
+        pop.setAttribute('aria-label', 'Sections');
+        Array.prototype.slice.call(navSrc.children).forEach(function (a) {
+            pop.appendChild(a.cloneNode(true));
+        });
+
+        wrap.appendChild(menuBtn);
+        wrap.appendChild(langBtn);
+        wrap.appendChild(themeBtn);
+        wrap.appendChild(pop);
+        document.body.appendChild(wrap);
+
+        function setOpen(open) {
+            wrap.setAttribute('data-open', open ? 'true' : 'false');
+            menuBtn.setAttribute('aria-expanded', open ? 'true' : 'false');
+        }
+        function isOpen() { return wrap.getAttribute('data-open') === 'true'; }
+
+        menuBtn.addEventListener('click', function (e) {
+            e.stopPropagation();
+            setOpen(!isOpen());
+        });
+        pop.querySelectorAll('a').forEach(function (a) {
+            a.addEventListener('click', function () { setOpen(false); });
+        });
+        document.addEventListener('click', function (e) {
+            if (isOpen() && !wrap.contains(e.target)) setOpen(false);
+        });
+        document.addEventListener('keydown', function (e) {
+            if (e.key === 'Escape' && isOpen()) {
+                setOpen(false);
+                menuBtn.focus();
+            }
+        });
+    }
+
+
+    /* ── 15.  Init ────────────────────────────────────────────── */
     function init() {
         populateRecentPapers();
+        buildFloatingControls();
         injectIcons();
         applyLanguage(currentLang);
         applyTheme(isDark);

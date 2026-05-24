@@ -7,6 +7,7 @@
    Inline <style> in head hides chrome by default; once .js is set
    external CSS turns each piece back on with the right display. */
 html.js nav.js-only           { display: flex   !important; }
+html.js nav.fc-popover        { display: block  !important; }
 html.js .toolbar.js-only      { display: flex   !important; }
 html.js section.js-only       { display: block  !important; }
 html.js .anchor               { display: inline !important; }
@@ -712,6 +713,124 @@ html.no-anim body.view-publications main > section.view {
 html.no-anim, html.no-anim * { transition: none !important; }
 
 
+/* ── 17b.  Floating mobile controls ──────────────────────────────
+   Three pebble buttons fixed at top-right (menu · lang · theme).
+   On narrow viewports the in-sidebar nav and toolbar yield to these,
+   keeping the page chrome out of the reading column.  Glass-paper
+   background blends with the colophon palette in both themes. */
+.float-ctrl {
+    position: fixed;
+    top: 0.85rem;
+    right: 0.85rem;
+    z-index: 100;
+    display: none;        /* shown only at narrow viewports (below) */
+    gap: 0.4rem;
+}
+
+.fc-btn {
+    width: 34px;
+    height: 34px;
+    border: 1px solid var(--rule);
+    background: color-mix(in srgb, var(--paper) 86%, transparent);
+    -webkit-backdrop-filter: saturate(150%) blur(12px);
+    backdrop-filter: saturate(150%) blur(12px);
+    border-radius: 50%;
+    color: var(--ink-soft);
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-family: var(--serif);
+    font-size: 0.74rem;
+    letter-spacing: 0.1em;
+    background-image: none;
+    cursor: pointer;
+    transition:
+        color .22s ease, border-color .22s ease,
+        background .22s ease, transform .25s cubic-bezier(.2,.7,.2,1);
+}
+.fc-btn:hover, .fc-btn:focus-visible {
+    color: var(--accent);
+    border-color: var(--accent-mute);
+    outline: none;
+}
+.fc-btn:active { transform: scale(0.94); }
+.fc-btn svg { width: 14px; height: 14px; }
+
+/* Hamburger ⇄ X crossfade */
+.fc-menu { position: relative; overflow: hidden; }
+.fc-menu .icon {
+    position: absolute;
+    top: 50%; left: 50%;
+    transform: translate(-50%, -50%) scale(1) rotate(0deg);
+    transition: opacity .22s ease, transform .3s cubic-bezier(.2,.7,.2,1);
+}
+.fc-menu .ic-x { opacity: 0; transform: translate(-50%, -50%) scale(0.7) rotate(-30deg); }
+.fc-menu[aria-expanded="true"] {
+    color: var(--accent);
+    border-color: var(--accent-mute);
+}
+.fc-menu[aria-expanded="true"] .ic-menu { opacity: 0; transform: translate(-50%, -50%) scale(0.7) rotate(30deg); }
+.fc-menu[aria-expanded="true"] .ic-x    { opacity: 1; transform: translate(-50%, -50%) scale(1)   rotate(0deg); }
+
+.fc-popover {
+    position: absolute;
+    top: calc(100% + 0.55rem);
+    right: 0;
+    min-width: 9.5rem;
+    padding: 0.45rem 0;
+    background: var(--paper);
+    border: 1px solid var(--rule);
+    border-radius: 6px;
+    box-shadow:
+        0 14px 36px -12px rgba(0, 0, 0, 0.18),
+        0  2px  6px  -2px rgba(0, 0, 0, 0.06);
+    opacity: 0;
+    transform: translateY(-6px) scale(0.96);
+    transform-origin: top right;
+    pointer-events: none;
+    transition: opacity .2s ease, transform .26s cubic-bezier(.2,.7,.2,1);
+}
+html.dark .fc-popover {
+    box-shadow:
+        0 14px 36px -12px rgba(0, 0, 0, 0.5),
+        0  2px  6px  -2px rgba(0, 0, 0, 0.25);
+}
+.float-ctrl[data-open="true"] .fc-popover {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+    pointer-events: auto;
+}
+.fc-popover a {
+    display: block;
+    padding: 0.45rem 1.1rem;
+    color: var(--ink-soft);
+    font-size: 0.9rem;
+    line-height: 1.5;
+    letter-spacing: 0.02em;
+    background-image: none;
+    transition: color .15s ease, background .15s ease;
+}
+.fc-popover a [lang="zh"] { letter-spacing: 0.08em; }
+.fc-popover a:hover,
+.fc-popover a:focus-visible {
+    color: var(--accent);
+    background: var(--paper-soft);
+    outline: none;
+}
+.fc-popover a.active { color: var(--accent); }
+/* Hairline marker so the active item still feels punctuated, like the
+   sidebar version — but flush left to suit a denser menu row. */
+.fc-popover a.active::before {
+    content: '';
+    display: inline-block;
+    width: 6px;
+    height: 1px;
+    background: var(--accent);
+    vertical-align: 0.32em;
+    margin-right: 0.4em;
+}
+
+
 /* ── 18.  Responsive ────────────────────────────────────────────── */
 @media (max-width: 960px) {
     :root { --gap: 0; --page-pad-y: 2.4rem; --page-pad-x: 1.5rem; }
@@ -739,13 +858,28 @@ html.no-anim, html.no-anim * { transition: none !important; }
         padding: 0.2rem 0.4rem;
         min-height: 0;
     }
-    .nav-cursor { display: none; }
+    /* The sliding cursor is desktop-only; on the inline nav each link
+       just gets a colour change when active. */
+    .sidebar nav a::before { display: none; }
     .toolbar {
         width: auto;
         justify-content: center;
         gap: 1.6rem;
         padding-left: 0; padding-right: 0;
     }
+}
+
+/* Phone / very narrow: surface the floating widget and retire the
+   in-sidebar nav + toolbar so the masthead reads as a clean header.
+   The explicit html.js prefix raises specificity over the chrome-
+   reveal rules at the top of this file. */
+@media (max-width: 720px) {
+    html.js .sidebar nav.js-only,
+    html.js .sidebar p.toolbar.js-only { display: none !important; }
+    .float-ctrl { display: flex; }
+    /* Give the sidebar a touch more vertical breathing room since the
+       inline nav row no longer sits beneath it. */
+    .sidebar { padding-bottom: 1.6rem; }
 }
 
 @media (max-width: 560px) {
@@ -772,7 +906,7 @@ html.no-anim, html.no-anim * { transition: none !important; }
         background: #fff; color: #000;
         font-size: 11pt; line-height: 1.5;
     }
-    .sidebar nav, .toolbar, .anchor, .copy, .reveal, .more, .back, .nav-cursor { display: none !important; }
+    .sidebar nav, .toolbar, .anchor, .copy, .reveal, .more, .back, .float-ctrl { display: none !important; }
     .sidebar { position: static; text-align: center; margin: 0 auto 1.5rem; padding: 0 0 1rem; border-bottom: 1px solid #999; }
     .photo { width: 80px; height: 100px; filter: grayscale(1); }
     main > section.view { display: block !important; }
