@@ -143,7 +143,11 @@ main     { grid-area: main; min-width: 0; }
     color: var(--ink-soft);
     display: flex;
     flex-direction: column;
-    min-height: calc(100vh - 2 * var(--page-pad-y));
+    /* override inline <style> fallback values */
+    margin-bottom: 0;
+    padding-bottom: 0;
+    /* stretch to fill the viewport so toolbar can sink to the bottom */
+    height: calc(100vh - 2 * var(--page-pad-y));
 }
 
 /* Portrait — soft circular mask, full colour. Avoids the rectangular
