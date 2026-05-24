@@ -859,6 +859,7 @@ html.dark .fc-popover {
         max-width: none;
         margin: 0 0 2.4rem;
         padding-bottom: 1.6rem;
+        height: auto;
     }
     html.js .sidebar nav.js-only,
     html.js .sidebar p.toolbar.js-only { display: none !important; }
