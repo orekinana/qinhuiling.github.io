@@ -1,0 +1,405 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='10' fill='%23EAF8F6'/%3E%3Cpath d='M7 20c5-9 13-9 18-1' fill='none' stroke='%232A9D8F' stroke-width='2.4' stroke-linecap='round'/%3E%3Ccircle cx='10' cy='18' r='2.2' fill='%2376C7BD'/%3E%3Ccircle cx='16' cy='13' r='2.2' fill='%232A9D8F'/%3E%3Ccircle cx='23' cy='19' r='2.2' fill='%23F2A07B'/%3E%3C/svg%3E">
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+<title>面向物理世界的城市时空感知与智能体协同决策</title>
+<style>
+/* ======================= Source deck content styles ======================= */
+:root{
+  --bg:#f7fbf9; --ink:#1d2b34; --muted:#5f7480; --soft:#eaf6f4; --soft2:#eef6ff;
+  --primary:#247d7b; --primary2:#58b7aa; --blue:#497eb9; --accent:#ec916d; --line:rgba(36,125,123,.18);
+  --u:min(0.0625vw,0.111111vh); --card:rgba(255,255,255,.78);
+  --shadow:0 calc(22 * var(--u)) calc(60 * var(--u)) rgba(42,92,105,.14);
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", "Noto Sans SC", "Microsoft YaHei", sans-serif;
+}
+*{box-sizing:border-box}
+html,body{width:100vw;height:100vh;margin:0;overflow:hidden;background:
+  radial-gradient(circle at 14% 8%, rgba(124,211,198,.25), transparent 30%),
+  radial-gradient(circle at 86% 14%, rgba(114,164,219,.22), transparent 28%),
+  linear-gradient(135deg,#fbfdfb,#edf8f6 54%,#f7fbff); color:var(--ink);}
+body{letter-spacing:calc(.4 * var(--u));line-height:1.5;}
+.deck{position:fixed;inset:0;display:grid;place-items:center}
+.stage{width:calc(1600 * var(--u));height:calc(900 * var(--u));aspect-ratio:16/9;position:relative;border-radius:calc(28 * var(--u));overflow:hidden;background:rgba(255,255,255,.35);box-shadow:0 calc(30 * var(--u)) calc(90 * var(--u)) rgba(51,96,117,.18), inset 0 0 0 calc(1 * var(--u)) rgba(255,255,255,.9);}
+.slide{position:absolute;inset:0;padding:calc(72 * var(--u));opacity:0;transform:translateX(calc(28 * var(--u))) scale(.985);transition:.42s cubic-bezier(.2,.8,.2,1);pointer-events:none;background:
+  linear-gradient(135deg,rgba(255,255,255,.88),rgba(246,253,251,.74)),
+  radial-gradient(circle at 12% 80%,rgba(88,183,170,.15),transparent 28%);}
+.slide.active{opacity:1;transform:none;pointer-events:auto}.slide.prev{transform:translateX(calc(-28 * var(--u))) scale(.985)}
+.slide:before{content:"";position:absolute;inset:calc(18 * var(--u));border:calc(1 * var(--u)) solid rgba(36,125,123,.12);border-radius:calc(22 * var(--u));pointer-events:none}.slide:after{content:"";position:absolute;right:-8%;top:-14%;width:34%;height:42%;background:linear-gradient(135deg,rgba(88,183,170,.18),rgba(73,126,185,.12));border-radius:46% 54% 52% 48%;filter:blur(calc(.2 * var(--u)));pointer-events:none}
+.kicker{font-size:calc(18 * var(--u));font-weight:700;color:var(--primary);text-transform:uppercase;letter-spacing:calc(2.52 * var(--u));margin-bottom:calc(12 * var(--u));display:flex;align-items:center;gap:calc(10 * var(--u))}.kicker:before{content:"";width:calc(34 * var(--u));height:calc(2 * var(--u));background:linear-gradient(90deg,var(--primary2),var(--accent));border-radius:calc(9 * var(--u))}
+h1{font-size:calc(74 * var(--u));line-height:1.08;margin:0 0 calc(22 * var(--u));font-weight:800;letter-spacing:calc(1.48 * var(--u));color:#17313a}h2{font-size:calc(54 * var(--u));line-height:1.13;margin:0 0 calc(22 * var(--u));font-weight:800;color:#18343d}h3{font-size:calc(30 * var(--u));margin:0 0 calc(12 * var(--u));color:#1f4d56}p{font-size:calc(23 * var(--u));margin:0;color:var(--muted)}.lead{font-size:calc(29 * var(--u));color:#38535d;max-width:calc(980 * var(--u))}.small{font-size:calc(16 * var(--u));color:#6b7f88}.grid{display:grid;gap:calc(28 * var(--u))}.two{grid-template-columns:1.02fr .98fr}.three{grid-template-columns:repeat(3,1fr)}.four{grid-template-columns:repeat(4,1fr)}.center{display:grid;place-items:center;text-align:center}.card{background:var(--card);border:calc(1 * var(--u)) solid rgba(36,125,123,.14);border-radius:calc(24 * var(--u));padding:calc(30 * var(--u));box-shadow:var(--shadow);backdrop-filter:blur(calc(10 * var(--u)))}.flat{box-shadow:none;background:rgba(255,255,255,.55)}.pill{display:inline-flex;align-items:center;gap:calc(8 * var(--u));border-radius:calc(999 * var(--u));padding:calc(8 * var(--u)) calc(14 * var(--u));background:#edf8f5;color:#247d7b;font-weight:700;font-size:calc(16 * var(--u));border:calc(1 * var(--u)) solid rgba(36,125,123,.14)}.tagrow{display:flex;gap:calc(10 * var(--u));flex-wrap:wrap;margin-top:calc(22 * var(--u))}.hero{height:100%;display:grid;grid-template-columns:1.05fr .95fr;gap:calc(44 * var(--u));align-items:center}.orb{position:relative;min-height:calc(520 * var(--u))}.orb .bubble{position:absolute;border-radius:calc(34 * var(--u));background:rgba(255,255,255,.76);border:calc(1 * var(--u)) solid rgba(36,125,123,.15);box-shadow:var(--shadow);padding:calc(24 * var(--u))}.bubble b{display:block;font-size:calc(20 * var(--u));color:#214b54;margin-bottom:calc(6 * var(--u))}.bubble span{font-size:calc(15 * var(--u));color:#66808a}.b1{left:2%;top:7%;width:46%}.b2{right:0;top:22%;width:45%}.b3{left:20%;bottom:8%;width:54%}.state-core{position:absolute;left:33%;top:34%;width:calc(190 * var(--u));height:calc(190 * var(--u));border-radius:50%;background:radial-gradient(circle,#fff 0,#ccefeb 48%,#8bd1c7 100%);box-shadow:0 calc(18 * var(--u)) calc(60 * var(--u)) rgba(36,125,123,.25);display:grid;place-items:center;text-align:center;color:#19585a;font-weight:800;font-size:calc(16 * var(--u))}.line{position:absolute;height:calc(2 * var(--u));background:linear-gradient(90deg,transparent,var(--primary2),transparent);transform-origin:left}.l1{left:27%;top:32%;width:calc(240 * var(--u));rotate:22deg}.l2{left:42%;top:49%;width:calc(220 * var(--u));rotate:-8deg}.l3{left:35%;top:62%;width:calc(250 * var(--u));rotate:-28deg}.timeline{display:grid;grid-template-columns:repeat(5,1fr);gap:calc(14 * var(--u));margin-top:calc(22 * var(--u))}.step{position:relative;padding:calc(18 * var(--u)) calc(16 * var(--u));border-radius:calc(20 * var(--u));background:rgba(255,255,255,.7);border:calc(1 * var(--u)) solid rgba(73,126,185,.14)}.step:before{content:attr(data-n);display:inline-grid;place-items:center;width:calc(30 * var(--u));height:calc(30 * var(--u));border-radius:50%;background:linear-gradient(135deg,var(--primary2),#8bd1c7);color:white;font-weight:800;margin-bottom:calc(12 * var(--u));font-size:calc(16 * var(--u))}.step strong{display:block;color:#234e59;font-size:calc(19 * var(--u));margin-bottom:calc(6 * var(--u))}.step span{font-size:calc(15 * var(--u));color:#6a7e87}.paper-list{display:grid;gap:calc(12 * var(--u))}.paper{display:grid;grid-template-columns:calc(108 * var(--u)) 1fr;gap:calc(14 * var(--u));align-items:start;padding:calc(14 * var(--u)) calc(16 * var(--u));border-radius:calc(18 * var(--u));background:rgba(255,255,255,.62);border:calc(1 * var(--u)) solid rgba(36,125,123,.12)}.venue{font-weight:800;color:white;background:linear-gradient(135deg,var(--blue),var(--primary2));border-radius:calc(14 * var(--u));text-align:center;padding:calc(8 * var(--u)) calc(6 * var(--u));font-size:calc(14 * var(--u))}.paper b{font-size:calc(17 * var(--u));color:#213f48}.paper em{font-style:normal;color:#6b7f88;font-size:calc(14 * var(--u))}.image-slide{display:grid;grid-template-columns:.86fr 1.14fr;gap:calc(30 * var(--u));align-items:center}.fig{width:100%;border-radius:calc(26 * var(--u));border:calc(1 * var(--u)) solid rgba(36,125,123,.16);box-shadow:var(--shadow);background:white}.quote{font-size:calc(44 * var(--u));line-height:1.22;color:#203c45;font-weight:800}.matrix{display:grid;grid-template-columns:1fr 1fr;gap:calc(18 * var(--u))}.axis-card{min-height:calc(180 * var(--u))}.axis-card .num{font-size:calc(42 * var(--u));color:rgba(36,125,123,.18);font-weight:900;line-height:1}.axis-card b{display:block;font-size:calc(24 * var(--u));color:#214b54;}.axis-card p{font-size:calc(18 * var(--u))}.roadmap{display:grid;grid-template-columns:repeat(3,1fr);gap:calc(20 * var(--u));margin-top:calc(22 * var(--u))}.phase{padding:calc(22 * var(--u));border-radius:calc(24 * var(--u));background:linear-gradient(180deg,rgba(255,255,255,.83),rgba(237,248,246,.62));border:calc(1 * var(--u)) solid rgba(36,125,123,.14)}.phase h3{display:flex;align-items:center;gap:calc(10 * var(--u))}.phase h3:before{content:"";width:calc(12 * var(--u));height:calc(12 * var(--u));border-radius:50%;background:var(--accent);box-shadow:0 0 0 calc(7 * var(--u)) rgba(236,145,109,.14)}.phase p{font-size:calc(18 * var(--u))}.value{display:grid;grid-template-columns:repeat(2,1fr);gap:calc(18 * var(--u));margin-top:calc(22 * var(--u))}.value .card{display:flex;gap:calc(16 * var(--u));align-items:flex-start}.icon{width:calc(48 * var(--u));height:calc(48 * var(--u));border-radius:calc(16 * var(--u));background:linear-gradient(135deg,#e6f6f3,#d9ecff);display:grid;place-items:center;color:var(--primary);font-weight:900;font-size:calc(20 * var(--u));flex:0 0 auto}.mt18{margin-top:calc(18 * var(--u))}.mt24{margin-top:calc(24 * var(--u))}.center-kicker{justify-content:center}.closing-title{max-width:calc(1100 * var(--u))}.mx-auto{margin:auto}.center-tags{justify-content:center}.controls{position:absolute;left:50%;bottom:calc(18 * var(--u));transform:translateX(-50%);display:flex;gap:calc(10 * var(--u));z-index:20}.btn{border:calc(1 * var(--u)) solid rgba(36,125,123,.18);background:rgba(255,255,255,.8);backdrop-filter:blur(calc(10 * var(--u)));color:#275760;border-radius:calc(999 * var(--u));padding:calc(9 * var(--u)) calc(14 * var(--u));font-weight:800;cursor:pointer;box-shadow:0 calc(8 * var(--u)) calc(24 * var(--u)) rgba(40,90,110,.12);font-size:calc(16 * var(--u))}.progress{position:absolute;left:calc(28 * var(--u));right:calc(28 * var(--u));bottom:0;height:calc(4 * var(--u));background:rgba(36,125,123,.1);z-index:20}.bar{height:100%;width:0;background:linear-gradient(90deg,var(--primary2),var(--accent));border-radius:calc(9 * var(--u))}.counter{position:absolute;right:calc(36 * var(--u));top:calc(30 * var(--u));z-index:10;color:#779099;font-weight:800;font-size:calc(14 * var(--u))}.dots{position:absolute;right:calc(18 * var(--u));top:50%;transform:translateY(-50%);display:grid;gap:calc(8 * var(--u));z-index:20}.dot{width:calc(8 * var(--u));height:calc(8 * var(--u));border-radius:calc(99 * var(--u));background:rgba(36,125,123,.18)}.dot.active{height:calc(24 * var(--u));background:var(--primary2)}
+#museUser{position:fixed;right:calc(16 * var(--u));top:calc(16 * var(--u));z-index:9999;display:flex;align-items:center;gap:calc(8 * var(--u));padding:calc(8 * var(--u)) calc(12 * var(--u));border-radius:calc(999 * var(--u));background:rgba(255,255,255,.82);border:calc(1 * var(--u)) solid rgba(36,125,123,.16);box-shadow:0 calc(8 * var(--u)) calc(24 * var(--u)) rgba(42,92,105,.12);font:600 calc(13 * var(--u))/1.2 system-ui;color:#275760}#museLogout{border:0;background:#e9f6f4;color:#247d7b;border-radius:calc(999 * var(--u));padding:calc(5 * var(--u)) calc(9 * var(--u));font-weight:700;font-size:calc(12 * var(--u))}.muse-badge{position:fixed;right:calc(16 * var(--u));bottom:calc(16 * var(--u));z-index:9999;display:inline-flex;align-items:center;gap:calc(4 * var(--u));padding:calc(7.2 * var(--u)) calc(16 * var(--u));border-radius:calc(999 * var(--u));border:calc(1 * var(--u)) solid var(--muse-badge-border, rgba(36,125,123,.14));background:var(--muse-badge-bg, rgba(255,255,255,.86));color:var(--muse-badge-fg, #247d7b);font:500 calc(13 * var(--u))/1.2 system-ui;letter-spacing:calc(.13 * var(--u));text-decoration:none;box-shadow:0 calc(4 * var(--u)) calc(14 * var(--u)) rgba(42,92,105,.18);transition:transform .2s ease,filter .2s ease,box-shadow .2s ease}.muse-badge img{width:calc(17.55 * var(--u));height:calc(17.55 * var(--u));object-fit:contain;flex-shrink:0}.muse-badge:hover{transform:translateY(calc(-1 * var(--u)));filter:brightness(1.06);box-shadow:0 calc(6 * var(--u)) calc(18 * var(--u)) rgba(42,92,105,.22)}
+.figure-focus-slide{padding:calc(44 * var(--u)) calc(62 * var(--u)) calc(54 * var(--u))}
+.figure-focus{height:100%;display:flex;flex-direction:column;gap:calc(14 * var(--u))}
+.figure-head .kicker{margin-bottom:calc(6 * var(--u))}
+.figure-head h2{margin:0;font-size:calc(47 * var(--u));line-height:1.12}
+.figure-copy{display:flex;align-items:flex-start;justify-content:space-between;gap:calc(26 * var(--u));min-height:calc(62 * var(--u))}
+.figure-copy p{font-size:calc(20 * var(--u));line-height:1.42;color:#4c6570;max-width:calc(1070 * var(--u))}
+.figure-copy .tagrow{margin-top:0;flex:0 0 auto;max-width:calc(430 * var(--u));justify-content:flex-end}
+.figure-copy .pill{font-size:calc(14 * var(--u));padding:calc(6 * var(--u)) calc(11 * var(--u))}
+.figure-canvas{flex:1;min-height:0;display:grid;place-items:start center;padding-top:calc(12 * var(--u))}
+.figure-focus .fig{display:block;width:auto;height:calc(580 * var(--u));max-width:100%;object-fit:contain;border-radius:calc(18 * var(--u))}
+.timeline{grid-template-columns:repeat(6,1fr);gap:calc(18 * var(--u));margin-top:calc(24 * var(--u))}
+.timeline .step{grid-column:span 2;display:grid;grid-template-columns:calc(42 * var(--u)) 1fr;column-gap:calc(14 * var(--u));align-items:start;min-height:calc(142 * var(--u));padding:calc(22 * var(--u));border-radius:calc(20 * var(--u));transition:transform .18s ease,box-shadow .18s ease,border-color .18s ease}
+.timeline .step:nth-child(4){grid-column:2 / span 2}
+.timeline .step:nth-child(5){grid-column:4 / span 2}
+.timeline .step:before{width:calc(42 * var(--u));height:calc(42 * var(--u));margin:0;font-size:calc(18 * var(--u));grid-row:1 / span 2}
+.timeline .step strong{font-size:calc(22 * var(--u));line-height:1.25;margin-bottom:calc(7 * var(--u))}
+.timeline .step span{font-size:calc(17.5 * var(--u));line-height:1.5;color:#607781}
+.timeline .step:hover{transform:translateY(calc(-4 * var(--u)));border-color:rgba(36,125,123,.28);box-shadow:0 calc(14 * var(--u)) calc(36 * var(--u)) rgba(42,92,105,.12)}
+.goal-line{display:flex;align-items:baseline;gap:calc(18 * var(--u));margin-top:calc(28 * var(--u));padding:0 calc(8 * var(--u));max-width:calc(1320 * var(--u))}
+.goal-line span{flex:0 0 auto;color:var(--primary);font-size:calc(22 * var(--u));font-weight:900;letter-spacing:calc(1.1 * var(--u))}
+.goal-line p{font-size:calc(29 * var(--u));line-height:1.35;font-weight:800;color:#203c45;max-width:none}
+.logic-slide{padding:calc(48 * var(--u)) calc(62 * var(--u)) calc(58 * var(--u))}
+.logic-slide h2{font-size:calc(44 * var(--u));line-height:1.15;margin-bottom:calc(18 * var(--u))}
+.logic-layout{height:calc(650 * var(--u));display:grid;grid-template-columns:.92fr 1.08fr;gap:calc(24 * var(--u));align-items:stretch}
+.logic-track{display:grid;gap:calc(11 * var(--u))}
+.logic-node{display:grid;grid-template-columns:calc(48 * var(--u)) 1fr;gap:calc(14 * var(--u));align-items:start;padding:calc(14 * var(--u)) calc(16 * var(--u));border-radius:calc(18 * var(--u));background:rgba(255,255,255,.72);border:calc(1 * var(--u)) solid rgba(36,125,123,.13)}
+.logic-node .mark{display:grid;place-items:center;width:calc(42 * var(--u));height:calc(42 * var(--u));border-radius:calc(14 * var(--u));background:linear-gradient(135deg,var(--primary2),#8bd1c7);color:white;font-weight:900;font-size:calc(20 * var(--u));box-shadow:0 calc(8 * var(--u)) calc(22 * var(--u)) rgba(36,125,123,.16)}
+.decision-logic .logic-node .mark{background:linear-gradient(135deg,var(--blue),#77a7d8)}
+.logic-node b{display:block;font-size:calc(20 * var(--u));line-height:1.2;color:#214b54;margin-bottom:calc(4 * var(--u))}
+.logic-node p{font-size:calc(16.5 * var(--u));line-height:1.45;color:#607781}
+.logic-node em{font-style:normal;color:var(--primary);font-weight:800}
+.logic-summary{display:flex;align-items:center;gap:calc(14 * var(--u));padding:calc(16 * var(--u)) calc(18 * var(--u));border-radius:calc(18 * var(--u));background:linear-gradient(135deg,rgba(237,248,245,.86),rgba(255,247,242,.68));border:calc(1 * var(--u)) solid rgba(236,145,109,.18)}
+.logic-summary span{flex:0 0 auto;color:var(--primary);font-size:calc(18 * var(--u));font-weight:900}
+.logic-summary p{font-size:calc(18 * var(--u));line-height:1.42;font-weight:800;color:#203c45}
+.logic-figure{min-width:0;display:flex;flex-direction:column;justify-content:center;gap:calc(10 * var(--u));padding:calc(12 * var(--u));border-radius:calc(22 * var(--u));background:rgba(255,255,255,.56);}
+.logic-figure .fig{width:100%;height:calc(535 * var(--u));object-fit:contain;border-radius:calc(16 * var(--u));box-shadow:none}
+.logic-caption{font-size:calc(15.5 * var(--u));line-height:1.42;color:#667e88;text-align:center}
+.section-lead{font-size:calc(20 * var(--u));line-height:1.48;color:#4c6570;max-width:calc(1230 * var(--u));margin:calc(-8 * var(--u)) 0 calc(18 * var(--u))}
+.transition-slide{padding:calc(48 * var(--u)) calc(62 * var(--u)) calc(56 * var(--u))}
+.transition-slide h2{font-size:calc(47 * var(--u));line-height:1.12;margin-bottom:calc(16 * var(--u))}
+.transition-slide .section-lead{max-width:calc(1280 * var(--u));margin-bottom:calc(12 * var(--u))}
+.transition-grid{display:grid;grid-template-columns:1fr calc(190 * var(--u)) 1fr;gap:calc(18 * var(--u));align-items:stretch;margin-top:calc(16 * var(--u))}
+.transition-panel{min-height:calc(438 * var(--u));padding:calc(26 * var(--u));border-radius:calc(22 * var(--u));background:rgba(255,255,255,.74);border:calc(1 * var(--u)) solid rgba(36,125,123,.14);box-shadow:0 calc(14 * var(--u)) calc(38 * var(--u)) rgba(42,92,105,.1)}
+.transition-panel.future{background:linear-gradient(180deg,rgba(255,255,255,.88),rgba(237,248,245,.72));border-color:rgba(36,125,123,.22)}
+.transition-panel h3{font-size:calc(32 * var(--u));line-height:1.22;margin-bottom:calc(16 * var(--u))}
+.transition-list{display:grid;gap:calc(14 * var(--u));margin:0;padding:0;list-style:none}
+.transition-list li{position:relative;padding-left:calc(24 * var(--u));font-size:calc(22 * var(--u));line-height:1.48;color:#516b75}
+.transition-list li:before{content:"";position:absolute;left:0;top:calc(12 * var(--u));width:calc(9 * var(--u));height:calc(9 * var(--u));border-radius:50%;background:var(--primary2)}
+.transition-panel.future .transition-list li:before{background:var(--accent)}
+.transition-arrow{display:grid;place-items:center;text-align:center;min-width:0}
+.arrow-core{width:100%;min-height:calc(336 * var(--u));display:grid;align-content:center;justify-items:center;gap:calc(12 * var(--u));padding:calc(22 * var(--u)) calc(14 * var(--u));border-radius:calc(24 * var(--u));background:linear-gradient(180deg,rgba(237,248,245,.84),rgba(255,247,242,.72));border:calc(1 * var(--u)) dashed rgba(236,145,109,.42)}
+.arrow-core b{font-size:calc(23 * var(--u));line-height:1.2;color:var(--accent)}
+.arrow-core span{font-size:calc(15.5 * var(--u));line-height:1.45;color:#687f88}
+.arrow-symbol{font-size:calc(50 * var(--u));line-height:1;color:var(--primary2);font-weight:900}
+.transition-note{display:flex;align-items:baseline;gap:calc(16 * var(--u));margin-top:calc(30 * var(--u));padding:0 calc(8 * var(--u))}
+.transition-note span{flex:0 0 auto;color:var(--primary);font-size:calc(22 * var(--u));font-weight:900;letter-spacing:calc(1.1 * var(--u))}
+.transition-note p{font-size:calc(27 * var(--u));line-height:1.32;font-weight:800;color:#203c45}
+.motivation-slide,.direction-slide,.roadmap-slide{display:flex;flex-direction:column;padding:calc(54 * var(--u)) calc(62 * var(--u)) calc(72 * var(--u))}
+.motivation-slide h2,.question-slide h2,.direction-slide h2,.value-slide h2,.roadmap-slide h2{margin-bottom:calc(18 * var(--u))}
+.motivation-slide .section-lead{max-width:calc(1300 * var(--u));margin-bottom:calc(18 * var(--u))}
+.motivation-slide .timeline{flex:1;align-content:stretch;grid-auto-rows:minmax(calc(150 * var(--u)),1fr);gap:calc(20 * var(--u));margin-top:calc(8 * var(--u))}
+.motivation-slide .timeline .step{min-height:0;grid-template-columns:calc(50 * var(--u)) 1fr;grid-template-rows:auto auto;column-gap:calc(16 * var(--u));row-gap:calc(8 * var(--u));align-content:center;align-items:start;padding:calc(22 * var(--u)) calc(24 * var(--u));border-color:rgba(36,125,123,.16);background:linear-gradient(180deg,rgba(255,255,255,.82),rgba(244,252,250,.68))}
+.motivation-slide .timeline .step:before{grid-column:1;grid-row:1;width:calc(46 * var(--u));height:calc(46 * var(--u));align-self:center}
+.motivation-slide .timeline .step strong{grid-column:2;grid-row:1;align-self:center;margin-bottom:0;font-size:calc(28 * var(--u));line-height:1.25}
+.motivation-slide .timeline .step span{grid-column:2;grid-row:2;font-size:calc(20 * var(--u));line-height:1.48}
+.motivation-goal{margin-top:calc(22 * var(--u));padding:calc(22 * var(--u)) calc(26 * var(--u));border-radius:calc(22 * var(--u));background:linear-gradient(135deg,rgba(237,248,245,.92),rgba(255,247,242,.76));border:calc(1 * var(--u)) solid rgba(236,145,109,.18);box-shadow:0 calc(12 * var(--u)) calc(34 * var(--u)) rgba(42,92,105,.08)}
+.motivation-goal p{font-size:calc(27 * var(--u));line-height:1.34;white-space:normal}
+.question-slide .matrix{margin-top:calc(6 * var(--u))}
+.question-slide .axis-card{min-height:calc(168 * var(--u));padding:calc(24 * var(--u))}
+.question-slide .axis-card p{font-size:calc(17 * var(--u));line-height:1.48}
+.question-foot{display:flex;align-items:center;gap:calc(16 * var(--u));margin-top:calc(18 * var(--u));padding:calc(16 * var(--u)) calc(20 * var(--u));border-radius:calc(18 * var(--u));background:linear-gradient(135deg,rgba(237,248,245,.82),rgba(255,247,242,.62));border:calc(1 * var(--u)) solid rgba(236,145,109,.17)}
+.question-foot span{flex:0 0 auto;color:var(--primary);font-size:calc(18 * var(--u));font-weight:900}
+.question-foot p{font-size:calc(19 * var(--u));font-weight:800;line-height:1.42;color:#203c45}
+.direction-slide .section-lead{max-width:calc(1290 * var(--u));margin-bottom:calc(22 * var(--u))}
+.direction-slide .three,.direction-slide .two{margin-top:0;align-items:stretch;grid-auto-rows:1fr}
+.direction-slide .three{flex:1;counter-reset:direction-card}
+.direction-slide .card{position:relative;overflow:hidden;display:flex;flex-direction:column;justify-content:flex-start;padding:calc(82 * var(--u)) calc(32 * var(--u)) calc(58 * var(--u))}
+.direction-slide .three>.card:not(.flat):before{counter-increment:direction-card;content:"0" counter(direction-card);position:absolute;right:calc(28 * var(--u));top:calc(18 * var(--u));font-size:calc(82 * var(--u));line-height:1;font-weight:900;color:rgba(36,125,123,.07)}
+.direction-slide .three>.card:not(.flat):after,.decision-direction .two>.card:after{content:"";position:absolute;left:calc(32 * var(--u));right:calc(32 * var(--u));bottom:calc(28 * var(--u));height:calc(4 * var(--u));border-radius:calc(99 * var(--u));background:linear-gradient(90deg,var(--primary2),var(--accent));opacity:.24}
+.direction-slide .card h3{font-size:calc(28.5 * var(--u));line-height:1.22;margin-bottom:calc(14 * var(--u))}
+.direction-slide .card p{font-size:calc(22   * var(--u));line-height:1.55}
+.mini-tags,.phase-tags{display:flex;flex-wrap:wrap;gap:calc(8 * var(--u));margin-top:auto;padding-top:calc(26 * var(--u))}
+.mini-tags span,.phase-tags span{display:inline-flex;align-items:center;min-height:calc(30 * var(--u));padding:calc(6 * var(--u)) calc(12 * var(--u));border-radius:calc(999 * var(--u));background:rgba(237,248,245,.82);border:calc(1 * var(--u)) solid rgba(36,125,123,.12);color:#2d7775;font-size:calc(15 * var(--u));font-weight:800}
+.direction-slide .flat{margin-top:calc(24 * var(--u));padding:calc(24 * var(--u)) calc(30 * var(--u));border-radius:calc(22 * var(--u));background:linear-gradient(135deg,rgba(237,248,245,.88),rgba(255,247,242,.7));border-color:rgba(236,145,109,.18)}
+.direction-slide .flat p{font-size:calc(23 * var(--u));line-height:1.36;font-weight:800;color:#203c45}
+.decision-direction .two{flex:0 0 calc(202 * var(--u))}
+.decision-direction .two .card{justify-content:center;padding:calc(28 * var(--u))}
+.decision-direction .timeline{flex:1;position:relative;display:grid;grid-template-columns:repeat(12,1fr);grid-template-rows:repeat(2,minmax(calc(122 * var(--u)),1fr));align-content:stretch;gap:calc(18 * var(--u));margin-top:calc(24 * var(--u));padding-top:calc(4 * var(--u))}
+.decision-direction .timeline .step{grid-column:span 4;position:relative;min-height:0;grid-template-columns:calc(46 * var(--u)) 1fr;grid-template-rows:auto auto auto;column-gap:calc(14 * var(--u));row-gap:calc(6 * var(--u));align-content:center;padding:calc(18 * var(--u)) calc(20 * var(--u));background:linear-gradient(160deg,rgba(255,255,255,.9),rgba(239,250,248,.7));border-color:rgba(36,125,123,.18);box-shadow:0 calc(10 * var(--u)) calc(28 * var(--u)) rgba(42,92,105,.08)}
+.decision-direction .timeline .step:nth-child(1){grid-column:1 / span 4}
+.decision-direction .timeline .step:nth-child(2){grid-column:5 / span 4}
+.decision-direction .timeline .step:nth-child(3){grid-column:9 / span 4}
+.decision-direction .timeline .step:nth-child(4){grid-column:3 / span 4;background:linear-gradient(160deg,rgba(255,255,255,.9),rgba(255,247,242,.7));border-color:rgba(236,145,109,.2)}
+.decision-direction .timeline .step:nth-child(5){grid-column:7 / span 4;background:linear-gradient(160deg,rgba(255,255,255,.9),rgba(238,246,255,.72));border-color:rgba(73,126,185,.18)}
+.decision-direction .timeline .step:before{grid-column:1;grid-row:1 / span 2;width:calc(42 * var(--u));height:calc(42 * var(--u));align-self:start}
+.decision-direction .timeline .step strong{grid-column:2;grid-row:1;margin-bottom:0;font-size:calc(20.5 * var(--u));line-height:1.25}
+.decision-direction .timeline .step span{grid-column:2;grid-row:2;font-size:calc(16.2 * var(--u));line-height:1.42;color:#5f7480}
+.decision-direction .timeline .step em{grid-column:2;grid-row:3;justify-self:start;display:inline-flex;align-items:center;min-height:calc(25 * var(--u));padding:calc(4 * var(--u)) calc(10 * var(--u));border-radius:calc(999 * var(--u));background:rgba(237,248,245,.9);border:calc(1 * var(--u)) solid rgba(36,125,123,.13);color:#2d7775;font-size:calc(13.5 * var(--u));font-style:normal;font-weight:900;letter-spacing:0}
+.roadmap-slide .section-lead{max-width:calc(1260 * var(--u));margin-bottom:calc(20 * var(--u))}
+.roadmap-slide .roadmap{flex:1;align-items:stretch;gap:calc(22 * var(--u));margin-top:calc(10 * var(--u));position:relative;counter-reset:roadmap-card}
+.roadmap-slide .phase{position:relative;overflow:hidden;display:flex;flex-direction:column;justify-content:flex-start;min-height:0;padding:calc(108 * var(--u)) calc(30 * var(--u)) calc(66 * var(--u));border-radius:calc(22 * var(--u));background:linear-gradient(180deg,rgba(255,255,255,.9),rgba(237,248,246,.66))}
+.roadmap-slide .phase:before{counter-increment:roadmap-card;content:"0" counter(roadmap-card);position:absolute;right:calc(28 * var(--u));top:calc(20 * var(--u));font-size:calc(82 * var(--u));line-height:1;font-weight:900;color:rgba(73,126,185,.07)}
+.roadmap-slide .phase:after{content:"";position:absolute;left:calc(30 * var(--u));right:calc(30 * var(--u));bottom:calc(28 * var(--u));height:calc(5 * var(--u));border-radius:calc(99 * var(--u));background:linear-gradient(90deg,var(--primary2),var(--accent));opacity:.34}
+.roadmap-slide .phase h3{font-size:calc(29 * var(--u));line-height:1.25;margin-bottom:calc(18 * var(--u))}
+.roadmap-slide .phase p{font-size:calc(22 * var(--u));line-height:1.56}
+.roadmap-slide .phase-tags span{background:rgba(255,247,242,.76);border-color:rgba(236,145,109,.18);color:#8a6a55}
+.roadmap-slide .goal-line{margin-top:calc(24 * var(--u));padding:calc(22 * var(--u)) calc(26 * var(--u));border-radius:calc(22 * var(--u));background:linear-gradient(135deg,rgba(237,248,245,.92),rgba(255,247,242,.72));border:calc(1 * var(--u)) solid rgba(236,145,109,.18);box-shadow:0 calc(12 * var(--u)) calc(34 * var(--u)) rgba(42,92,105,.08)}
+.roadmap-slide .goal-line p{font-size:calc(27 * var(--u));line-height:1.34}
+.value-slide .value{margin-top:calc(18 * var(--u))}
+.value-slide .card p{font-size:calc(18 * var(--u));line-height:1.48}
+
+/* =========================================================================
+   DashiAI presentation shell — adapted from dashiai-ppt/assets/template-swiss.html
+   Kept: top play button, left thumbnail rail (目录), centered stage, page
+   transition animation, present/fullscreen mode.
+   Removed: export / reset / theme toggle / collapse button / right side panel.
+   ========================================================================= */
+:root{
+  --sans:"Inter","Noto Sans SC","PingFang SC","Hiragino Sans GB","Microsoft YaHei",system-ui,-apple-system,sans-serif;
+  --sans-zh:"Noto Sans SC","PingFang SC","Hiragino Sans GB","Microsoft YaHei",var(--sans);
+  --mono:"Space Mono","JetBrains Mono",ui-monospace,monospace;
+  --ease-prod:cubic-bezier(.2,0,.38,.9);
+  --paper:#fafaf8;
+  --pp-topbar-h:52px;
+  --slide-rail-w:150px;
+  /* chrome tokens — light */
+  --pp-fg:#1a1a18; --pp-fg2:#84847c; --pp-muted:#b2b2aa; --pp-icon:#5a5a52;
+  --pp-bg:#ffffff; --pp-chip:#f4f4f1; --pp-chip-h:#ecece8; --pp-border:#ecebe7; --pp-divider:#f0efeb;
+  --pp-rail:#dcdbd5; --pp-blue:#0e9f6e; --pp-blue-h:#0c8a5f; --pp-blue-soft:rgba(14,159,110,.1);
+  --pp-stage:#efede9;
+}
+@media (prefers-color-scheme:dark){
+  :root{
+    --pp-fg:#f4f4f1; --pp-fg2:#a6a49b; --pp-muted:#7c7b72; --pp-icon:#c8c8c2;
+    --pp-bg:#1c1c1a; --pp-chip:#2a2a26; --pp-chip-h:#34332e; --pp-border:#36352f; --pp-divider:#2a2a26;
+    --pp-rail:#4a493f; --pp-blue:#34ce98; --pp-blue-h:#3ddaa3; --pp-blue-soft:rgba(52,206,152,.2);
+    --pp-stage:#0b0b0a;
+  }
+}
+
+/* ---- Top bar: brand + count + play only ---- */
+#deck-topbar{position:fixed;left:0;top:0;right:0;z-index:80;height:var(--pp-topbar-h);display:flex;align-items:center;justify-content:space-between;gap:16px;padding:0 18px;background:var(--pp-bg);border-bottom:1px solid var(--pp-divider);color:var(--pp-fg);font-family:var(--sans)}
+.pp-topbar-brand{display:flex;align-items:center;gap:11px;min-width:0}
+.pp-topbar-dot{width:9px;height:9px;border-radius:50%;background:var(--pp-blue);flex:0 0 auto}
+.pp-topbar-title{font:600 14px/1 var(--sans-zh);letter-spacing:-.01em;color:var(--pp-fg);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.pp-topbar-count{font:500 11.5px/1 var(--sans);color:var(--pp-fg2);white-space:nowrap;font-variant-numeric:tabular-nums;flex:0 0 auto}
+.pp-topbar-actions{display:flex;align-items:center;gap:7px;flex:0 0 auto}
+#preview-present-btn.pp-present{display:flex;align-items:center;justify-content:center;gap:8px;height:34px;min-width:0;padding:0 15px;border:0;border-radius:6px;cursor:pointer;background:var(--pp-blue);color:#fff;font:600 13px/1 var(--sans-zh)}
+#preview-present-btn.pp-present:hover{background:var(--pp-blue-h)}
+#preview-present-btn.pp-present svg{width:16px;height:16px}
+
+/* ---- Left thumbnail rail (目录) ---- */
+#slide-rail{position:fixed;left:0;top:var(--pp-topbar-h);z-index:24;width:var(--slide-rail-w);height:calc(100vh - var(--pp-topbar-h));display:flex;flex-direction:column;background:var(--pp-bg);color:var(--pp-fg);border-right:1px solid var(--pp-divider);font-family:var(--sans);overflow:hidden}
+.slide-rail-head{height:52px;display:flex;align-items:center;justify-content:space-between;gap:8px;padding:0 12px;border-bottom:1px solid var(--pp-divider);flex:0 0 auto}
+.slide-rail-title{font:650 13px/1 var(--sans-zh);color:var(--pp-fg)}
+.slide-rail-count{font:600 11px/1 var(--mono);color:var(--pp-fg2);letter-spacing:.02em}
+#slide-rail-list{flex:1;overflow-y:auto;overflow-x:hidden;padding:12px;scrollbar-width:thin;scrollbar-color:var(--pp-rail) transparent}
+#slide-rail-list::-webkit-scrollbar{width:8px}
+#slide-rail-list::-webkit-scrollbar-track{background:transparent}
+#slide-rail-list::-webkit-scrollbar-thumb{background:var(--pp-rail);border-radius:999px;border:2px solid transparent;background-clip:content-box}
+.rail-grid{position:relative;display:grid;grid-template-columns:minmax(0,1fr);gap:10px;align-items:start;width:100%;min-width:0}
+.rail-card{position:relative;display:grid;gap:0;width:100%;min-width:0;max-width:100%;padding:2px;border:3px solid transparent;border-radius:12px;background:transparent;color:var(--pp-fg);cursor:pointer;text-align:left;outline:1px solid transparent;transition:opacity .16s,transform .2s,border-color .16s,box-shadow .16s}
+.rail-card:hover .rail-thumb-frame{box-shadow:0 0 0 1px var(--pp-fg2)}
+.rail-card[aria-current="true"]{border-color:var(--pp-blue);box-shadow:0 6px 18px var(--pp-blue-soft)}
+.rail-card[aria-current="true"] .rail-thumb-frame{box-shadow:0 0 0 1px var(--pp-border)}
+.rail-card:focus-visible{outline:2px solid var(--pp-blue);outline-offset:1px}
+.rail-thumb-frame{position:relative;width:100%;aspect-ratio:16/9;overflow:hidden;border-radius:8px;background:var(--paper);box-shadow:0 0 0 1px var(--pp-border);transition:box-shadow .16s;contain:layout paint style}
+.rail-thumb{position:absolute;inset:0;width:100%;height:100%;overflow:hidden;pointer-events:none;background:var(--paper);container-type:size;display:grid;place-items:center}
+.rail-label{position:absolute;left:7px;top:6px;z-index:3;display:inline-flex;align-items:center;gap:6px;padding:2px 6px;border-radius:5px;background:rgba(10,10,10,.5);color:#fff;font:700 9px/1 var(--mono);letter-spacing:.02em;backdrop-filter:blur(4px);-webkit-backdrop-filter:blur(4px)}
+.rail-card[aria-current="true"] .rail-label{color:#fff;background:var(--pp-blue)}
+/* the cloned slide inside a thumbnail: static, auto-scaled via container query */
+.rail-thumb .stage{--u:min(0.0625cqw,0.111111cqh);box-shadow:none;border-radius:0}
+.rail-thumb .slide{opacity:1!important;transform:none!important;transition:none!important;animation:none!important;pointer-events:none}
+
+/* ---- Center stage viewport: dashi neutral frame, NO src full-canvas gradient ---- */
+#deck-viewport{position:fixed;top:var(--pp-topbar-h);left:var(--slide-rail-w);right:0;bottom:0;z-index:1;overflow:hidden;container-type:size;display:grid;place-items:center;padding:clamp(16px,2.4vmin,32px);background:var(--pp-stage)}
+body{background:var(--pp-stage)}
+/* main stage fits the viewport area (beside rail / below topbar) via container query */
+#deck-viewport>.stage{--u:min(0.0625cqw,0.111111cqh)}
+/* Keep the source deck's canvas gradient INSIDE the slide card only, so the
+   semi-transparent slides read exactly like the original, while the surrounding
+   frame / letterbox stays dashi's neutral stage colour. */
+#deck-viewport>.stage,
+.rail-thumb .stage{
+  background:
+    linear-gradient(rgba(255,255,255,.35),rgba(255,255,255,.35)),
+    radial-gradient(circle at 14% 8%, rgba(124,211,198,.25), transparent 30%),
+    radial-gradient(circle at 86% 14%, rgba(114,164,219,.22), transparent 28%),
+    linear-gradient(135deg,#fbfdfb,#edf8f6 54%,#f7fbff);
+}
+
+/* ---- Present (播放) / fullscreen mode: hide chrome, stage fills screen ---- */
+body[data-mode="present"] #deck-topbar,
+body[data-mode="present"] #slide-rail{display:none}
+body[data-mode="present"] #deck-viewport{top:0;left:0;right:0;bottom:0;padding:0;cursor:none}
+body[data-mode="present"] #deck-viewport:hover{cursor:default}
+</style>
+</head>
+<body>
+<header id="deck-topbar" aria-label="演示控制台工具栏">
+  <div class="pp-topbar-brand">
+    <span class="pp-topbar-dot" aria-hidden="true"></span>
+    <span class="pp-topbar-title">面向物理世界的城市时空感知与智能体协同决策</span>
+    <span class="pp-topbar-count" id="preview-slide-count">01 / 15</span>
+  </div>
+  <div class="pp-topbar-actions">
+    <button class="pp-present" id="preview-present-btn" type="button" aria-label="播放" title="播放">
+      <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M8 5.8v12.4c0 .8.9 1.3 1.6.9l9.1-6.2a1 1 0 0 0 0-1.8L9.6 4.9C8.9 4.5 8 5 8 5.8Z"/></svg>
+      <span>播放</span>
+    </button>
+  </div>
+</header>
+
+<aside id="slide-rail" aria-label="页面缩略图目录">
+  <div class="slide-rail-head">
+    <div class="slide-rail-title">目录</div>
+    <div class="slide-rail-count" id="slide-rail-count">0</div>
+  </div>
+  <div id="slide-rail-list"></div>
+</aside>
+
+<main id="deck-viewport">
+  <div class="stage" id="stage">
+
+  <section class="slide active"><div class="hero"><div><div class="kicker">Future Research Direction</div><h1>面向物理世界的<br>城市时空感知与<br>智能体协同决策</h1><p class="lead">从物理世界状态如何存在、演化并响应行动出发，把多源时空观测转化为可估计、可预测、可更新的城市状态，并与城市智能体协同决策形成反馈闭环。</p><div class="tagrow"><span class="pill">城市时空感知</span><span class="pill">状态演化建模</span><span class="pill">智能体协同决策</span><span class="pill">反馈闭环</span></div></div><div class="orb"><div class="line l1"></div><div class="line l2"></div><div class="line l3"></div><div class="state-core">Physical<br>State Field</div><div class="bubble b1"><b>部分观测</b><span>传感器、车辆、轨迹、事件与城市语义</span></div><div class="bubble b2"><b>状态建模</b><span>补全不可观测位置，预测未来变化</span></div><div class="bubble b3"><b>智能体决策</b><span>协同配置资源，行动后形成反馈闭环</span></div></div></div></section>
+
+  <section class="slide"><div class="kicker">Recent Foundation</div><h2>近期可以收束为两条连续主线</h2><div class="two grid"><div class="card"><h3>感知：从稀疏观测到城市状态</h3><p>近期工作围绕时间序列预测、未观测位置估计、主动采样与协同感知展开，逐步回答“在观测不完整的情况下，如何恢复和预判城市物理状态”。</p><div class="paper-list mt18"><div class="paper"><div class="venue">AAAI<br>2026</div><div><b>WaveDiST</b><br><em>未观测位置的时空估计</em></div></div><div class="paper"><div class="venue">ICML<br>2026</div><div><b>Energy-Adaptive Diffusion</b><br><em>时间序列预测中的频率建模</em></div></div><div class="paper"><div class="venue">TMC<br>2026</div><div><b>ST-CoSense</b><br><em>资源受限城市应用中的协同感知</em></div></div></div></div><div class="card"><h3>决策：从状态认知到协同行动</h3><p>多智能体协作、动态资源配置、在线选择与城市语义解析，为“状态如何转化为行动”提供了方法基础，也自然连接到未来的状态引导决策。</p><div class="paper-list mt18"><div class="paper"><div class="venue">KDD<br>2026</div><div><b>PG-DyRA</b><br><em>潜在博弈引导的多智能体动态资源配置</em></div></div><div class="paper"><div class="venue">KBS<br>2026</div><div><b>BLADE</b><br><em>LLM 辅助在线子集选择算法设计</em></div></div><div class="paper"><div class="venue">CIKM<br>2025</div><div><b>Spatial Semantic Address Parsing</b><br><em>空间语义增强的城市地址理解</em></div></div></div></div></div></section>
+
+  <section class="slide logic-slide"><div class="kicker">Perception Logic</div><h2>感知主线：从状态分布学习到事件驱动感知</h2><div class="logic-layout"><div class="logic-track"><div class="logic-node"><div class="mark">1</div><div><b>WaveDiST：空间冷启动下的状态恢复</b><p>将 diffusion process 迁移到小波域，在多频带中拆解空间区域的状态变化模式，提升未观测区域估计能力。</p></div></div><div class="logic-node"><div class="mark">2</div><div><b>Energy-Adaptive Diffusion：细粒度时间变化建模</b><p>不同能量频段匹配不同加噪策略，让模型学习传感器时间序列中更细的趋势、波动与突变。</p></div></div><div class="logic-node"><div class="mark">3</div><div><b>ST-CoSense：采样与感知形成闭环</b><p>用感知重建结果指导下一轮采样决策，在有限采样条件下最大化城市状态信息量。</p></div></div><div class="logic-node"><div class="mark">4</div><div><b>进行中：事件影响下的状态分布学习</b><p>将事件影响的扩散过程融入状态分布学习，刻画天气、事故、活动等事件造成的时空分布偏移。</p></div></div><div class="logic-summary"><span>递进关系</span><p>恢复未观测状态 → 分解多频变化 → 主动选择观测 → 适应事件扰动。</p></div></div><div class="logic-figure"><img class="fig" src="assets/images/perception-logic.png" alt="感知研究逻辑辅助图"><p class="logic-caption">已有工作从“补全状态”逐步扩展到“理解状态如何随频率、采样和事件发生变化”。</p></div></div></section>
+
+  <section class="slide logic-slide decision-logic"><div class="kicker">Decision Logic</div><h2>决策主线：从推理能力增强到状态关系驱动协同</h2><div class="logic-layout"><div class="logic-track"><div class="logic-node"><div class="mark">1</div><div><b>群体协同推理：多智能体形成一个 action</b><p>多个能力互补的小规模大模型在边缘设备上头脑风暴，提升分布式集群的总体推理能力。</p></div></div><div class="logic-node"><div class="mark">2</div><div><b>环境协同决策：单智能体选择一个 action</b><p>将城市物理运行规律与智能体状态联合建模，让 state 不只是条件输入，也参与关系学习。</p></div></div><div class="logic-node"><div class="mark">3</div><div><b>多主体动态决策：多智能体形成多个 action</b><p>在部分可观测城市环境中，同时估计环境状态与其他智能体状态，辅助多行动协同。</p></div></div><div class="logic-node"><div class="mark">4</div><div><b>共同目标：在物理世界中做可执行决策</b><p>决策结果会改变道路、资源、风险与观测分布，并反向更新下一轮感知与策略。</p></div></div><div class="logic-summary"><span>递进关系</span><p>增强推理能力 → 学习环境关系 → 估计其他主体 → 闭环改变城市状态。</p></div></div><div class="logic-figure"><img class="fig" src="assets/images/decision-logic.png" alt="决策研究逻辑辅助图"><p class="logic-caption">决策工作不只优化 action，而是把智能体、环境变量和其他主体的动态关系一起纳入推理。</p></div></div></section>
+
+  <section class="slide transition-slide"><div class="kicker">Transition</div><h2>从物理约束到物理关系学习</h2><p class="section-lead">已有工作为“状态如何估计”和“行动如何选择”打下基础；下一步的关键，是让模型不只使用物理先验，而是学习城市对象、状态与行动之间如何相互影响。</p><div class="transition-grid"><div class="transition-panel"><h3>过去研究基础</h3><ul class="transition-list"><li>感知与决策相对分开：感知侧估计、预测和采样，决策侧调度、配置和协作。</li><li>物理世界多作为先验约束：路网连通、速度范围、容量限制和对象非重叠。</li><li>物理知识也常被编码成输入特征：POI、道路、传感器和空间语义。</li></ul></div><div class="transition-arrow"><div class="arrow-core"><b>关键不足</b><span>约束能排除不合理结果，特征能补充上下文，但还不等于理解对象如何相互影响。</span><div class="arrow-symbol">→</div></div></div><div class="transition-panel future"><h3>未来研究转向</h3><ul class="transition-list"><li>学习对象—对象关系：车辆、道路、传感器、事件和资源如何相互影响。</li><li>学习状态—行动关系：行动如何改变交通、风险、需求与下一轮观测。</li><li>学习感知—决策闭环：决策反哺感知，感知更新策略。</li></ul></div></div><div class="transition-note"><span>核心转变</span><p>不是把更多物理先验塞进模型，而是让模型学习物理世界中状态、对象与行动之间的可推演关系。</p></div></section>
+
+  <section class="slide motivation-slide"><div class="kicker">Motivation</div><h2>为什么要把时空估计与感知决策融合？</h2><p class="section-lead">已有工作为状态估计、预测、采样和决策打下基础；新的问题是，如何从“使用物理先验约束模型”走向“学习物理世界关系”，让状态进入智能体行动并被反馈持续修正。</p><div class="timeline"><div class="step" data-n="1"><strong>城市观测正在智能体化</strong><span>传感器、车辆、路侧设备与移动终端本身都在成为可行动、可调度、可反馈的城市智能体。</span></div><div class="step" data-n="2"><strong>观测天然不完整</strong><span>真实城市存在稀疏、噪声、遮挡、延迟与异构语义，智能体只能看到局部状态。</span></div><div class="step" data-n="3"><strong>决策需要世界状态</strong><span>文本或视觉影像不足以支持交通、应急、资源配置等连续物理行动，决策需要可推演的城市状态。</span></div><div class="step" data-n="4"><strong>时空映射成为关键</strong><span>观测必须对齐到时间、位置、对象、道路结构和空间语义，才能成为可被智能体使用的状态。</span></div><div class="step" data-n="5"><strong>行动改变未来状态</strong><span>采样、调度、管控和路径选择会改变下一刻城市状态，感知与决策必须形成闭环。</span></div></div><div class="goal-line motivation-goal"><span>核心转变</span><p>从学习“数据到答案”的映射，转向学习“物理世界状态如何存在、演化并响应行动”的关系</p></div></section>
+
+  <section class="slide question-slide"><div class="kicker">Scientific Question</div><h2>核心科学问题：局部观测如何成为可决策的世界状态？</h2><p class="section-lead">问题的本质不是把更多数据简单拼接起来，而是把局部、异构、动态的观测转化为能描述真实城市、预测未来变化、约束行动后果的状态表达。</p><div class="matrix"><div class="axis-card card"><div class="num">01</div><b>状态表示</b><p>如何把轨迹、传感器、事件和空间语义对齐到时间、位置、对象与物理结构，形成统一的城市状态场？</p></div><div class="axis-card card"><div class="num">02</div><b>状态补全与预测</b><p>在部分观测和不确定性存在时，如何估计不可见区域，并预测状态在事件、环境和行动影响下的演化？</p></div><div class="axis-card card"><div class="num">03</div><b>主动感知</b><p>当观测资源有限时，智能体应优先观察哪些位置、对象和时间片，才能最大化状态认知价值并降低决策风险？</p></div><div class="axis-card card"><div class="num">04</div><b>状态引导决策</b><p>如何把估计、预测和不确定性转化为多智能体协作、资源配置和行动规划的依据，并接受反馈更新？</p></div></div><div class="question-foot"><span>研究抓手</span><p>以时空映射建立状态，以物理世界关系学习状态如何相互影响，以智能体反馈更新状态。</p></div></section>
+
+  <section class="slide figure-focus-slide"><div class="figure-focus"><div class="figure-head"><div class="kicker">Overall Framework</div><h2>总体框架：观测—感知—决策—反馈</h2></div><div class="figure-copy"><p>整体框架以时空观测为入口：先把传感器、车辆、轨迹和事件对齐到物理世界，再形成可估计、可预测、可更新的城市状态场。感知侧提供状态与不确定性，决策侧利用状态变量关系推演行动后果，行动再反哺下一轮观测。</p><div class="tagrow"><span class="pill">Spatiotemporal Mapping</span><span class="pill">Physical State</span><span class="pill">Closed-loop Intelligence</span></div></div><div class="figure-canvas"><img class="fig" src="assets/images/overall-framework.png" alt="总体研究框架图"></div></div></section>
+
+  <section class="slide direction-slide"><div class="kicker">Direction I · Perception</div><h2>方向一：面向城市物理世界状态的时空感知</h2><p class="section-lead">这里的“感知”采用广义定义：不仅是看见局部观测，也包括基于局部观测恢复全量状态、预测未来状态、主动选择下一步观测，并为决策提供可用的状态表达。</p><div class="three grid"><div class="card"><h3>全量状态估计</h3><p>由部分观测恢复不可见区域和对象状态，显式考虑位置、路网结构、空间语义、状态共现与物理可行性。</p><div class="mini-tags"><span>空间语义</span><span>状态共现</span><span>物理可行</span></div></div><div class="card"><h3>未来状态预测</h3><p>从历史趋势外推走向建模城市状态如何随时间、事件、环境变化和智能体行动共同演化。</p><div class="mini-tags"><span>时间演化</span><span>事件扰动</span><span>行动影响</span></div></div><div class="card"><h3>主动观测选择</h3><p>在观测资源有限时，选择最能降低状态不确定性、提升信息量并影响决策风险的位置、对象和时间片。</p><div class="mini-tags"><span>信息增益</span><span>风险下降</span><span>资源约束</span></div></div></div><div class="card flat mt24"><p>核心输出不是单个预测值，而是带有不确定性、物理语义和行动关联的城市状态场。</p></div></section>
+
+  <section class="slide figure-focus-slide"><div class="figure-focus"><div class="figure-head"><div class="kicker">Perception Branch</div><h2>感知分支框架：从部分观测到全量与未来状态</h2></div><div class="figure-copy"><p>这一分支把稀疏观测映射到物理城市：时间、位置、对象身份和空间语义共同定义状态坐标，路网拓扑、运动可行性、覆盖范围和容量限制不只是输入条件，也用于学习对象与状态之间的影响关系。</p></div><div class="figure-canvas"><img class="fig" src="assets/images/perception-framework.png" alt="感知分支框架图"></div></div></section>
+
+  <section class="slide direction-slide decision-direction"><div class="kicker">Direction II · Decision</div><h2>方向二：基于城市状态变量关系的智能体协同决策</h2><p class="section-lead">城市智能体不是在抽象环境中选择动作，而是在道路、资源、风险、需求和其他智能体共同变化的物理世界中决策；因此决策需要理解状态变量之间的关系和行动后果。</p><div class="two grid"><div class="card"><h3>从“看见状态”到“推演行动”</h3><p>决策输入不仅是预测值，还应利用交通流、供需、路网、资源与风险等变量关系，推演行动会怎样改变城市状态。</p></div><div class="card"><h3>从“单体最优”到“群体协同”</h3><p>多智能体协同需要理解行动之间以及行动与状态变量之间的耦合，让调度、管控和采样服务于整体状态改善。</p></div></div><div class="timeline"><div class="step" data-n="A"><strong>城市状态</strong><span>全量估计、未来预测、状态变量、不确定性</span><em>共同语境</em></div><div class="step" data-n="B"><strong>变量推演</strong><span>建模变量关系、行动后果和风险变化</span><em>因果推演</em></div><div class="step" data-n="C"><strong>协同行动</strong><span>任务分配、资源配置、路径与采样规划</span><em>联合执行</em></div><div class="step" data-n="D"><strong>物理反馈</strong><span>行动改变交通、资源、风险并暴露新观测</span><em>世界响应</em></div><div class="step" data-n="E"><strong>感知更新</strong><span>用反馈更新状态认知、预测和下一轮策略</span><em>闭环修正</em></div></div></section>
+
+  <section class="slide figure-focus-slide"><div class="figure-focus"><div class="figure-head"><div class="kicker">Decision Branch</div><h2>决策分支框架：状态场驱动协同行动</h2></div><div class="figure-copy"><p>决策分支以状态场为共同语境：智能体不仅检查物理可行性，更要学习道路、资源、风险、其他智能体与行动之间的影响关系，并据此完成协同。</p></div><div class="figure-canvas"><img class="fig" src="assets/images/decision-framework.png" alt="决策分支框架图"></div></div></section>
+
+  <section class="slide roadmap-slide"><div class="kicker">Research Roadmap</div><h2>形成研究体系：三阶段推进</h2><p class="section-lead">未来研究不追求单点算法堆叠，而是逐步形成“状态表示—状态推演—行动反馈”的方法体系，让感知与决策能够在同一个物理世界状态空间中协同。</p><div class="roadmap"><div class="phase"><h3>近期：状态感知基础</h3><p>围绕未观测区域估计、时间序列预测、事件扰动建模、主动采样与协同感知，形成可迁移的城市状态建模方法。</p><div class="phase-tags"><span>估计</span><span>预测</span><span>采样</span></div></div><div class="phase"><h3>中期：状态—决策耦合</h3><p>把状态估计、未来预测和不确定性嵌入多智能体资源配置、任务分配、路径规划和动态协作框架。</p><div class="phase-tags"><span>不确定性</span><span>资源配置</span><span>动态协作</span></div></div><div class="phase"><h3>长期：城市具身智能</h3><p>让车辆、传感器、基础设施和服务系统成为能够理解状态、预测后果并改变物理世界的协同智能体。</p><div class="phase-tags"><span>理解状态</span><span>预测后果</span><span>改变世界</span></div></div></div><div class="goal-line"><span>最终目标</span><p>构建“面向物理世界的时空智能底座”，既能描述城市，也能支撑城市智能体的行动。</p></div></section>
+
+  <section class="slide value-slide"><div class="kicker">Expected Value</div><h2>研究价值：把时空数据挖掘推向物理世界智能</h2><p class="section-lead">这一方向的价值在于把“时空数据分析”推进到“物理世界中的状态理解与行动推演”：模型不仅解释过去，还能服务未来行动，并从行动反馈中持续更新。</p><div class="value"><div class="card"><div class="icon">理</div><div><h3>理论价值</h3><p>提出状态引导的感知决策统一视角，连接时空建模、多智能体系统、世界模型与城市具身智能。</p></div></div><div class="card"><div class="icon">法</div><div><h3>方法价值</h3><p>形成状态估计、未来预测、主动观测、变量关系推演和协同决策的闭环方法体系。</p></div></div><div class="card"><div class="icon">城</div><div><h3>应用价值</h3><p>服务交通、应急、环境、物流与公共服务等城市动态资源优化场景，提升状态认知和行动效率。</p></div></div><div class="card"><div class="icon">台</div><div><h3>平台价值</h3><p>沉淀可复用的城市状态建模、智能体决策评测和物理反馈仿真实验平台，支撑持续研究积累。</p></div></div></div></section>
+
+  <section class="slide center"><div><div class="kicker center-kicker">Closing</div><h2 class="closing-title">从“数据描述城市”到<br>“状态驱动智能体理解并改变城市”</h2><p class="lead mx-auto">未来研究的主线，是以时空观测为入口、以物理世界状态为中枢、以多智能体感知决策为出口，建立智慧城市走向具身智能的一套研究体系。</p><div class="tagrow center-tags"><span class="pill">状态是桥梁</span><span class="pill">感知是基础</span><span class="pill">决策是目标</span><span class="pill">反馈是闭环</span></div></div></section>
+
+  </div>
+</main>
+
+<script>
+/* DashiAI-style presentation shell runtime — drives the source deck's slides.
+   Features kept & fully working: thumbnail rail (click + live preview + active
+   highlight + auto-scroll), page transition animation (source deck's fade/slide),
+   keyboard navigation, and the play button (fullscreen present mode). */
+(function () {
+  var stage = document.getElementById('stage');
+  var slides = Array.prototype.slice.call(stage.querySelectorAll('.slide'));
+  var railList = document.getElementById('slide-rail-list');
+  var railCount = document.getElementById('slide-rail-count');
+  var topCount = document.getElementById('preview-slide-count');
+  var presentBtn = document.getElementById('preview-present-btn');
+  var viewport = document.getElementById('deck-viewport');
+  var total = slides.length;
+  var idx = 0;
+
+  function pad(n) { return String(n).length < 2 ? '0' + n : String(n); }
+
+  // Build the thumbnail rail: each thumb is a live, container-query-scaled clone
+  // of the real slide, so previews always match the actual content.
+  var grid = document.createElement('div');
+  grid.className = 'rail-grid';
+  var railCards = slides.map(function (slide, i) {
+    var card = document.createElement('button');
+    card.type = 'button';
+    card.className = 'rail-card';
+    card.setAttribute('aria-label', '第 ' + (i + 1) + ' 页');
+    card.setAttribute('aria-current', 'false');
+
+    var frame = document.createElement('div');
+    frame.className = 'rail-thumb-frame';
+
+    var thumb = document.createElement('div');
+    thumb.className = 'rail-thumb';
+
+    var mini = document.createElement('div');
+    mini.className = 'stage';
+    mini.setAttribute('aria-hidden', 'true');
+
+    var clone = slide.cloneNode(true);
+    clone.removeAttribute('id');
+    clone.classList.add('active');
+    clone.classList.remove('prev');
+    mini.appendChild(clone);
+    thumb.appendChild(mini);
+
+    var label = document.createElement('span');
+    label.className = 'rail-label';
+    label.textContent = pad(i + 1);
+
+    frame.appendChild(thumb);
+    frame.appendChild(label);
+    card.appendChild(frame);
+    card.addEventListener('click', function () { show(i); });
+    grid.appendChild(card);
+    return card;
+  });
+  railList.appendChild(grid);
+  if (railCount) railCount.textContent = String(total);
+
+  function show(n) {
+    idx = ((n % total) + total) % total;
+    for (var i = 0; i < slides.length; i++) {
+      slides[i].classList.toggle('active', i === idx);
+      slides[i].classList.toggle('prev', i < idx);
+    }
+    for (var j = 0; j < railCards.length; j++) {
+      railCards[j].setAttribute('aria-current', j === idx ? 'true' : 'false');
+    }
+    var cur = railCards[idx];
+    if (cur && cur.scrollIntoView) cur.scrollIntoView({ block: 'nearest' });
+    if (topCount) topCount.textContent = pad(idx + 1) + ' / ' + pad(total);
+  }
+
+  // Keyboard navigation
+  document.addEventListener('keydown', function (e) {
+    // Up/Down also switch pages (and we preventDefault so focus sitting on a
+    // thumbnail button no longer just scrolls the rail list).
+    if (['ArrowRight', 'ArrowDown', 'PageDown', ' '].indexOf(e.key) >= 0) { e.preventDefault(); show(idx + 1); }
+    else if (['ArrowLeft', 'ArrowUp', 'PageUp'].indexOf(e.key) >= 0) { e.preventDefault(); show(idx - 1); }
+    else if (e.key === 'Home') { e.preventDefault(); show(0); }
+    else if (e.key === 'End') { e.preventDefault(); show(total - 1); }
+    else if (e.key === 'Escape' && isPresenting()) { exitPresent(); }
+  });
+
+  // Play button -> fullscreen present mode (hides chrome, stage fills screen)
+  function isPresenting() { return document.body.getAttribute('data-mode') === 'present'; }
+  function enterPresent() {
+    document.body.setAttribute('data-mode', 'present');
+    var el = document.documentElement;
+    if (el.requestFullscreen) { var p = el.requestFullscreen(); if (p && p.catch) p.catch(function () {}); }
+  }
+  function exitPresent() {
+    document.body.removeAttribute('data-mode');
+    if (document.fullscreenElement && document.exitFullscreen) {
+      var p = document.exitFullscreen(); if (p && p.catch) p.catch(function () {});
+    }
+  }
+  if (presentBtn) {
+    presentBtn.addEventListener('click', function () {
+      if (isPresenting()) exitPresent(); else enterPresent();
+    });
+  }
+  document.addEventListener('fullscreenchange', function () {
+    if (!document.fullscreenElement && isPresenting()) document.body.removeAttribute('data-mode');
+  });
+  // While presenting, click advances to the next slide (standard playback UX)
+  if (viewport) {
+    viewport.addEventListener('click', function () { if (isPresenting()) show(idx + 1); });
+  }
+
+  show(0);
+})();
+</script>
+</body>
+</html>
